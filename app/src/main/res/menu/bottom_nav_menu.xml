@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="NewsFeed"
+        android:icon="@drawable/baseline_home_24"
+        android:id="@+id/navbar_newsFeed"/>
+    <item
+        android:title="Messages"
+        android:icon="@drawable/baseline_chat_bubble_24"
+        android:id="@+id/navbar_messages"/>
+    <item
+        android:title="Search"
+        android:icon="@drawable/baseline_zoom_in_24"
+        android:id="@+id/navbar_search"/>
+    <item
+        android:title="Notifications"
+        android:icon="@drawable/baseline_notifications_active_24"
+        android:id="@+id/navbar_notification"/>
+    <item
+        android:title="Profile"
+        android:icon="@drawable/baseline_person_2_24"
+        android:id="@+id/navbar_profile"/>
+</menu>
