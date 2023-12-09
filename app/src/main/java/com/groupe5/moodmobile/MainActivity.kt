@@ -1,12 +1,10 @@
 package com.groupe5.moodmobile
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.appcompat.app.AppCompatActivity
 import com.groupe5.moodmobile.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -14,6 +12,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (!isTokenPresent()) {
+            val intent = Intent(this, SigninActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         setUpListeners()
     }
@@ -28,6 +32,12 @@ class MainActivity : AppCompatActivity() {
             )
             .commit()
         super.onStart()
+    }
+
+    private fun isTokenPresent(): Boolean {
+        val prefs = getSharedPreferences("app", MODE_PRIVATE)
+        val token = prefs.getString("token", null)
+        return token != null
     }
 
     private fun setUpListeners() {
