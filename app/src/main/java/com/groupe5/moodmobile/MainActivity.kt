@@ -35,8 +35,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun isTokenPresent(): Boolean {
-        val prefs = getSharedPreferences("app", MODE_PRIVATE)
-        val token = prefs.getString("token", null)
+        val prefs = getSharedPreferences("mood", MODE_PRIVATE)
+        val token = prefs.getString("jwtToken", null)
         return token != null
     }
 
