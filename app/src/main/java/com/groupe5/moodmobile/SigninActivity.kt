@@ -1,14 +1,19 @@
 package com.groupe5.moodmobile
 
+import android.R
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ClickableSpan
 import android.util.Log
+import android.view.View
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.groupe5.moodmobile.databinding.ActivitySigninBinding
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class SigninActivity : AppCompatActivity() {
     lateinit var binding: ActivitySigninBinding
@@ -18,13 +23,18 @@ class SigninActivity : AppCompatActivity() {
         binding = ActivitySigninBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnSignIn.setOnClickListener {
-            val login = binding.etLogin.text.toString()
-            val password = binding.etPassword.text.toString()
-            val stayLoggedIn = binding.cbStayConnected.isChecked
+        binding.btnSignInSignIn.setOnClickListener {
+            val login = binding.etSigninLogin.text.toString()
+            val password = binding.etSigninPassword.text.toString()
+            val stayLoggedIn = true
             val message = "Submit!"
             Log.d("Submit", message)
             submitForm(login, password, stayLoggedIn)
+        }
+        binding.tvSigninLink.setOnClickListener {
+            val intent = Intent(this, SignupActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 
@@ -37,8 +47,8 @@ class SigninActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
 
                     val sessionTokenService = SessionTokenService("clesecrete")
-                    val message = "DebToken!"
-                    Log.d("DebToken", message)
+//                    val message = "DebToken!"
+//                    Log.d("DebToken", message)
                     val userId = login.toString()
                     val role = "user"
                     val isSessionOnly = true
@@ -48,8 +58,8 @@ class SigninActivity : AppCompatActivity() {
 
                     startActivity(Intent(this@SigninActivity, MainActivity::class.java))
                 } else {
-                    val message = "Echec Auth!"
-                    Log.d("EchecAuth", message)
+//                    val message = "Echec Auth!"
+//                    Log.d("EchecAuth", message)
                     // Échec de l'authentification
                 }
             }

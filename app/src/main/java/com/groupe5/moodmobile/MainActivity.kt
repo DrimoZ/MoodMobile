@@ -85,6 +85,15 @@ class MainActivity : AppCompatActivity() {
                         .commit()
                 }
                 R.id.navbar_profile -> {
+                    val prefs = getSharedPreferences("mood", MODE_PRIVATE)
+                    val editor = prefs.edit()
+                    editor.putString("jwtToken", null)
+                    editor.apply()
+                    if (!isTokenPresent()) {
+                        val intent = Intent(this, SigninActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
                     supportFragmentManager
                         .beginTransaction()
                         .replace(
