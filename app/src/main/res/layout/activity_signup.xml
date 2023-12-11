@@ -78,7 +78,7 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="50dp"
-        android:hint="Birthdate"
+        android:hint="Birthdate (yyyy-mm-dd)"
         android:inputType="date"
         android:textColor="@color/gold"
         android:textColorHint="@color/gold"

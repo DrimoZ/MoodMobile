@@ -24,8 +24,7 @@ class SignupActivity : AppCompatActivity() {
             val name = binding.etSignupFullName.text.toString()
             val login = binding.etSignupUsername.text.toString()
             val mail = binding.etSignupEmail.text.toString()
-            //val birthdate = binding.etSignupBirthdate.text.toString()
-            val birthdate = "2000-12-11T17:11:26.665Z"
+            val birthdate = binding.etSignupBirthdate.text.toString()
             val password = binding.etSignupPassword.text.toString()
             val passwordConfirmation = binding.etSignupPasswordConfirmation.text.toString()
             if (validateForm(name, login, mail, birthdate, password, passwordConfirmation)) {
