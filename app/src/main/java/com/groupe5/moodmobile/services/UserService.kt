@@ -1,6 +1,7 @@
 package com.groupe5.moodmobile.services
 
 import android.util.Log
+import com.groupe5.moodmobile.dtos.Publication.DtoInputPublication
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
 import okhttp3.Cookie
@@ -18,6 +19,8 @@ interface UserService {
     fun getUserProfile(@Path("userLogin") userLogin: String): Call<DtoInputUserProfile>
     @GET("/api/v1/user")
     fun getUserIdAndRole(): Call<DtoInputUserIdAndRole>
+    @GET("/api/v1/user/{userLogin}/publications")
+    fun getUserPublications(@Path("userLogin") userLogin: String): Call<List<DtoInputPublication>>
 }
 object ApiClientProfile {
     private const val BASE_URL = "http://10.0.2.2:5555"

@@ -29,6 +29,11 @@ class ProfilePublicationsFragment : Fragment() {
         return view
     }
 
+    fun initUIWithTodos(publications: List<DtoInputPublication>?) {
+        publications?.forEach ( publicationUI::add )
+        profilePublicationRecyclerViewAdapter.notifyDataSetChanged()
+    }
+
     companion object {
         @JvmStatic
         fun newInstance() = ProfilePublicationsFragment()
