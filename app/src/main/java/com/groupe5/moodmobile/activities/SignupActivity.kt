@@ -1,12 +1,13 @@
-package com.groupe5.moodmobile
+package com.groupe5.moodmobile.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.groupe5.moodmobile.databinding.ActivitySigninBinding
 import com.groupe5.moodmobile.databinding.ActivitySignupBinding
+import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserSignup
+import com.groupe5.moodmobile.services.ApiClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException

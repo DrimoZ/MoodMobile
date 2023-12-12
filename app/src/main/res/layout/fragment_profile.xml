@@ -6,107 +6,98 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#010928"
-    tools:context=".ProfileFragment">
+    tools:context=".fragments.ProfileFragment">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="107dp"
-        android:layout_height="102dp"
-        android:layout_marginTop="50dp"
+        android:id="@+id/iv_fragmentProfile_userImage"
+        android:layout_width="116dp"
+        android:layout_height="117dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="30dp"
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tv_fragmentProfile_userUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="50dp"
-        android:text="Login"
+        android:text="Username"
         android:textColor="@color/gold"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/iv_fragmentProfile_userImage"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/tv_fragmentProfile_userNbPublications"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
         android:text="Publications :"
         android:textColor="@color/gold"
-        android:textSize="10sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/iv_fragmentProfile_userImage"
+        app:layout_constraintTop_toBottomOf="@+id/tv_fragmentProfile_userUsername" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/tv_fragmentProfile_userNbFriends"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
+        android:layout_marginTop="87dp"
         android:text="Friends :"
         android:textColor="@color/gold"
-        android:textSize="10sp"
-        app:layout_constraintStart_toEndOf="@+id/textView7"
-        tools:layout_editor_absoluteY="79dp" />
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/tv_fragmentProfile_userNbPublications"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/tv_fragmentProfile_userDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
-        android:text="Username"
-        android:textColor="@color/gold"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="25dp"
         android:text="Description"
         android:textColor="@color/gold"
-        android:textSize="10sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/iv_fragmentProfile_userImage"
+        app:layout_constraintTop_toBottomOf="@+id/tv_fragmentProfile_userNbPublications" />
 
     <View
         android:id="@+id/divider"
         android:layout_width="0dp"
         android:layout_height="2dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:background="#deb992"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_fragmentProfile_userDescription" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_fragmentProfile_publications"
         android:layout_width="128dp"
-        android:layout_height="0dp"
+        android:layout_height="35dp"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="10dp"
         android:backgroundTint="#00FFFFFF"
         android:text="Publications"
         android:textColor="#deb992"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btn_fragmentProfile_friends"
         android:layout_width="128dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="35dp"
         android:layout_marginEnd="60dp"
         android:backgroundTint="#00FFFFFF"
         android:text="Friends"
         android:textColor="#deb992"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
         tools:ignore="MissingConstraints" />

@@ -1,9 +1,15 @@
-package com.groupe5.moodmobile
+package com.groupe5.moodmobile.activities
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.groupe5.moodmobile.R
+import com.groupe5.moodmobile.fragments.SearchFragment
 import com.groupe5.moodmobile.databinding.ActivityMainBinding
+import com.groupe5.moodmobile.fragments.MessageFragment
+import com.groupe5.moodmobile.fragments.NewsFeedFragment
+import com.groupe5.moodmobile.fragments.NotificationFragment
+import com.groupe5.moodmobile.fragments.ProfileFragment
 
 
 class MainActivity : AppCompatActivity() {

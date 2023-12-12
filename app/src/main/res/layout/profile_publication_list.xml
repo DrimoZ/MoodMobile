@@ -11,5 +11,5 @@
     android:layout_marginRight="16dp"
     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
     app:spanCount="3"
-    tools:context=".ProfilePublicationsFragment"
+    tools:context=".fragments.ProfilePublicationsFragment"
     tools:listitem="@layout/profile_publication_item" />

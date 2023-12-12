@@ -1,12 +1,9 @@
-package com.groupe5.moodmobile
+package com.groupe5.moodmobile.fragments
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 
-import com.groupe5.moodmobile.placeholder.PlaceholderContent.PlaceholderItem
 import com.groupe5.moodmobile.databinding.ProfilePublicationItemBinding
 import com.groupe5.moodmobile.dtos.Publication.DtoInputPublication
 import com.squareup.picasso.Picasso

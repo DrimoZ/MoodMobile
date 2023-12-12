@@ -1,15 +1,12 @@
-package com.groupe5.moodmobile
+package com.groupe5.moodmobile.activities
 
-import android.R
 import android.content.Intent
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.ClickableSpan
 import android.util.Log
-import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.groupe5.moodmobile.databinding.ActivitySigninBinding
+import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserSignin
+import com.groupe5.moodmobile.services.ApiClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,7 +25,12 @@ class SigninActivity : AppCompatActivity() {
             val login = binding.etSigninLogin.text.toString()
             val password = binding.etSigninPassword.text.toString()
             val stayLoggedIn = true
+//            Log.d("test", "test")
+//            updateTokenInPreferences("leShow")
+//            startActivity(Intent(this@SigninActivity, MainActivity::class.java))
+
             submitForm(login, password, stayLoggedIn)
+
         }
         binding.tvSigninLink.setOnClickListener {
             val intent = Intent(this, SignupActivity::class.java)
