@@ -13,6 +13,7 @@ import com.groupe5.moodmobile.databinding.ActivitySigninBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.regex.Pattern
 
 
 class SigninActivity : AppCompatActivity() {
@@ -27,8 +28,6 @@ class SigninActivity : AppCompatActivity() {
             val login = binding.etSigninLogin.text.toString()
             val password = binding.etSigninPassword.text.toString()
             val stayLoggedIn = true
-            val message = "Submit!"
-            Log.d("Submit", message)
             submitForm(login, password, stayLoggedIn)
         }
         binding.tvSigninLink.setOnClickListener {
@@ -45,32 +44,36 @@ class SigninActivity : AppCompatActivity() {
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-
-                    val sessionTokenService = SessionTokenService("clesecrete")
-//                    val message = "DebToken!"
-//                    Log.d("DebToken", message)
-                    val userId = login.toString()
-                    val role = "user"
-                    val isSessionOnly = true
-
-                    val sessionToken = sessionTokenService.createSessionToken(userId, role, isSessionOnly)
-                    updateTokenInPreferences(sessionToken)
+                    //Get the token from the cookie
+                    val cookieHeader: String? = response.headers().get("Set-Cookie")
+                    if (cookieHeader != null) {
+                        val token = extractTokenFromCookie(cookieHeader)
+                        Log.d("cookieToken", token)
+                        updateTokenInPreferences(token)
+                    }
 
                     startActivity(Intent(this@SigninActivity, MainActivity::class.java))
                 } else {
-//                    val message = "Echec Auth!"
-//                    Log.d("EchecAuth", message)
-                    // Échec de l'authentification
+                    val message = "Echec Auth!: ${response.message()}"
+                    Log.d("EchecAuth", message)
                 }
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                // Echec bd pas accessible
                 val message = "Echec DB: ${t.message}"
                 Log.e("EchecDb", message, t)
             }
 
         })
+    }
+    private fun extractTokenFromCookie(cookieHeader: String): String {
+        val pattern = Pattern.compile("MoodSession=([^;]+)")
+        val matcher = pattern.matcher(cookieHeader)
+        return if (matcher.find()) {
+            matcher.group(1)
+        } else {
+            ""
+        }
     }
     private fun updateTokenInPreferences(newToken: String) {
         val prefs = getSharedPreferences("mood", MODE_PRIVATE)

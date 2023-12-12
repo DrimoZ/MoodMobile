@@ -11,9 +11,9 @@ data class DtoOutputUserSignup(val name: String, val login: String, val mail: St
 
 interface AuthenticationService {
 
-    @POST("/api/v1/user/signIn")
+    @POST("/api/v1/auth/signIn")
     fun signInUser(@Body dto: DtoOutputUserSignin): Call<Void>
-    @POST("/api/v1/user/signUp")
+    @POST("/api/v1/auth/signUp")
     fun signUpUser(@Body dto: DtoOutputUserSignup): Call<Void>
 
     // Ajoutez les autres methodes : signUpUser,...

@@ -9,6 +9,7 @@ import com.groupe5.moodmobile.databinding.ActivitySigninBinding
 import com.groupe5.moodmobile.databinding.ActivitySignupBinding
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
 import java.util.regex.Pattern
 
@@ -49,30 +50,53 @@ class SignupActivity : AppCompatActivity() {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
 
-                    val sessionTokenService = SessionTokenService("clesecrete")
-                    val message = "DebToken!"
-                    Log.d("DebToken", message)
-                    val userId = login.toString()
-                    val role = "user"
-                    val isSessionOnly = true
-
-                    val sessionToken = sessionTokenService.createSessionToken(userId, role, isSessionOnly)
-                    updateTokenInPreferences(sessionToken)
+                    //Get the token from the cookie
+                    val cookieHeader: String? = response.headers().get("Set-Cookie")
+                    if (cookieHeader != null) {
+                        val token = extractTokenFromCookie(cookieHeader)
+                        Log.d("cookieToken", token)
+                        updateTokenInPreferences(token)
+                    }
 
                     startActivity(Intent(this@SignupActivity, MainActivity::class.java))
                 } else {
                     val errorBody = response.errorBody()?.string()
                     Log.d("EchecAuth", "Error body: $errorBody")
+                    if (response.code() == 409) {
+                        Log.d("EchecAuth", "Conflict: Username or mail already used")
+                        runOnUiThread {
+                            Toast.makeText(
+                                this@SignupActivity,
+                                "Username and email already exists.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
                 }
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
+                if (t is HttpException) {
+                    val responseCode = t.code()
+                    if (responseCode == 409) {
+                        Log.d("EchecAuth", "Conflict: Username or mail already used")
+                    }
+                }
                 // Echec bd pas accessible
                 val message = "Echec DB: ${t.message}"
                 Log.e("EchecDb", message, t)
             }
 
         })
+    }
+    private fun extractTokenFromCookie(cookieHeader: String): String {
+        val pattern = Pattern.compile("MoodSession=([^;]+)")
+        val matcher = pattern.matcher(cookieHeader)
+        return if (matcher.find()) {
+            matcher.group(1)
+        } else {
+            ""
+        }
     }
     private fun validateForm(
         name: String,
