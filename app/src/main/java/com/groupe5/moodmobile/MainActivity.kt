@@ -74,17 +74,17 @@ class MainActivity : AppCompatActivity() {
                         )
                         .commit()
                 }
-                R.id.navbar_notification -> {
+                R.id.navbar_profile -> {
                     supportFragmentManager
                         .beginTransaction()
                         .replace(
                             R.id.fragmentContainerView_mainActivity,
-                            NotificationFragment.newInstance(),
-                            "NotificationFragment"
+                            ProfileFragment.newInstance(),
+                            "ProfileFragment"
                         )
                         .commit()
                 }
-                R.id.navbar_profile -> {
+                R.id.navbar_more -> {
                     val prefs = getSharedPreferences("mood", MODE_PRIVATE)
                     val editor = prefs.edit()
                     editor.putString("jwtToken", null)
@@ -98,8 +98,8 @@ class MainActivity : AppCompatActivity() {
                         .beginTransaction()
                         .replace(
                             R.id.fragmentContainerView_mainActivity,
-                            ProfileFragment.newInstance(),
-                            "ProfileFragment"
+                            NotificationFragment.newInstance(),
+                            "NotificationFragment"
                         )
                         .commit()
                 }
