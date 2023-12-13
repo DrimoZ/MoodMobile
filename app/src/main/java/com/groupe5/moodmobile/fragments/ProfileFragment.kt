@@ -2,6 +2,7 @@ package com.groupe5.moodmobile.fragments
 
 import android.R
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,11 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import com.groupe5.moodmobile.activities.SigninActivity
 import com.groupe5.moodmobile.databinding.FragmentProfileBinding
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
+import com.groupe5.moodmobile.repositories.IAuthenticationRepository
 import com.groupe5.moodmobile.services.ApiClientProfile
 import com.groupe5.moodmobile.services.UserService
+import com.groupe5.moodmobile.utils.RetrofitFactory
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,6 +27,7 @@ import retrofit2.Response
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private lateinit var userService: UserService
+    private val authenticationRepository = RetrofitFactory.instance.create(IAuthenticationRepository::class.java)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -13,6 +13,7 @@ import com.groupe5.moodmobile.dtos.Publication.DtoInputPublication
 class ProfilePublicationsFragment : Fragment() {
     private val publicationUI: ArrayList<DtoInputPublication> = arrayListOf()
     private val profilePublicationRecyclerViewAdapter = ProfilePublicationsRecyclerViewAdapter(publicationUI)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -21,16 +22,15 @@ class ProfilePublicationsFragment : Fragment() {
 
         // Set the adapter
         if (view is RecyclerView) {
-            with(view) {
-                layoutManager = LinearLayoutManager(context)
-                adapter = profilePublicationRecyclerViewAdapter
-            }
+            val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            view.layoutManager = layoutManager
+            view.adapter = profilePublicationRecyclerViewAdapter
         }
         return view
     }
 
     fun initUIWithTodos(publications: List<DtoInputPublication>?) {
-        publications?.forEach ( publicationUI::add )
+        publications?.forEach(publicationUI::add)
         profilePublicationRecyclerViewAdapter.notifyDataSetChanged()
     }
 

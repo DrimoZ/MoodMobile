@@ -36,6 +36,7 @@ class ProfilePublicationManagerFragment : Fragment() {
         val token = prefs.getString("jwtToken", "") ?: ""
 
         // Directly create the ViewModel with the token
+        //viewModel = ViewModelProvider(this).get(ProfilePublicationManagerViewModel::class.java)
         viewModel = ProfilePublicationManagerViewModel(token)
 
         val profilePublicationsFragment = childFragmentManager

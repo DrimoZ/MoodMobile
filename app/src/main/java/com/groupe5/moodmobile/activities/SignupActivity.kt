@@ -7,7 +7,8 @@ import android.util.Log
 import android.widget.Toast
 import com.groupe5.moodmobile.databinding.ActivitySignupBinding
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserSignup
-import com.groupe5.moodmobile.services.ApiClient
+import com.groupe5.moodmobile.repositories.IAuthenticationRepository
+import com.groupe5.moodmobile.utils.RetrofitFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
@@ -16,7 +17,7 @@ import java.util.regex.Pattern
 
 class SignupActivity : AppCompatActivity() {
     lateinit var binding: ActivitySignupBinding
-    private val authenticationService = ApiClient.create()
+    private val authenticationRepository = RetrofitFactory.instance.create(IAuthenticationRepository::class.java)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
@@ -45,7 +46,7 @@ class SignupActivity : AppCompatActivity() {
     }
     private fun submitForm(name: String, login: String, mail: String, birthdate: String, password: String, passwordConfirmation: String) {
         val dto = DtoOutputUserSignup(name, login, mail, birthdate, password)
-        val call = authenticationService.signUpUser(dto)
+        val call = authenticationRepository.signUpUser(dto)
 
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
