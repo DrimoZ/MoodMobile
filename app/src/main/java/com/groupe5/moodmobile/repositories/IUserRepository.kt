@@ -1,5 +1,6 @@
 package com.groupe5.moodmobile.repositories
 
+import com.groupe5.moodmobile.dtos.Friend.DtoInputFriendsResponse
 import com.groupe5.moodmobile.dtos.Publication.DtoInputPublicationsResponse
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
@@ -14,5 +15,7 @@ interface IUserRepository {
     fun getUserIdAndRole(): Call<DtoInputUserIdAndRole>
     @GET("/api/v1/user/{userLogin}/publications")
     fun getUserPublications(@Path("userLogin") userLogin: String): Call<DtoInputPublicationsResponse>
+    @GET("/api/v1/user/{userLogin}/friends")
+    fun getUserFriends(@Path("userLogin") userLogin: String): Call<DtoInputFriendsResponse>
 }
 

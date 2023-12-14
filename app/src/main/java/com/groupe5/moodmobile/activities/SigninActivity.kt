@@ -1,6 +1,8 @@
 package com.groupe5.moodmobile.activities
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -16,23 +18,26 @@ import java.util.regex.Pattern
 
 class SigninActivity : AppCompatActivity() {
     lateinit var binding: ActivitySigninBinding
-    private val authenticationRepository = RetrofitFactory.instance.create(IAuthenticationRepository::class.java)
+    lateinit var jwtToken: String
+    private lateinit var authenticationRepository: IAuthenticationRepository
+    lateinit var prefs: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySigninBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        prefs = getSharedPreferences("mood", Context.MODE_PRIVATE)
+        jwtToken = prefs.getString("jwtToken", "") ?: ""
+        authenticationRepository = RetrofitFactory.create(jwtToken, IAuthenticationRepository::class.java)
+
         binding.btnSignInSignIn.setOnClickListener {
             val login = binding.etSigninLogin.text.toString()
             val password = binding.etSigninPassword.text.toString()
             val stayLoggedIn = true
-//            Log.d("test", "test")
-//            updateTokenInPreferences("leShow")
-//            startActivity(Intent(this@SigninActivity, MainActivity::class.java))
-
             submitForm(login, password, stayLoggedIn)
-
         }
+
         binding.tvSigninLink.setOnClickListener {
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)

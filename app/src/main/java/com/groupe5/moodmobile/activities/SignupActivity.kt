@@ -1,6 +1,8 @@
 package com.groupe5.moodmobile.activities
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -17,11 +19,19 @@ import java.util.regex.Pattern
 
 class SignupActivity : AppCompatActivity() {
     lateinit var binding: ActivitySignupBinding
-    private val authenticationRepository = RetrofitFactory.instance.create(IAuthenticationRepository::class.java)
+    lateinit var jwtToken: String
+    private lateinit var authenticationRepository: IAuthenticationRepository
+    lateinit var prefs: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        prefs = getSharedPreferences("mood", Context.MODE_PRIVATE)
+        jwtToken = prefs.getString("jwtToken", "") ?: ""
+        authenticationRepository = RetrofitFactory.create(jwtToken, IAuthenticationRepository::class.java)
+
 
         binding.btnSignUpSignUp.setOnClickListener {
             val name = binding.etSignupFullName.text.toString()

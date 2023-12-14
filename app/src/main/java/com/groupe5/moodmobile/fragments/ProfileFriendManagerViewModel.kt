@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.groupe5.moodmobile.dtos.Publication.DtoInputPublication
-import com.groupe5.moodmobile.dtos.Publication.DtoInputPublicationsResponse
+import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
+import com.groupe5.moodmobile.dtos.Friend.DtoInputFriendsResponse
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
@@ -14,14 +14,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProfilePublicationManagerViewModel(private val jwtToken: String) : ViewModel() {
-    val mutablePublicationLiveData: MutableLiveData<List<DtoInputPublication>> = MutableLiveData()
+class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() {
+    val mutableFriendLiveData: MutableLiveData<List<DtoInputFriend>> = MutableLiveData()
     private val userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
 
-    fun startGetAllPublications() {
+    fun startGetAllFriends() {
         viewModelScope.launch {
             try {
-                // Step 1: Get user ID and role
                 val call1 = userRepository.getUserIdAndRole()
                 call1.enqueue(object : Callback<DtoInputUserIdAndRole> {
                     override fun onResponse(call: Call<DtoInputUserIdAndRole>, response: Response<DtoInputUserIdAndRole>) {
@@ -29,8 +28,7 @@ class ProfilePublicationManagerViewModel(private val jwtToken: String) : ViewMod
                             val userId = response.body()?.userId
                             Log.d("userId", userId.toString())
                             userId?.let {
-                                // Step 2: Use the ID/Login to call the API to get the user's publications
-                                getUserPublications(it)
+                                getUserFriends(it)
                             }
                         } else {
                             handleApiError(response)
@@ -47,21 +45,21 @@ class ProfilePublicationManagerViewModel(private val jwtToken: String) : ViewMod
         }
     }
 
-    private fun getUserPublications(userId: String) {
-        val call2 = userRepository.getUserPublications(userId)
-        call2.enqueue(object : Callback<DtoInputPublicationsResponse> {
-            override fun onResponse(call: Call<DtoInputPublicationsResponse>, response: Response<DtoInputPublicationsResponse>) {
+    private fun getUserFriends(userId: String) {
+        val call2 = userRepository.getUserFriends(userId)
+        call2.enqueue(object : Callback<DtoInputFriendsResponse> {
+            override fun onResponse(call: Call<DtoInputFriendsResponse>, response: Response<DtoInputFriendsResponse>) {
                 if (response.isSuccessful) {
-                    val publicationsResponse = response.body()
-                    val publications = publicationsResponse?.publications
-                    Log.d("Publications", publications.toString())
-                    mutablePublicationLiveData.postValue(publications)
+                    val friendsResponse = response.body()
+                    val friends = friendsResponse?.friends
+                    Log.d("Friends", friends.toString())
+                    mutableFriendLiveData.postValue(friends)
                 } else {
                     handleApiError(response)
                 }
             }
 
-            override fun onFailure(call: Call<DtoInputPublicationsResponse>, t: Throwable) {
+            override fun onFailure(call: Call<DtoInputFriendsResponse>, t: Throwable) {
                 handleNetworkError(t)
             }
         })

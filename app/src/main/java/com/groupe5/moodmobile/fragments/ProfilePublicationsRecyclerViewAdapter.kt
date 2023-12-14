@@ -36,7 +36,6 @@ class ProfilePublicationsRecyclerViewAdapter(
     inner class ViewHolder(binding: ProfilePublicationItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val content = binding.imProfilePublicationItemContent
-
     }
 
 }

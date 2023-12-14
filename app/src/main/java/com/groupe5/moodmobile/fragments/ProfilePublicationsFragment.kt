@@ -29,7 +29,7 @@ class ProfilePublicationsFragment : Fragment() {
         return view
     }
 
-    fun initUIWithTodos(publications: List<DtoInputPublication>?) {
+    fun initUIWithPublications(publications: List<DtoInputPublication>?) {
         publications?.forEach(publicationUI::add)
         profilePublicationRecyclerViewAdapter.notifyDataSetChanged()
     }
