@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriendsResponse
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
+import com.groupe5.moodmobile.repositories.IFriendRepository
 import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import kotlinx.coroutines.launch
@@ -16,7 +17,9 @@ import retrofit2.Response
 
 class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() {
     val mutableFriendLiveData: MutableLiveData<List<DtoInputFriend>> = MutableLiveData()
+    val mutableFriendDeleteData: MutableLiveData<DtoInputFriend> = MutableLiveData()
     private val userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
+    private val friendRepository = RetrofitFactory.create(jwtToken, IFriendRepository::class.java)
 
     fun startGetAllFriends() {
         viewModelScope.launch {
@@ -45,6 +48,7 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
         }
     }
 
+
     private fun getUserFriends(userId: String) {
         val call2 = userRepository.getUserFriends(userId)
         call2.enqueue(object : Callback<DtoInputFriendsResponse> {
@@ -64,6 +68,34 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
             }
         })
     }
+
+    fun deleteFriend(friend: DtoInputFriend) {
+        val friendId = friend.id
+        Log.d("friendid",friendId)
+        viewModelScope.launch {
+            val deleteCall = friendRepository.deleteFriend(friendId)
+            deleteCall.enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Log.d("FriendDeletion", "Friend deleted successfully")
+                        mutableFriendDeleteData.postValue(friend)
+                    } else if (response.code() == 404) {
+                        Log.d("FriendDeletion", "Friend not found")
+                    }else {
+                        handleApiError(response)
+                        Log.d("responseNotSucc","responseNotSucc")
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    handleNetworkError(t)
+                    Log.d("Failure","Failure")
+                }
+            })
+        }
+    }
+
+
 
     private fun handleApiError(response: Response<*>) {
         val message = "API error: ${response.message()}"

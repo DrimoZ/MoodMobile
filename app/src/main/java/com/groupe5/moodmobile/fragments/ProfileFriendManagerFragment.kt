@@ -8,10 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.groupe5.moodmobile.R
 import android.content.Context
+import androidx.lifecycle.ViewModelProvider
+import com.groupe5.moodmobile.classes.SharedViewModel
 import com.groupe5.moodmobile.databinding.FragmentProfileFriendManagerBinding
+import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 
 class ProfileFriendManagerFragment : Fragment() {
     lateinit var binding: FragmentProfileFriendManagerBinding
+    private lateinit var sharedViewModel: SharedViewModel
 
     companion object {
         fun newInstance() = ProfileFriendManagerFragment()
@@ -30,7 +34,6 @@ class ProfileFriendManagerFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        // Get the JWT token from SharedPreferences
         val prefs = requireActivity().getSharedPreferences("mood", Context.MODE_PRIVATE)
         val token = prefs.getString("jwtToken", "") ?: ""
         viewModel = ProfileFriendManagerViewModel(token)
@@ -38,11 +41,26 @@ class ProfileFriendManagerFragment : Fragment() {
         val profileFriendsFragment = childFragmentManager
             .findFragmentById(R.id.fcb_profileFriendManager_list) as ProfileFriendsFragment
 
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        //...
+        viewModel.mutableFriendDeleteData.observe(viewLifecycleOwner) { friend ->
+            sharedViewModel.friendData.value = friend
+        }
+
+        viewModel.mutableFriendDeleteData.observe(viewLifecycleOwner){
+            profileFriendsFragment.deleteFriendFromUI(it)
+        }
         viewModel.mutableFriendLiveData.observe(viewLifecycleOwner) {
             Log.i("Friends", it.toString())
             profileFriendsFragment.initUIWithFriends(it)
         }
 
         viewModel.startGetAllFriends()
+
+        profileFriendsFragment.profileFriendRecyclerViewAdapter.setOnDeleteClickListener(object : ProfileFriendsRecyclerViewAdapter.OnDeleteClickListener {
+            override fun onDeleteClick(friend: DtoInputFriend) {
+                viewModel.deleteFriend(friend)
+            }
+        })
     }
 }

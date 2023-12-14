@@ -10,12 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.groupe5.moodmobile.R
+import com.groupe5.moodmobile.databinding.FragmentProfileFriendManagerBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.dtos.Publication.DtoInputPublication
 import com.groupe5.moodmobile.placeholder.PlaceholderContent
 class ProfileFriendsFragment : Fragment() {
     private val friendUI: ArrayList<DtoInputFriend> = arrayListOf()
-    private val profileFriendRecyclerViewAdapter = ProfileFriendsRecyclerViewAdapter(friendUI)
+    val profileFriendRecyclerViewAdapter = ProfileFriendsRecyclerViewAdapter(friendUI)
+    lateinit var binding: FragmentProfileFriendManagerBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,6 +35,11 @@ class ProfileFriendsFragment : Fragment() {
 
     fun initUIWithFriends(friends: List<DtoInputFriend>?) {
         friends?.forEach(friendUI::add)
+        profileFriendRecyclerViewAdapter.notifyDataSetChanged()
+    }
+
+    fun deleteFriendFromUI(friend: DtoInputFriend) {
+        friendUI.remove(friend)
         profileFriendRecyclerViewAdapter.notifyDataSetChanged()
     }
 

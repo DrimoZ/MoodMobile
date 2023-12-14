@@ -7,7 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.groupe5.moodmobile.R
+import com.groupe5.moodmobile.classes.SharedViewModel
 import com.groupe5.moodmobile.databinding.FragmentProfileBinding
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
@@ -21,6 +24,7 @@ import retrofit2.Response
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private lateinit var userRepository: IUserRepository
+    private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +37,30 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        sharedViewModel.friendData.observe(viewLifecycleOwner, Observer { userProfile ->
+            startUserData()
+        })
+
+        startUserData()
+
+        binding.btnFragmentProfilePublications.setOnClickListener {
+            replaceFragment(ProfilePublicationManagerFragment.newInstance())
+        }
+
+        binding.btnFragmentProfileFriends.setOnClickListener {
+            replaceFragment(ProfileFriendManagerFragment.newInstance())
+        }
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.replace(R.id.fcb_profilePublicationManager_list, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+    private fun startUserData(){
         val prefs = requireActivity().getSharedPreferences("mood", Context.MODE_PRIVATE)
         val jwtToken = prefs.getString("jwtToken", "") ?: ""
         userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
@@ -76,21 +104,6 @@ class ProfileFragment : Fragment() {
                 Log.e("EchecDb", message, t)
             }
         })
-
-        binding.btnFragmentProfilePublications.setOnClickListener {
-            replaceFragment(ProfilePublicationManagerFragment.newInstance())
-        }
-
-        binding.btnFragmentProfileFriends.setOnClickListener {
-            replaceFragment(ProfileFriendManagerFragment.newInstance())
-        }
-    }
-
-    private fun replaceFragment(fragment: Fragment) {
-        val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.fcb_profilePublicationManager_list, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
     }
 
     companion object {
