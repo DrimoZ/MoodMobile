@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nestedScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#010928"
+    tools:context=".fragments.UserProfile.ProfileFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_fragmentProfile_userImage"
+            android:layout_width="116dp"
+            android:layout_height="117dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="48dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/back"
+            app:civ_border_width="2dp"
+            app:civ_border_color="#deb996"
+            tools:ignore="MissingConstraints" />
+
+
+        <TextView
+            android:id="@+id/tv_fragmentProfile_userUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp"
+            android:text="Username"
+            android:textColor="@color/gold"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/iv_fragmentProfile_userImage"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_fragmentProfile_userNbPublications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:text="Publications :"
+            android:textColor="@color/gold"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/iv_fragmentProfile_userImage"
+            app:layout_constraintTop_toBottomOf="@+id/tv_fragmentProfile_userUsername" />
+
+        <TextView
+            android:id="@+id/tv_fragmentProfile_userNbFriends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="87dp"
+            android:text="Friends :"
+            android:textColor="@color/gold"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/tv_fragmentProfile_userNbPublications"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_fragmentProfile_userDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="25dp"
+            android:text="Description"
+            android:textColor="@color/gold"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/iv_fragmentProfile_userImage"
+            app:layout_constraintTop_toBottomOf="@+id/tv_fragmentProfile_userNbPublications" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="40dp"
+            android:background="#deb992"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_fragmentProfile_userDescription" />
+
+        <Button
+            android:id="@+id/btn_fragmentProfile_publications"
+            android:layout_width="128dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="60dp"
+            android:backgroundTint="#00FFFFFF"
+            android:text="Publications"
+            android:textColor="#deb992"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/btn_fragmentProfile_friends"
+            android:layout_width="128dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="60dp"
+            android:backgroundTint="#00FFFFFF"
+            android:text="Friends"
+            android:textColor="#deb992"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider"
+            tools:ignore="MissingConstraints" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fcb_otherUserProfileFriendManager_list"
+            android:name="com.groupe5.moodmobile.fragments.OtherUserProfile.OtherUserProfileFriendManagerFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider"
+            tools:layout_editor_absoluteX="203dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

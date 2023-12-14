@@ -6,13 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.fragments.SearchFragment
 import com.groupe5.moodmobile.databinding.ActivityMainBinding
+import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.fragments.MessageFragment
 import com.groupe5.moodmobile.fragments.NewsFeedFragment
 import com.groupe5.moodmobile.fragments.NotificationFragment
-import com.groupe5.moodmobile.fragments.ProfileFragment
+import com.groupe5.moodmobile.fragments.OtherUserProfile.OtherUserProfileFragment
+import com.groupe5.moodmobile.fragments.UserProfile.ProfileFragment
+import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendsRecyclerViewAdapter
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFriendClickListener {
     lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,5 +115,15 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+    }
+    override fun onFriendClick(friend: DtoInputFriend) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(
+                R.id.fragmentContainerView_mainActivity,
+                OtherUserProfileFragment.newInstance(friend),
+                "OtherUserProfileFragment"
+            )
+            .commit()
     }
 }

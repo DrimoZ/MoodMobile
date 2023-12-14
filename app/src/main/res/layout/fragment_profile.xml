@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#010928"
-    tools:context=".fragments.ProfileFragment">
+    tools:context=".fragments.UserProfile.ProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -113,7 +113,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fcb_profilePublicationManager_list"
-            android:name="com.groupe5.moodmobile.fragments.ProfilePublicationManagerFragment"
+            android:name="com.groupe5.moodmobile.fragments.UserProfile.ProfilePublicationManagerFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="40dp"

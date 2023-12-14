@@ -1,4 +1,4 @@
-package com.groupe5.moodmobile.fragments
+package com.groupe5.moodmobile.fragments.UserProfile
 
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.groupe5.moodmobile.R
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
+import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.classes.SharedViewModel
 import com.groupe5.moodmobile.databinding.FragmentProfileFriendManagerBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
@@ -57,9 +58,16 @@ class ProfileFriendManagerFragment : Fragment() {
 
         viewModel.startGetAllFriends()
 
-        profileFriendsFragment.profileFriendRecyclerViewAdapter.setOnDeleteClickListener(object : ProfileFriendsRecyclerViewAdapter.OnDeleteClickListener {
+        profileFriendsFragment.profileFriendRecyclerViewAdapter.setOnDeleteClickListener(object :
+            ProfileFriendsRecyclerViewAdapter.OnDeleteClickListener {
             override fun onDeleteClick(friend: DtoInputFriend) {
                 viewModel.deleteFriend(friend)
+            }
+        })
+        profileFriendsFragment.profileFriendRecyclerViewAdapter.setOnFriendClickListener(object :
+            ProfileFriendsRecyclerViewAdapter.OnFriendClickListener {
+            override fun onFriendClick(friend: DtoInputFriend) {
+                (requireActivity() as MainActivity).onFriendClick(friend)
             }
         })
     }

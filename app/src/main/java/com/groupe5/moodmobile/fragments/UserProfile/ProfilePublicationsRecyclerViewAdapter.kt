@@ -1,4 +1,4 @@
-package com.groupe5.moodmobile.fragments
+package com.groupe5.moodmobile.fragments.UserProfile
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater

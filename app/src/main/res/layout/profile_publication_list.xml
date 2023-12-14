@@ -11,5 +11,5 @@
     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
     app:spanCount="3"
     android:orientation="horizontal"
-    tools:context=".fragments.ProfilePublicationsFragment"
+    tools:context=".fragments.UserProfile.ProfilePublicationsFragment"
     tools:listitem="@layout/profile_publication_item" />

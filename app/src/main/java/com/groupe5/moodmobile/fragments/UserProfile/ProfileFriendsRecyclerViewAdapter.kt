@@ -1,9 +1,8 @@
-package com.groupe5.moodmobile.fragments
+package com.groupe5.moodmobile.fragments.UserProfile
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.databinding.FragmentFriendItemBinding
@@ -15,8 +14,12 @@ class ProfileFriendsRecyclerViewAdapter(
 ) : RecyclerView.Adapter<ProfileFriendsRecyclerViewAdapter.ViewHolder>() {
 
     private var deleteClickListener: OnDeleteClickListener? = null
+    private var friendClickListener: OnFriendClickListener? = null
     interface OnDeleteClickListener {
         fun onDeleteClick(friend: DtoInputFriend)
+    }
+    interface OnFriendClickListener {
+        fun onFriendClick(friend: DtoInputFriend)
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -30,6 +33,9 @@ class ProfileFriendsRecyclerViewAdapter(
     fun setOnDeleteClickListener(listener: OnDeleteClickListener) {
         deleteClickListener = listener
     }
+    fun setOnFriendClickListener(listener: OnFriendClickListener) {
+        friendClickListener = listener
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
@@ -37,6 +43,9 @@ class ProfileFriendsRecyclerViewAdapter(
         holder.name.text = item.name
         holder.button.setOnClickListener {
             deleteClickListener?.onDeleteClick(item)
+        }
+        holder.name.setOnClickListener {
+            friendClickListener?.onFriendClick(item)
         }
     }
 

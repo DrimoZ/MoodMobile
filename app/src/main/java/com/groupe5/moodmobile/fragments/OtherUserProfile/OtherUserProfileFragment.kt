@@ -1,59 +1,48 @@
-package com.groupe5.moodmobile.fragments
+package com.groupe5.moodmobile.fragments.OtherUserProfile
 
 import android.content.Context
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.groupe5.moodmobile.R
-import com.groupe5.moodmobile.classes.SharedViewModel
-import com.groupe5.moodmobile.databinding.FragmentProfileBinding
+import com.groupe5.moodmobile.databinding.FragmentOtherUserProfileBinding
+import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.dtos.Image.DtoInputImage
-import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
+import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendManagerFragment
+import com.groupe5.moodmobile.fragments.UserProfile.ProfilePublicationManagerFragment
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.Path
-import java.nio.file.Files
-import java.nio.file.Paths
-import android.os.Environment
 import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
 
-
-class ProfileFragment : Fragment() {
-    private lateinit var binding: FragmentProfileBinding
+class OtherUserProfileFragment(friend: DtoInputFriend) : Fragment() {
+    val friend = friend
+    private lateinit var binding: FragmentOtherUserProfileBinding
     private lateinit var userRepository: IUserRepository
     private lateinit var imageRepository: IImageRepository
-    private lateinit var sharedViewModel: SharedViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentProfileBinding.inflate(layoutInflater, container, false)
+        // Inflate the layout for this fragment
+        binding = FragmentOtherUserProfileBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
-        sharedViewModel.friendData.observe(viewLifecycleOwner, Observer { userProfile ->
-            startUserData()
-        })
-
-        startUserData()
+        startUserData(friend)
 
         binding.btnFragmentProfilePublications.setOnClickListener {
             replaceFragment(ProfilePublicationManagerFragment.newInstance())
@@ -71,46 +60,26 @@ class ProfileFragment : Fragment() {
         transaction.commit()
     }
 
-    private fun startUserData(){
+    private fun startUserData(friend: DtoInputFriend){
         val prefs = requireActivity().getSharedPreferences("mood", Context.MODE_PRIVATE)
         val jwtToken = prefs.getString("jwtToken", "") ?: ""
         userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
 
-        // Call the API to get the user's ID and role
-        val call1 = userRepository.getUserIdAndRole()
-        call1.enqueue(object : Callback<DtoInputUserIdAndRole> {
-            override fun onResponse(call: Call<DtoInputUserIdAndRole>, response: Response<DtoInputUserIdAndRole>) {
+        val userId = friend.id
+        val call = userRepository.getUserProfile(userId)
+        call.enqueue(object : Callback<DtoInputUserProfile> {
+            override fun onResponse(call: Call<DtoInputUserProfile>, response: Response<DtoInputUserProfile>) {
                 if (response.isSuccessful) {
-                    val userId = response.body()?.userId
-                    //Log.d("userId", userId.toString())
-                    userId?.let {
-                        // Use the ID/Login to call the API to get the user's profile
-                        val call2 = userRepository.getUserProfile(it)
-                        call2.enqueue(object : Callback<DtoInputUserProfile> {
-                            override fun onResponse(call: Call<DtoInputUserProfile>, response: Response<DtoInputUserProfile>) {
-                                if (response.isSuccessful) {
-                                    val userProfile = response.body()
-                                    // Update TextViews with profile data
-                                    binding.tvFragmentProfileUserUsername.text = userProfile?.name
-                                    binding.tvFragmentProfileUserNbPublications.text = "Publications: ${userProfile?.publicationCount}"
-                                    binding.tvFragmentProfileUserNbFriends.text = "Friends: ${userProfile?.friendCount}"
-                                    binding.tvFragmentProfileUserDescription.text = userProfile?.description
-                                }
-                            }
-
-                            override fun onFailure(call: Call<DtoInputUserProfile>, t: Throwable) {
-                                val message = "Echec DB: ${t.message}"
-                                Log.e("EchecDb", message, t)
-                            }
-                        })
-                    }
-                } else {
-                    val message = "echec : ${response.message()}"
-                    Log.d("Echec", message)
+                    val userProfile = response.body()
+                    // Update TextViews with profile data
+                    binding.tvFragmentProfileUserUsername.text = userProfile?.name
+                    binding.tvFragmentProfileUserNbPublications.text = "Publications: ${userProfile?.publicationCount}"
+                    binding.tvFragmentProfileUserNbFriends.text = "Friends: ${userProfile?.friendCount}"
+                    binding.tvFragmentProfileUserDescription.text = userProfile?.description
                 }
             }
 
-            override fun onFailure(call: Call<DtoInputUserIdAndRole>, t: Throwable) {
+            override fun onFailure(call: Call<DtoInputUserProfile>, t: Throwable) {
                 val message = "Echec DB: ${t.message}"
                 Log.e("EchecDb", message, t)
             }
@@ -151,6 +120,6 @@ class ProfileFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() = ProfileFragment()
+        fun newInstance(friend: DtoInputFriend) = OtherUserProfileFragment(friend)
     }
 }
