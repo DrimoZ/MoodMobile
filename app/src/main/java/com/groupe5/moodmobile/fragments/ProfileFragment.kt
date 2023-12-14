@@ -2,6 +2,7 @@ package com.groupe5.moodmobile.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,18 +13,28 @@ import androidx.lifecycle.ViewModelProvider
 import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.classes.SharedViewModel
 import com.groupe5.moodmobile.databinding.FragmentProfileBinding
+import com.groupe5.moodmobile.dtos.Image.DtoInputImage
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
+import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Path
+import java.nio.file.Files
+import java.nio.file.Paths
+import android.os.Environment
+import java.io.File
+import java.io.FileOutputStream
+import java.util.UUID
 
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private lateinit var userRepository: IUserRepository
+    private lateinit var imageRepository: IImageRepository
     private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreateView(
@@ -104,6 +115,38 @@ class ProfileFragment : Fragment() {
                 Log.e("EchecDb", message, t)
             }
         })
+    }
+
+    fun imageToURL(dto: DtoInputImage): String {
+        val imageData = dto.data
+        val decodedBytes: ByteArray = Base64.decode(imageData, Base64.DEFAULT)
+
+        // Créez un fichier dans le répertoire des fichiers temporaires de l'application
+        val directory = File(requireContext().filesDir, "images")
+        if (!directory.exists()) {
+            directory.mkdirs()
+        }
+
+        // Générez un nom de fichier aléatoire
+        val randomFileName = UUID.randomUUID().toString() + ".jpg"
+        val imageFile = File(directory, randomFileName)
+
+        // Écrivez les octets dans le fichier image
+        try {
+            FileOutputStream(imageFile).use { stream ->
+                stream.write(decodedBytes)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        // Obtenez l'URL du fichier
+        val imageUrl: String = imageFile.toURI().toURL().toString()
+
+        // Affichez l'URL de l'image
+        println("URL de l'image: $imageUrl")
+
+        return imageUrl
     }
 
     companion object {
