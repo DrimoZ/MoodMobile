@@ -13,7 +13,7 @@ import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 
 class ProfileFriendsFragment : Fragment() {
     private val friendUI: ArrayList<DtoInputFriend> = arrayListOf()
-    val profileFriendRecyclerViewAdapter = ProfileFriendsRecyclerViewAdapter(friendUI)
+    lateinit var profileFriendRecyclerViewAdapter: ProfileFriendsRecyclerViewAdapter
     lateinit var binding: FragmentProfileFriendManagerBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,6 +23,7 @@ class ProfileFriendsFragment : Fragment() {
 
         // Set the adapter
         if (view is RecyclerView) {
+            profileFriendRecyclerViewAdapter = ProfileFriendsRecyclerViewAdapter(requireContext(), friendUI)
             val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             view.layoutManager = layoutManager
             view.adapter = profileFriendRecyclerViewAdapter

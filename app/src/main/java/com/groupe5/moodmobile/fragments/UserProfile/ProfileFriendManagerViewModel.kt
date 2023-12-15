@@ -21,14 +21,14 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
     private val userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
     private val friendRepository = RetrofitFactory.create(jwtToken, IFriendRepository::class.java)
 
-    fun startGetAllFriends() {
+    fun startGetAllFriends(friendId: String? = null) {
         viewModelScope.launch {
             try {
                 val call1 = userRepository.getUserIdAndRole()
                 call1.enqueue(object : Callback<DtoInputUserIdAndRole> {
                     override fun onResponse(call: Call<DtoInputUserIdAndRole>, response: Response<DtoInputUserIdAndRole>) {
                         if (response.isSuccessful) {
-                            val userId = response.body()?.userId
+                            val userId = friendId ?: response.body()?.userId
                             Log.d("userId", userId.toString())
                             userId?.let {
                                 getUserFriends(it)

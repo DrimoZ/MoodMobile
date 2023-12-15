@@ -14,7 +14,13 @@ class ProfilePublicationManagerFragment : Fragment() {
     lateinit var binding: FragmentProfilePublicationManagerBinding
 
     companion object {
-        fun newInstance() = ProfilePublicationManagerFragment()
+        fun newInstance(friendId: String): ProfilePublicationManagerFragment {
+            val fragment = ProfilePublicationManagerFragment()
+            val args = Bundle()
+            args.putString("friendId", friendId)
+            fragment.arguments = args
+            return fragment
+        }
     }
 
     private lateinit var viewModel: ProfilePublicationManagerViewModel
@@ -30,6 +36,7 @@ class ProfilePublicationManagerFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        val friendId = arguments?.getString("friendId")
         // Get the JWT token from SharedPreferences
         val prefs = requireActivity().getSharedPreferences("mood", Context.MODE_PRIVATE)
         val token = prefs.getString("jwtToken", "") ?: ""
@@ -45,7 +52,6 @@ class ProfilePublicationManagerFragment : Fragment() {
             Log.i("Publications", it.toString())
             profilePublicationsFragment.initUIWithPublications(it)
         }
-
-        viewModel.startGetAllPublications()
+        viewModel.startGetAllPublications(if (friendId.isNullOrEmpty()) null else friendId)
     }
 }

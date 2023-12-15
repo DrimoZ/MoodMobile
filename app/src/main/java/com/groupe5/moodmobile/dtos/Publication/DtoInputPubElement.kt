@@ -1,5 +1,4 @@
 package com.groupe5.moodmobile.dtos.Publication
 
-data class DtoInputPubElement(val content:String,
-                              val extension:String,
+data class DtoInputPubElement(val idImage:Int,
                               val id:Int)

@@ -19,7 +19,13 @@ class ProfileFriendManagerFragment : Fragment() {
     private lateinit var sharedViewModel: SharedViewModel
 
     companion object {
-        fun newInstance() = ProfileFriendManagerFragment()
+        fun newInstance(friendId: String): ProfileFriendManagerFragment {
+            val fragment = ProfileFriendManagerFragment()
+            val args = Bundle()
+            args.putString("friendId", friendId)
+            fragment.arguments = args
+            return fragment
+        }
     }
 
     private lateinit var viewModel: ProfileFriendManagerViewModel
@@ -35,6 +41,7 @@ class ProfileFriendManagerFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        val friendId = arguments?.getString("friendId")
         val prefs = requireActivity().getSharedPreferences("mood", Context.MODE_PRIVATE)
         val token = prefs.getString("jwtToken", "") ?: ""
         viewModel = ProfileFriendManagerViewModel(token)
@@ -56,7 +63,7 @@ class ProfileFriendManagerFragment : Fragment() {
             profileFriendsFragment.initUIWithFriends(it)
         }
 
-        viewModel.startGetAllFriends()
+        viewModel.startGetAllFriends(if (friendId.isNullOrEmpty()) null else friendId)
 
         profileFriendsFragment.profileFriendRecyclerViewAdapter.setOnDeleteClickListener(object :
             ProfileFriendsRecyclerViewAdapter.OnDeleteClickListener {

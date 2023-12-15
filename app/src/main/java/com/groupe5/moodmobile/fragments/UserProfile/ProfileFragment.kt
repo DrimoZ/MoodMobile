@@ -18,7 +18,12 @@ import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.repositories.IUserRepository
+import com.groupe5.moodmobile.services.ImageService
 import com.groupe5.moodmobile.utils.RetrofitFactory
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,6 +36,7 @@ class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private lateinit var userRepository: IUserRepository
     private lateinit var imageRepository: IImageRepository
+    private lateinit var imageService: ImageService
     private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreateView(
@@ -52,11 +58,11 @@ class ProfileFragment : Fragment() {
         startUserData()
 
         binding.btnFragmentProfilePublications.setOnClickListener {
-            replaceFragment(ProfilePublicationManagerFragment.newInstance())
+            replaceFragment(ProfilePublicationManagerFragment.newInstance(""))
         }
 
         binding.btnFragmentProfileFriends.setOnClickListener {
-            replaceFragment(ProfileFriendManagerFragment.newInstance())
+            replaceFragment(ProfileFriendManagerFragment.newInstance(""))
         }
     }
 
@@ -71,6 +77,8 @@ class ProfileFragment : Fragment() {
         val prefs = requireActivity().getSharedPreferences("mood", Context.MODE_PRIVATE)
         val jwtToken = prefs.getString("jwtToken", "") ?: ""
         userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
+        imageRepository = RetrofitFactory.create(jwtToken, IImageRepository::class.java)
+        imageService = ImageService(requireContext(), imageRepository)
 
         // Call the API to get the user's ID and role
         val call1 = userRepository.getUserIdAndRole()
@@ -78,14 +86,28 @@ class ProfileFragment : Fragment() {
             override fun onResponse(call: Call<DtoInputUserIdAndRole>, response: Response<DtoInputUserIdAndRole>) {
                 if (response.isSuccessful) {
                     val userId = response.body()?.userId
-                    //Log.d("userId", userId.toString())
                     userId?.let {
-                        // Use the ID/Login to call the API to get the user's profile
                         val call2 = userRepository.getUserProfile(it)
                         call2.enqueue(object : Callback<DtoInputUserProfile> {
                             override fun onResponse(call: Call<DtoInputUserProfile>, response: Response<DtoInputUserProfile>) {
                                 if (response.isSuccessful) {
                                     val userProfile = response.body()
+                                    val imageId = response.body()?.idImage
+                                    imageId?.let { id ->
+                                        CoroutineScope(Dispatchers.Main).launch {
+                                            val image = imageService.getImageById(id)
+                                            if (image.startsWith("@drawable/")) {
+                                                val resourceId = resources.getIdentifier(
+                                                    image.substringAfterLast('/'),
+                                                    "drawable",
+                                                    image
+                                                )
+                                                Picasso.with(binding.ivFragmentProfileUserImage.context).load(resourceId).into(binding.ivFragmentProfileUserImage)
+                                            } else {
+                                                Picasso.with(binding.ivFragmentProfileUserImage.context).load(image).into(binding.ivFragmentProfileUserImage)
+                                            }
+                                        }
+                                    }
                                     // Update TextViews with profile data
                                     binding.tvFragmentProfileUserUsername.text = userProfile?.name
                                     binding.tvFragmentProfileUserNbPublications.text = "Publications: ${userProfile?.publicationCount}"
@@ -111,6 +133,7 @@ class ProfileFragment : Fragment() {
                 Log.e("EchecDb", message, t)
             }
         })
+
     }
 
     fun imageToURL(dto: DtoInputImage): String {

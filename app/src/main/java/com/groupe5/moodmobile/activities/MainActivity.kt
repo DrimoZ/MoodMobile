@@ -10,7 +10,7 @@ import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.fragments.MessageFragment
 import com.groupe5.moodmobile.fragments.NewsFeedFragment
 import com.groupe5.moodmobile.fragments.NotificationFragment
-import com.groupe5.moodmobile.fragments.OtherUserProfile.OtherUserProfileFragment
+import com.groupe5.moodmobile.fragments.UserProfile.OtherUserProfileFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendsRecyclerViewAdapter
 

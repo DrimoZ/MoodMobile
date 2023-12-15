@@ -18,7 +18,7 @@ class ProfilePublicationManagerViewModel(private val jwtToken: String) : ViewMod
     val mutablePublicationLiveData: MutableLiveData<List<DtoInputPublication>> = MutableLiveData()
     private val userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
 
-    fun startGetAllPublications() {
+    fun startGetAllPublications(friendId: String? = null) {
         viewModelScope.launch {
             try {
                 // Step 1: Get user ID and role
@@ -26,7 +26,8 @@ class ProfilePublicationManagerViewModel(private val jwtToken: String) : ViewMod
                 call1.enqueue(object : Callback<DtoInputUserIdAndRole> {
                     override fun onResponse(call: Call<DtoInputUserIdAndRole>, response: Response<DtoInputUserIdAndRole>) {
                         if (response.isSuccessful) {
-                            val userId = response.body()?.userId
+                            Log.e("friendID", "firend id : " + friendId)
+                            val userId = friendId ?: response.body()?.userId
                             Log.d("userId", userId.toString())
                             userId?.let {
                                 // Step 2: Use the ID/Login to call the API to get the user's publications
@@ -66,6 +67,7 @@ class ProfilePublicationManagerViewModel(private val jwtToken: String) : ViewMod
             }
         })
     }
+
 
     private fun handleApiError(response: Response<*>) {
         val message = "API error: ${response.message()}"

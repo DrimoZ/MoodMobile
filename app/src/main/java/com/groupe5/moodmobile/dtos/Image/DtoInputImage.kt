@@ -1,3 +1,6 @@
 package com.groupe5.moodmobile.dtos.Image
 
-data class DtoInputImage(val data: String)
+import java.util.Date
+
+data class DtoInputImage(val data: String,
+                            val date: Date)
