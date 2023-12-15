@@ -1,22 +1,37 @@
 package com.groupe5.moodmobile.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.fragments.SearchFragment
 import com.groupe5.moodmobile.databinding.ActivityMainBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
+import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
+import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
 import com.groupe5.moodmobile.fragments.MessageFragment
 import com.groupe5.moodmobile.fragments.NewsFeedFragment
 import com.groupe5.moodmobile.fragments.NotificationFragment
 import com.groupe5.moodmobile.fragments.UserProfile.OtherUserProfileFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendsRecyclerViewAdapter
+import com.groupe5.moodmobile.repositories.IUserRepository
+import com.groupe5.moodmobile.services.UserService
+import com.groupe5.moodmobile.utils.RetrofitFactory
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFriendClickListener {
     lateinit var binding: ActivityMainBinding
+    private lateinit var userService: UserService
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -117,13 +132,29 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
         }
     }
     override fun onFriendClick(friend: DtoInputFriend) {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(
-                R.id.fragmentContainerView_mainActivity,
-                OtherUserProfileFragment.newInstance(friend),
-                "OtherUserProfileFragment"
-            )
-            .commit()
+        userService = UserService(this)
+        CoroutineScope(Dispatchers.Main).launch {
+            val userId = userService.getUserId()
+            val friendId = friend.id
+            if(friendId == userId){
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(
+                        R.id.fragmentContainerView_mainActivity,
+                        ProfileFragment.newInstance(),
+                        "ProfileFragment"
+                    )
+                    .commit()
+            }else{
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(
+                        R.id.fragmentContainerView_mainActivity,
+                        OtherUserProfileFragment.newInstance(friend),
+                        "OtherUserProfileFragment"
+                    )
+                    .commit()
+            }
+        }
     }
 }

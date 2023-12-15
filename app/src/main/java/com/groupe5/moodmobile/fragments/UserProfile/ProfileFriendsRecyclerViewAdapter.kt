@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.groupe5.moodmobile.R
@@ -12,6 +13,7 @@ import com.groupe5.moodmobile.databinding.FragmentFriendItemBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.services.ImageService
+import com.groupe5.moodmobile.services.UserService
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -25,11 +27,16 @@ class ProfileFriendsRecyclerViewAdapter(
     lateinit var jwtToken: String
     private lateinit var imageRepository: IImageRepository
     private lateinit var imageService: ImageService
+    private lateinit var userService: UserService
     lateinit var prefs: SharedPreferences
     private var deleteClickListener: OnDeleteClickListener? = null
+    private var addClickListener: OnAddClickListener? = null
     private var friendClickListener: OnFriendClickListener? = null
     interface OnDeleteClickListener {
         fun onDeleteClick(friend: DtoInputFriend)
+    }
+    interface OnAddClickListener {
+        fun onAddClick(friend: DtoInputFriend)
     }
     interface OnFriendClickListener {
         fun onFriendClick(friend: DtoInputFriend)
@@ -39,6 +46,7 @@ class ProfileFriendsRecyclerViewAdapter(
         jwtToken = prefs.getString("jwtToken", "") ?: ""
         imageRepository = RetrofitFactory.create(jwtToken, IImageRepository::class.java)
         imageService = ImageService(context, imageRepository)
+        userService = UserService(context)
         return ViewHolder(
             FragmentFriendItemBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -49,6 +57,9 @@ class ProfileFriendsRecyclerViewAdapter(
     }
     fun setOnDeleteClickListener(listener: OnDeleteClickListener) {
         deleteClickListener = listener
+    }
+    fun setOnAddClickListener(listener: OnAddClickListener) {
+        addClickListener = listener
     }
     fun setOnFriendClickListener(listener: OnFriendClickListener) {
         friendClickListener = listener
@@ -68,13 +79,41 @@ class ProfileFriendsRecyclerViewAdapter(
             } else {
                 Picasso.with(holder.photo.context).load(image).into(holder.photo)
             }
+            if(userService.getUserId() == item.id){
+                holder.delButton.isEnabled = false
+                holder.delButton.visibility = View.INVISIBLE
+                holder.addButton.isEnabled = false
+                holder.addButton.visibility = View.INVISIBLE
+            }
+            val friendList = userService.getFriendList()
+            var isFriend = false
+            for (friend in friendList) {
+                if (friend == item.id) {
+                    isFriend = true
+                }
+            }
+            if (!isFriend && userService.getUserId() != item.id){
+                holder.addButton.isEnabled = true
+                holder.addButton.visibility = View.VISIBLE
+            }else if(isFriend){
+                holder.delButton.isEnabled = true
+                holder.delButton.visibility = View.VISIBLE
+            }
         }
         holder.name.text = item.name
-        holder.button.setOnClickListener {
-            deleteClickListener?.onDeleteClick(item)
+        if(item.commonFriendCount > 1){
+            holder.commonFriend.text = "${item.commonFriendCount} Friends in common"
+        }else if(item.commonFriendCount == 1){
+            holder.commonFriend.text = "${item.commonFriendCount} Friend in common"
         }
         holder.name.setOnClickListener {
             friendClickListener?.onFriendClick(item)
+        }
+        holder.delButton.setOnClickListener {
+            deleteClickListener?.onDeleteClick(item)
+        }
+        holder.addButton.setOnClickListener {
+            addClickListener?.onAddClick(item)
         }
     }
 
@@ -84,6 +123,8 @@ class ProfileFriendsRecyclerViewAdapter(
         RecyclerView.ViewHolder(binding.root) {
         val photo = binding.ivProfileFriendUserImage
         val name: TextView = binding.tvProfileFriendUserUsername
-        val button = binding.btnProfileFriendDeleteFriend
+        val commonFriend: TextView = binding.tvProfileFriendUserCommonFriends
+        val delButton = binding.btnProfileFriendDeleteFriend
+        val addButton = binding.btnProfileFriendAddFriend
     }
 }

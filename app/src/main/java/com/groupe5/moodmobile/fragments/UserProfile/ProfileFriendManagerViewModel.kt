@@ -95,7 +95,32 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
         }
     }
 
+    fun addFriend(friend: DtoInputFriend) {
+        val friendId = friend.id
+        Log.d("friendid",friendId)
+        viewModelScope.launch {
+            val addCall = friendRepository.createFriendRequest(friendId)
+            addCall.enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Log.d("FriendRequestSent", "Friend request sent successfully")
+                        mutableFriendDeleteData.postValue(friend)
+                    } else if (response.code() == 404) {
+                        Log.d("FriendRequestNotSent", "Friend not found")
+                    }else {
+                        handleApiError(response)
+                        val message = "erreur : ${response.message()}"
+                        Log.d("responseNotSucc",message)
+                    }
+                }
 
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    handleNetworkError(t)
+                    Log.d("Failure","Failure")
+                }
+            })
+        }
+    }
 
     private fun handleApiError(response: Response<*>) {
         val message = "API error: ${response.message()}"

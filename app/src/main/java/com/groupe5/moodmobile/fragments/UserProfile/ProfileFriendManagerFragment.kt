@@ -71,6 +71,12 @@ class ProfileFriendManagerFragment : Fragment() {
                 viewModel.deleteFriend(friend)
             }
         })
+        profileFriendsFragment.profileFriendRecyclerViewAdapter.setOnAddClickListener(object  :
+            ProfileFriendsRecyclerViewAdapter.OnAddClickListener {
+            override fun onAddClick(friend: DtoInputFriend) {
+                viewModel.addFriend(friend)
+            }
+            })
         profileFriendsFragment.profileFriendRecyclerViewAdapter.setOnFriendClickListener(object :
             ProfileFriendsRecyclerViewAdapter.OnFriendClickListener {
             override fun onFriendClick(friend: DtoInputFriend) {

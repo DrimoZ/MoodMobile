@@ -100,7 +100,7 @@ class ProfileFragment : Fragment() {
                                                 val resourceId = resources.getIdentifier(
                                                     image.substringAfterLast('/'),
                                                     "drawable",
-                                                    image
+                                                    "com.groupe5.moodmobile"
                                                 )
                                                 Picasso.with(binding.ivFragmentProfileUserImage.context).load(resourceId).into(binding.ivFragmentProfileUserImage)
                                             } else {
@@ -134,38 +134,6 @@ class ProfileFragment : Fragment() {
             }
         })
 
-    }
-
-    fun imageToURL(dto: DtoInputImage): String {
-        val imageData = dto.data
-        val decodedBytes: ByteArray = Base64.decode(imageData, Base64.DEFAULT)
-
-        // Créez un fichier dans le répertoire des fichiers temporaires de l'application
-        val directory = File(requireContext().filesDir, "images")
-        if (!directory.exists()) {
-            directory.mkdirs()
-        }
-
-        // Générez un nom de fichier aléatoire
-        val randomFileName = UUID.randomUUID().toString() + ".jpg"
-        val imageFile = File(directory, randomFileName)
-
-        // Écrivez les octets dans le fichier image
-        try {
-            FileOutputStream(imageFile).use { stream ->
-                stream.write(decodedBytes)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        // Obtenez l'URL du fichier
-        val imageUrl: String = imageFile.toURI().toURL().toString()
-
-        // Affichez l'URL de l'image
-        println("URL de l'image: $imageUrl")
-
-        return imageUrl
     }
 
     companion object {
