@@ -14,6 +14,7 @@ import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
 import com.groupe5.moodmobile.fragments.MessageFragment
 import com.groupe5.moodmobile.fragments.NewsFeedFragment
 import com.groupe5.moodmobile.fragments.NotificationFragment
+import com.groupe5.moodmobile.fragments.SideMenuFragment
 import com.groupe5.moodmobile.fragments.UserProfile.OtherUserProfileFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendManagerFragment
@@ -123,23 +124,31 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
                         .commit()
                 }
                 R.id.navbar_more -> {
-                    val prefs = getSharedPreferences("mood", MODE_PRIVATE)
-                    val editor = prefs.edit()
-                    editor.putString("jwtToken", null)
-                    editor.apply()
-                    if (!isTokenPresent()) {
-                        val intent = Intent(this, SigninActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
                     supportFragmentManager
                         .beginTransaction()
-                        .replace(
+                        .add(
                             R.id.fragmentContainerView_mainActivity,
-                            NotificationFragment.newInstance(),
-                            "NotificationFragment"
+                            SideMenuFragment.newInstance(),
+                            "SideMenuFragment"
                         )
                         .commit()
+//                    val prefs = getSharedPreferences("mood", MODE_PRIVATE)
+//                    val editor = prefs.edit()
+//                    editor.putString("jwtToken", null)
+//                    editor.apply()
+//                    if (!isTokenPresent()) {
+//                        val intent = Intent(this, SigninActivity::class.java)
+//                        startActivity(intent)
+//                        finish()
+//                    }
+//                    supportFragmentManager
+//                        .beginTransaction()
+//                        .replace(
+//                            R.id.fragmentContainerView_mainActivity,
+//                            NotificationFragment.newInstance(),
+//                            "NotificationFragment"
+//                        )
+//                        .commit()
                 }
             }
             true
