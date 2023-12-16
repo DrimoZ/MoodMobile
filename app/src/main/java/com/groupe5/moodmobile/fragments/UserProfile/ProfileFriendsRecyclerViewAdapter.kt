@@ -31,12 +31,25 @@ class ProfileFriendsRecyclerViewAdapter(
     lateinit var prefs: SharedPreferences
     private var deleteClickListener: OnDeleteClickListener? = null
     private var addClickListener: OnAddClickListener? = null
+    private var cancelClickListener: OnCancelClickListener? = null
+    private var acceptClickListener: OnAcceptClickListener? = null
+    private var rejectClickListener: OnRejectClickListener? = null
     private var friendClickListener: OnFriendClickListener? = null
+
     interface OnDeleteClickListener {
         fun onDeleteClick(friend: DtoInputFriend)
     }
     interface OnAddClickListener {
         fun onAddClick(friend: DtoInputFriend)
+    }
+    interface OnCancelClickListener {
+        fun onCancelClick(friend: DtoInputFriend)
+    }
+    interface OnAcceptClickListener {
+        fun onAcceptClick(friend: DtoInputFriend)
+    }
+    interface OnRejectClickListener {
+        fun onRejectClick(friend: DtoInputFriend)
     }
     interface OnFriendClickListener {
         fun onFriendClick(friend: DtoInputFriend)
@@ -60,6 +73,15 @@ class ProfileFriendsRecyclerViewAdapter(
     }
     fun setOnAddClickListener(listener: OnAddClickListener) {
         addClickListener = listener
+    }
+    fun setOnCancelClickListener(listener: OnCancelClickListener) {
+        cancelClickListener = listener
+    }
+    fun setOnAcceptClickListener(listener: OnAcceptClickListener) {
+        acceptClickListener = listener
+    }
+    fun setOnRejectClickListener(listener: OnRejectClickListener) {
+        rejectClickListener = listener
     }
     fun setOnFriendClickListener(listener: OnFriendClickListener) {
         friendClickListener = listener
@@ -85,19 +107,23 @@ class ProfileFriendsRecyclerViewAdapter(
                 holder.addButton.isEnabled = false
                 holder.addButton.visibility = View.INVISIBLE
             }
-            val friendList = userService.getFriendList()
-            var isFriend = false
-            for (friend in friendList) {
-                if (friend == item.id) {
-                    isFriend = true
-                }
-            }
-            if (!isFriend && userService.getUserId() != item.id){
-                holder.addButton.isEnabled = true
-                holder.addButton.visibility = View.VISIBLE
-            }else if(isFriend){
+            if(item.isFriendWithConnected == 2){
                 holder.delButton.isEnabled = true
                 holder.delButton.visibility = View.VISIBLE
+            }
+            if(item.isFriendWithConnected == 0){
+                holder.cancelButton.isEnabled = true
+                holder.cancelButton.visibility = View.VISIBLE
+            }
+            if(item.isFriendWithConnected == 1){
+                holder.acceptButton.isEnabled = true
+                holder.acceptButton.visibility = View.VISIBLE
+                holder.rejectButton.isEnabled = true
+                holder.rejectButton.visibility = View.VISIBLE
+            }
+            if(item.isFriendWithConnected == -1 && userService.getUserId() != item.id){
+                holder.addButton.isEnabled = true
+                holder.addButton.visibility = View.VISIBLE
             }
         }
         holder.name.text = item.name
@@ -115,6 +141,16 @@ class ProfileFriendsRecyclerViewAdapter(
         holder.addButton.setOnClickListener {
             addClickListener?.onAddClick(item)
         }
+        holder.cancelButton.setOnClickListener {
+            cancelClickListener?.onCancelClick(item)
+        }
+        holder.acceptButton.setOnClickListener {
+            acceptClickListener?.onAcceptClick(item)
+        }
+        holder.rejectButton.setOnClickListener {
+            rejectClickListener?.onRejectClick(item)
+        }
+
     }
 
     override fun getItemCount(): Int = values.size
@@ -126,5 +162,8 @@ class ProfileFriendsRecyclerViewAdapter(
         val commonFriend: TextView = binding.tvProfileFriendUserCommonFriends
         val delButton = binding.btnProfileFriendDeleteFriend
         val addButton = binding.btnProfileFriendAddFriend
+        val cancelButton = binding.btnProfileFriendCancelFriendRequest
+        val acceptButton = binding.btnProfileFriendAcceptFriend
+        val rejectButton = binding.btnProfileFriendRejectFriend
     }
 }

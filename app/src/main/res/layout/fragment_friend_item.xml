@@ -70,4 +70,54 @@
         app:strokeWidth="1dp"
         android:visibility="invisible"
         android:enabled="false"/>
+
+    <Button
+        android:id="@+id/btn_ProfileFriend_acceptFriend"
+        android:layout_width="60dp"
+        android:layout_height="45dp"
+        android:layout_below="@id/btn_ProfileFriend_deleteFriend"
+        android:layout_alignRight="@id/btn_ProfileFriend_deleteFriend"
+        android:layout_marginTop="-45dp"
+        android:layout_marginRight="32dp"
+        android:backgroundTint="#00FFFFFF"
+        android:text="v"
+        android:textColor="@color/green"
+        android:textColorHighlight="@color/green"
+        app:strokeColor="@color/green"
+        app:strokeWidth="1dp"
+        android:visibility="invisible"
+        android:enabled="false"/>
+
+    <Button
+        android:id="@+id/btn_ProfileFriend_rejectFriend"
+        android:layout_width="60dp"
+        android:layout_height="45dp"
+        android:layout_below="@id/btn_ProfileFriend_deleteFriend"
+        android:layout_alignRight="@id/btn_ProfileFriend_deleteFriend"
+        android:layout_marginTop="-45dp"
+        android:layout_marginRight="-32dp"
+        android:backgroundTint="#00FFFFFF"
+        android:text="x"
+        android:textColor="@color/red"
+        android:textColorHighlight="@color/red"
+        app:strokeColor="@color/red"
+        app:strokeWidth="1dp"
+        android:visibility="invisible"
+        android:enabled="false"/>
+
+    <Button
+        android:id="@+id/btn_ProfileFriend_CancelFriendRequest"
+        android:layout_width="60dp"
+        android:layout_height="45dp"
+        android:layout_below="@id/btn_ProfileFriend_deleteFriend"
+        android:layout_alignRight="@id/btn_ProfileFriend_deleteFriend"
+        android:layout_marginTop="-45dp"
+        android:backgroundTint="#00FFFFFF"
+        android:text="-"
+        android:textColor="@color/gray"
+        android:textColorHighlight="@color/gray"
+        app:strokeColor="@color/gray"
+        app:strokeWidth="1dp"
+        android:visibility="invisible"
+        android:enabled="false"/>
 </RelativeLayout>

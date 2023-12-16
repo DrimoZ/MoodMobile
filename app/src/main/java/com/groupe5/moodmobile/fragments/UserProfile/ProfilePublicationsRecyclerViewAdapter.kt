@@ -72,7 +72,12 @@ class ProfilePublicationsRecyclerViewAdapter(
                 }
             }
         } else {
-            holder.content.visibility = View.GONE
+            val resourceId = context.resources.getIdentifier(
+                "no_publication_picture",
+                "drawable",
+                context.packageName
+            )
+            Picasso.with(holder.content.context).load(resourceId).into(holder.content)
         }
     }
 

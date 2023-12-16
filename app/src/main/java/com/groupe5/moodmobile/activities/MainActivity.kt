@@ -16,6 +16,7 @@ import com.groupe5.moodmobile.fragments.NewsFeedFragment
 import com.groupe5.moodmobile.fragments.NotificationFragment
 import com.groupe5.moodmobile.fragments.UserProfile.OtherUserProfileFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFragment
+import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendsFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendsRecyclerViewAdapter
 import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.services.UserService

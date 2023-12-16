@@ -75,15 +75,119 @@
             app:layout_constraintStart_toEndOf="@+id/iv_fragmentOtherUserProfile_userImage"
             app:layout_constraintTop_toBottomOf="@+id/tv_fragmentOtherUserProfile_userNbPublications" />
 
+        <Button
+            android:id="@+id/btn_fragmentOtherUserProfile_sendMessage"
+            android:layout_width="160dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#00FFFFFF"
+            android:text="Send a message"
+            android:textColor="@color/white"
+            android:textColorHighlight="@color/white"
+            app:cornerRadius="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_fragmentOtherUserProfile_userDescription"
+            app:strokeColor="@color/white"
+            app:strokeWidth="2dp"/>
+
+        <Button
+            android:id="@+id/btn_fragmentOtherUserProfile_deleteFriend"
+            android:layout_width="160dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#00FFFFFF"
+            android:text="Delete friend"
+            android:textColor="@color/red"
+            android:textColorHighlight="@color/red"
+            app:cornerRadius="1dp"
+            app:layout_constraintStart_toEndOf="@+id/btn_fragmentOtherUserProfile_sendMessage"
+            app:layout_constraintTop_toBottomOf="@+id/tv_fragmentOtherUserProfile_userDescription"
+            app:strokeColor="@color/red"
+            app:strokeWidth="2dp"
+            android:visibility="invisible"
+            android:enabled="false"/>
+        <Button
+            android:id="@+id/btn_fragmentOtherUserProfile_addFriend"
+            android:layout_width="160dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#00FFFFFF"
+            android:text="Add friend"
+            android:textColor="@color/green"
+            android:textColorHighlight="@color/green"
+            app:cornerRadius="1dp"
+            app:layout_constraintStart_toEndOf="@+id/btn_fragmentOtherUserProfile_sendMessage"
+            app:layout_constraintTop_toBottomOf="@+id/tv_fragmentOtherUserProfile_userDescription"
+            app:strokeColor="@color/green"
+            app:strokeWidth="2dp"
+            android:visibility="invisible"
+            android:enabled="false" />
+        <Button
+            android:id="@+id/btn_fragmentOtherUserProfile_cancelFriendRequest"
+            android:layout_width="160dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#00FFFFFF"
+            android:text="Cancel request"
+            android:textColor="@color/gray"
+            android:textColorHighlight="@color/gray"
+            app:cornerRadius="1dp"
+            app:layout_constraintStart_toEndOf="@+id/btn_fragmentOtherUserProfile_sendMessage"
+            app:layout_constraintTop_toBottomOf="@+id/tv_fragmentOtherUserProfile_userDescription"
+            app:strokeColor="@color/gray"
+            app:strokeWidth="2dp"
+            android:visibility="invisible"
+            android:enabled="false" />
+
+        <Button
+            android:id="@+id/btn_fragmentOtherUserProfile_acceptFriendRequest"
+            android:layout_width="75dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#00FFFFFF"
+            android:text="v"
+            android:textColor="@color/green"
+            android:textColorHighlight="@color/green"
+            app:cornerRadius="1dp"
+            app:layout_constraintStart_toEndOf="@+id/btn_fragmentOtherUserProfile_sendMessage"
+            app:layout_constraintTop_toBottomOf="@+id/tv_fragmentOtherUserProfile_userDescription"
+            app:strokeColor="@color/green"
+            app:strokeWidth="2dp"
+            android:visibility="invisible"
+            android:enabled="false" />
+
+        <Button
+            android:id="@+id/btn_fragmentOtherUserProfile_rejectFriendRequest"
+            android:layout_width="75dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#00FFFFFF"
+            android:text="x"
+            android:textColor="@color/red"
+            android:textColorHighlight="@color/red"
+            app:cornerRadius="1dp"
+            app:layout_constraintStart_toEndOf="@+id/btn_fragmentOtherUserProfile_acceptFriendRequest"
+            app:layout_constraintTop_toBottomOf="@+id/tv_fragmentOtherUserProfile_userDescription"
+            app:strokeColor="@color/red"
+            app:strokeWidth="2dp"
+            android:visibility="invisible"
+            android:enabled="false"  />
+
         <View
             android:id="@+id/divider"
             android:layout_width="0dp"
             android:layout_height="2dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="15dp"
             android:background="#deb992"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_fragmentOtherUserProfile_userDescription" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_fragmentOtherUserProfile_sendMessage" />
 
         <Button
             android:id="@+id/btn_fragmentOtherUserProfile_publications"

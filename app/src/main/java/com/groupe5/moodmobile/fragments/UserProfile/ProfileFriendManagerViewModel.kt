@@ -18,6 +18,8 @@ import retrofit2.Response
 class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() {
     val mutableFriendLiveData: MutableLiveData<List<DtoInputFriend>> = MutableLiveData()
     val mutableFriendDeleteData: MutableLiveData<DtoInputFriend> = MutableLiveData()
+    val mutableFriendAcceptData: MutableLiveData<DtoInputFriend> = MutableLiveData()
+    val mutableFriendRefreshData: MutableLiveData<Void> = MutableLiveData()
     private val userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
     private val friendRepository = RetrofitFactory.create(jwtToken, IFriendRepository::class.java)
 
@@ -104,9 +106,89 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
                         Log.d("FriendRequestSent", "Friend request sent successfully")
-                        mutableFriendDeleteData.postValue(friend)
+                        mutableFriendRefreshData.postValue(null)
                     } else if (response.code() == 404) {
                         Log.d("FriendRequestNotSent", "Friend not found")
+                    }else {
+                        handleApiError(response)
+                        val message = "erreur : ${response.message()}"
+                        Log.d("responseNotSucc",message)
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    handleNetworkError(t)
+                    Log.d("Failure","Failure")
+                }
+            })
+        }
+    }
+
+    fun cancelFriendRequest(friend: DtoInputFriend) {
+        val friendId = friend.id
+        Log.d("friendid",friendId)
+        viewModelScope.launch {
+            val cancelCall = friendRepository.rejectFriendRequest(friendId)
+            cancelCall.enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Log.d("FriendRequestCanceled", "Friend request canceled successfully")
+                        mutableFriendRefreshData.postValue(null)
+                    } else if (response.code() == 404) {
+                        Log.d("FriendRequestNotCanceled", "Friend not found")
+                    }else {
+                        handleApiError(response)
+                        val message = "erreur : ${response.message()}"
+                        Log.d("responseNotSucc",message)
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    handleNetworkError(t)
+                    Log.d("Failure","Failure")
+                }
+            })
+        }
+    }
+
+    fun acceptFriendRequest(friend: DtoInputFriend) {
+        val friendId = friend.id
+        Log.d("friendid",friendId)
+        viewModelScope.launch {
+            val acceptCall = friendRepository.acceptFriendRequest(friendId)
+            acceptCall.enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Log.d("FriendRequestAccepted", "Friend request accepted successfully")
+                        mutableFriendAcceptData.postValue(friend)
+                    } else if (response.code() == 404) {
+                        Log.d("FriendRequestNotCanceled", "Friend not found")
+                    }else {
+                        handleApiError(response)
+                        val message = "erreur : ${response.message()}"
+                        Log.d("responseNotSucc",message)
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    handleNetworkError(t)
+                    Log.d("Failure","Failure")
+                }
+            })
+        }
+    }
+
+    fun rejectFriendRequest(friend: DtoInputFriend) {
+        val friendId = friend.id
+        Log.d("friendid",friendId)
+        viewModelScope.launch {
+            val rejectCall = friendRepository.rejectFriendRequest(friendId)
+            rejectCall.enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Log.d("FriendRequestRejected", "Friend request rejected successfully")
+                    } else if (response.code() == 404) {
+                        Log.d("FriendRequestNotCanceled", "Friend not found")
                     }else {
                         handleApiError(response)
                         val message = "erreur : ${response.message()}"

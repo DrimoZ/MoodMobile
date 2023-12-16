@@ -19,10 +19,11 @@ import kotlin.coroutines.suspendCoroutine
 class ImageService(private val context: Context, private val imageRepository: IImageRepository) {
 
     suspend fun getImageById(imageId: Int): String = suspendCoroutine { continuation ->
+        Log.e("test", "" + imageId)
         if(imageId == -1){
             continuation.resume("@drawable/no_publication_picture")
         }
-        if(imageId == 1 || imageId == 2){
+        if(imageId == 0){
             continuation.resume("@drawable/no_profile_picture")
         }
         else{

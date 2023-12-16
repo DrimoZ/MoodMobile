@@ -11,6 +11,7 @@ import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.databinding.FragmentOtherUserProfileBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
+import com.groupe5.moodmobile.repositories.IFriendRepository
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.services.ImageService
@@ -27,6 +28,7 @@ class OtherUserProfileFragment(friend: DtoInputFriend) : Fragment() {
     val friend = friend
     private lateinit var binding: FragmentOtherUserProfileBinding
     private lateinit var userRepository: IUserRepository
+    private lateinit var friendRepository: IFriendRepository
     private lateinit var imageRepository: IImageRepository
     private lateinit var imageService: ImageService
     override fun onCreateView(
@@ -57,6 +59,42 @@ class OtherUserProfileFragment(friend: DtoInputFriend) : Fragment() {
             val profileFriendFragment = ProfileFriendManagerFragment.newInstance(friendId)
             replaceFragment(profileFriendFragment)
         }
+
+        binding.btnFragmentOtherUserProfileAddFriend.setOnClickListener {
+            friendRepository.createFriendRequest(friendId)
+        }
+
+        binding.btnFragmentOtherUserProfileCancelFriendRequest.setOnClickListener {
+            friendRepository.rejectFriendRequest(friendId)
+        }
+
+        binding.btnFragmentOtherUserProfileAcceptFriendRequest.setOnClickListener {
+            friendRepository.acceptFriendRequest(friendId)
+        }
+
+        binding.btnFragmentOtherUserProfileRejectFriendRequest.setOnClickListener {
+            friendRepository.rejectFriendRequest(friendId)
+        }
+
+        binding.btnFragmentOtherUserProfileDeleteFriend.setOnClickListener {
+            friendRepository.deleteFriend(friendId)
+            val deleteCall = friendRepository.deleteFriend(friendId)
+            deleteCall.enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Log.d("FriendDeletion", "Friend deleted successfully")
+                    } else if (response.code() == 404) {
+                        Log.d("FriendDeletion", "Friend not found")
+                    }else {
+                        Log.d("responseNotSucc","responseNotSucc")
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.d("Failure","Failure")
+                }
+            })
+        }
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -66,10 +104,21 @@ class OtherUserProfileFragment(friend: DtoInputFriend) : Fragment() {
         transaction.commit()
     }
 
+    fun refreshFragment() {
+        val friendId = friend.id
+        val profileFriendFragment = ProfileFriendManagerFragment.newInstance(friendId)
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.replace(R.id.fcb_otherUserProfileFriendManager_list, profileFriendFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+
     private fun startUserData(friend: DtoInputFriend){
         val prefs = requireActivity().getSharedPreferences("mood", Context.MODE_PRIVATE)
         val jwtToken = prefs.getString("jwtToken", "") ?: ""
         userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
+        friendRepository = RetrofitFactory.create(jwtToken, IFriendRepository::class.java)
         imageRepository = RetrofitFactory.create(jwtToken, IImageRepository::class.java)
         imageService = ImageService(requireContext(), imageRepository)
 
@@ -101,6 +150,24 @@ class OtherUserProfileFragment(friend: DtoInputFriend) : Fragment() {
                     binding.tvFragmentOtherUserProfileUserNbPublications.text = "Publications: ${userProfile?.publicationCount}"
                     binding.tvFragmentOtherUserProfileUserNbFriends.text = "Friends: ${userProfile?.friendCount}"
                     binding.tvFragmentOtherUserProfileUserDescription.text = userProfile?.description
+                    if(friend.isFriendWithConnected == 2){
+                        binding.btnFragmentOtherUserProfileDeleteFriend.isEnabled = true
+                        binding.btnFragmentOtherUserProfileDeleteFriend.visibility = View.VISIBLE
+                    }
+                    if(friend.isFriendWithConnected == 0){
+                        binding.btnFragmentOtherUserProfileCancelFriendRequest.isEnabled = true
+                        binding.btnFragmentOtherUserProfileCancelFriendRequest.visibility = View.VISIBLE
+                    }
+                    if(friend.isFriendWithConnected == 1){
+                        binding.btnFragmentOtherUserProfileAcceptFriendRequest.isEnabled = true
+                        binding.btnFragmentOtherUserProfileAcceptFriendRequest.visibility = View.VISIBLE
+                        binding.btnFragmentOtherUserProfileRejectFriendRequest.isEnabled = true
+                        binding.btnFragmentOtherUserProfileRejectFriendRequest.visibility = View.VISIBLE
+                    }
+                    if(friend.isFriendWithConnected == -1){
+                        binding.btnFragmentOtherUserProfileAddFriend.isEnabled = true
+                        binding.btnFragmentOtherUserProfileAddFriend.visibility = View.VISIBLE
+                    }
                 }
             }
 

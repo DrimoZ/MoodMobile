@@ -56,7 +56,25 @@ class ProfileFriendManagerFragment : Fragment() {
         }
 
         viewModel.mutableFriendDeleteData.observe(viewLifecycleOwner){
-            profileFriendsFragment.deleteFriendFromUI(it)
+            if (friendId != null) {
+                profileFriendsFragment.deleteFriendFromUI(it, true)
+            } else {
+                profileFriendsFragment.deleteFriendFromUI(it, false)
+            }
+
+        }
+        viewModel.mutableFriendRefreshData.observe(viewLifecycleOwner){
+            if (friendId != null) {
+                Log.e("frId", "fId : " + friendId)
+                profileFriendsFragment.RefreshFriendUI(friendId)
+            }
+        }
+        viewModel.mutableFriendAcceptData.observe(viewLifecycleOwner){
+            if (friendId != null) {
+                profileFriendsFragment.acceptFriendToUI(it, true)
+            } else {
+                profileFriendsFragment.acceptFriendToUI(it, false)
+            }
         }
         viewModel.mutableFriendLiveData.observe(viewLifecycleOwner) {
             Log.i("Friends", it.toString())
@@ -71,12 +89,30 @@ class ProfileFriendManagerFragment : Fragment() {
                 viewModel.deleteFriend(friend)
             }
         })
-        profileFriendsFragment.profileFriendRecyclerViewAdapter.setOnAddClickListener(object  :
+        profileFriendsFragment.profileFriendRecyclerViewAdapter.setOnAddClickListener(object :
             ProfileFriendsRecyclerViewAdapter.OnAddClickListener {
             override fun onAddClick(friend: DtoInputFriend) {
                 viewModel.addFriend(friend)
             }
-            })
+        })
+        profileFriendsFragment.profileFriendRecyclerViewAdapter.setOnCancelClickListener(object :
+            ProfileFriendsRecyclerViewAdapter.OnCancelClickListener {
+            override fun onCancelClick(friend: DtoInputFriend) {
+                viewModel.cancelFriendRequest(friend)
+            }
+        })
+        profileFriendsFragment.profileFriendRecyclerViewAdapter.setOnAcceptClickListener(object :
+            ProfileFriendsRecyclerViewAdapter.OnAcceptClickListener {
+            override fun onAcceptClick(friend: DtoInputFriend) {
+                viewModel.acceptFriendRequest(friend)
+            }
+        })
+        profileFriendsFragment.profileFriendRecyclerViewAdapter.setOnRejectClickListener(object :
+            ProfileFriendsRecyclerViewAdapter.OnRejectClickListener {
+            override fun onRejectClick(friend: DtoInputFriend) {
+                viewModel.rejectFriendRequest(friend)
+            }
+        })
         profileFriendsFragment.profileFriendRecyclerViewAdapter.setOnFriendClickListener(object :
             ProfileFriendsRecyclerViewAdapter.OnFriendClickListener {
             override fun onFriendClick(friend: DtoInputFriend) {
