@@ -6,7 +6,7 @@
     android:id="@+id/frameLayout6"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.SideMenuFragment">
+    tools:context=".fragments.More.SideMenuFragment">
 
     <LinearLayout
         android:layout_width="120dp"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/btn_fragmentSideMenu_Parameters"
             android:layout_width="120dp"
             android:layout_height="25dp"
             android:layout_marginStart="8dp"
@@ -35,7 +35,7 @@
             android:background="#deb992" />
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/btn_fragmentSideMenu_SignOut"
             android:layout_width="100dp"
             android:layout_height="25dp"
             android:layout_marginStart="20dp"

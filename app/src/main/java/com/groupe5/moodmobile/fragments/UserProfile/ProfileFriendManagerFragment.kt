@@ -65,7 +65,6 @@ class ProfileFriendManagerFragment : Fragment() {
         }
         viewModel.mutableFriendRefreshData.observe(viewLifecycleOwner){
             if (friendId != null) {
-                Log.e("frId", "fId : " + friendId)
                 profileFriendsFragment.RefreshFriendUI(friendId)
             }
         }
@@ -77,7 +76,6 @@ class ProfileFriendManagerFragment : Fragment() {
             }
         }
         viewModel.mutableFriendLiveData.observe(viewLifecycleOwner) {
-            Log.i("Friends", it.toString())
             profileFriendsFragment.initUIWithFriends(it)
         }
 
