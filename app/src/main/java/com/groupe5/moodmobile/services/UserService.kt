@@ -6,6 +6,7 @@ import android.util.Log
 import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriendsResponse
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
+import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
 import com.groupe5.moodmobile.fragments.UserProfile.OtherUserProfileFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFragment
 import com.groupe5.moodmobile.repositories.IUserRepository
@@ -42,6 +43,31 @@ class UserService(private val context: Context) {
             }
 
             override fun onFailure(call: Call<DtoInputUserIdAndRole>, t: Throwable) {
+                val message = "Echec DB: ${t.message}"
+                Log.e("EchecDb", message, t)
+            }
+        })
+    }
+
+    suspend fun getUserProfile(friendId: String): Int = suspendCoroutine {continuation ->
+        prefs = context.getSharedPreferences("mood", Context.MODE_PRIVATE)
+        val jwtToken = prefs.getString("jwtToken", "") ?: ""
+        userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
+        val call1 = userRepository.getUserProfile(friendId)
+        call1.enqueue(object : Callback<DtoInputUserProfile> {
+            override fun onResponse(call: Call<DtoInputUserProfile>, response: Response<DtoInputUserProfile>) {
+                if (response.isSuccessful) {
+                    val isUserFriendWith = response.body()?.isFriendWithConnected
+                    isUserFriendWith?.let {
+                        continuation.resume(isUserFriendWith)
+                    }
+                } else {
+                    val message = "echec : ${response.message()}"
+                    Log.d("Echec", message)
+                }
+            }
+
+            override fun onFailure(call: Call<DtoInputUserProfile>, t: Throwable) {
                 val message = "Echec DB: ${t.message}"
                 Log.e("EchecDb", message, t)
             }

@@ -16,6 +16,7 @@ import com.groupe5.moodmobile.fragments.NewsFeedFragment
 import com.groupe5.moodmobile.fragments.NotificationFragment
 import com.groupe5.moodmobile.fragments.UserProfile.OtherUserProfileFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFragment
+import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendManagerFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendsFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendsRecyclerViewAdapter
 import com.groupe5.moodmobile.repositories.IUserRepository
@@ -57,6 +58,18 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
             )
             .commit()
         super.onStart()
+    }
+
+    fun onRefresh(friend: DtoInputFriend) {
+        Log.e("",""+friend.isFriendWithConnected)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(
+                R.id.fragmentContainerView_mainActivity,
+                OtherUserProfileFragment.newInstance(friend),
+                "OtherUserProfileFragment"
+            )
+            .commit()
     }
 
     private fun isTokenPresent(): Boolean {
