@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#010928"
+    tools:context=".SigninActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="173dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="180dp"
+        android:text="Sign In"
+        android:textColor="#deb992"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.431"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_signin_login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="50dp"
+        android:backgroundTint="#deb992"
+        android:hint="Login"
+        android:inputType="text"
+        android:textColor="#deb992"
+        android:textColorHint="#deb992"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/et_signin_password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="50dp"
+        android:backgroundTint="#deb992"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColor="@color/gold"
+        android:textColorHint="@color/gold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_signin_login" />
+
+    <Button
+        android:id="@+id/btn_signIn_signIn"
+        android:layout_width="122dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="70dp"
+        android:backgroundTint="#00FFFFFF"
+        android:text="Sign In"
+        android:textColor="#deb992"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_signin_password"
+        app:strokeColor="#deb992"
+        app:strokeWidth="3dp" />
+
+    <TextView
+        android:id="@+id/tv_signin_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="80dp"
+        android:padding="8dp"
+        android:text="New to Mood?"
+        android:textColor="@color/gold"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signIn_signIn" />
+
+    <TextView
+        android:id="@+id/tv_signin_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="115dp"
+        android:text="Sign up now"
+        android:textColor="@android:color/holo_blue_light"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_signin_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_signin_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
