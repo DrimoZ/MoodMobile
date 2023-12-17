@@ -1,15 +1,15 @@
-package com.groupe5.moodmobile
+package com.groupe5.moodmobile.activities
 
-import android.R
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.ClickableSpan
 import android.util.Log
-import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.groupe5.moodmobile.databinding.ActivitySigninBinding
+import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserSignin
+import com.groupe5.moodmobile.repositories.IAuthenticationRepository
+import com.groupe5.moodmobile.utils.RetrofitFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,11 +18,18 @@ import java.util.regex.Pattern
 
 class SigninActivity : AppCompatActivity() {
     lateinit var binding: ActivitySigninBinding
-    private val authenticationService = ApiClient.create()
+    lateinit var jwtToken: String
+    private lateinit var authenticationRepository: IAuthenticationRepository
+    lateinit var prefs: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySigninBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        prefs = getSharedPreferences("mood", Context.MODE_PRIVATE)
+        jwtToken = prefs.getString("jwtToken", "") ?: ""
+        authenticationRepository = RetrofitFactory.create(jwtToken, IAuthenticationRepository::class.java)
 
         binding.btnSignInSignIn.setOnClickListener {
             val login = binding.etSigninLogin.text.toString()
@@ -30,6 +37,7 @@ class SigninActivity : AppCompatActivity() {
             val stayLoggedIn = true
             submitForm(login, password, stayLoggedIn)
         }
+
         binding.tvSigninLink.setOnClickListener {
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
@@ -39,7 +47,7 @@ class SigninActivity : AppCompatActivity() {
 
     private fun submitForm(login: String, password: String, stayLoggedIn: Boolean) {
         val dto = DtoOutputUserSignin(login, password, stayLoggedIn)
-        val call = authenticationService.signInUser(dto)
+        val call = authenticationRepository.signInUser(dto)
 
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {

@@ -1,12 +1,16 @@
-package com.groupe5.moodmobile
+package com.groupe5.moodmobile.activities
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.groupe5.moodmobile.databinding.ActivitySigninBinding
 import com.groupe5.moodmobile.databinding.ActivitySignupBinding
+import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserSignup
+import com.groupe5.moodmobile.repositories.IAuthenticationRepository
+import com.groupe5.moodmobile.utils.RetrofitFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
@@ -15,11 +19,19 @@ import java.util.regex.Pattern
 
 class SignupActivity : AppCompatActivity() {
     lateinit var binding: ActivitySignupBinding
-    private val authenticationService = ApiClient.create()
+    lateinit var jwtToken: String
+    private lateinit var authenticationRepository: IAuthenticationRepository
+    lateinit var prefs: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        prefs = getSharedPreferences("mood", Context.MODE_PRIVATE)
+        jwtToken = prefs.getString("jwtToken", "") ?: ""
+        authenticationRepository = RetrofitFactory.create(jwtToken, IAuthenticationRepository::class.java)
+
 
         binding.btnSignUpSignUp.setOnClickListener {
             val name = binding.etSignupFullName.text.toString()
@@ -44,7 +56,7 @@ class SignupActivity : AppCompatActivity() {
     }
     private fun submitForm(name: String, login: String, mail: String, birthdate: String, password: String, passwordConfirmation: String) {
         val dto = DtoOutputUserSignup(name, login, mail, birthdate, password)
-        val call = authenticationService.signUpUser(dto)
+        val call = authenticationRepository.signUpUser(dto)
 
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {

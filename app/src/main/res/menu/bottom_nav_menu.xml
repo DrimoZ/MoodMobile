@@ -14,11 +14,11 @@
         android:icon="@drawable/baseline_zoom_in_24"
         android:id="@+id/navbar_search"/>
     <item
-        android:title="Notifications"
-        android:icon="@drawable/baseline_notifications_active_24"
-        android:id="@+id/navbar_notification"/>
-    <item
         android:title="Profile"
         android:icon="@drawable/baseline_person_2_24"
         android:id="@+id/navbar_profile"/>
+    <item
+        android:title="More"
+        android:icon="@drawable/baseline_menu_24"
+        android:id="@+id/navbar_more"/>
 </menu>

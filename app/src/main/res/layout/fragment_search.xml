@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,40 +11,28 @@
         android:id="@+id/searchInput"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
         android:hint="Search"
         android:textColor="#deb992"
+        android:textColorHint="@color/gold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <Button
-        android:id="@+id/allBtn"
-        android:layout_width="65dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:backgroundTint="#00FFFFFF"
-        android:text="All"
-        android:textColor="#deb992"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchInput"
-        app:strokeColor="#deb992"
-        app:strokeWidth="2dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/publicationsBtn"
         android:layout_width="128dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="85dp"
         android:backgroundTint="#00FFFFFF"
         android:text="Publications"
         android:textColor="#deb992"
-        app:layout_constraintStart_toEndOf="@id/allBtn"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchInput"
         app:strokeColor="#deb992"
-        app:strokeWidth="2dp"/>
+        app:strokeWidth="2dp" />
 
     <Button
         android:id="@+id/profilesBtn"
@@ -58,26 +47,12 @@
         app:strokeColor="#deb992"
         app:strokeWidth="2dp"/>
 
-    <Button
-        android:id="@+id/tagsBtn"
-        android:layout_width="80dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:backgroundTint="#00FFFFFF"
-        android:text="Tags"
-        android:textColor="#deb992"
-        app:layout_constraintStart_toEndOf="@id/profilesBtn"
-        app:layout_constraintTop_toBottomOf="@id/searchInput"
-        app:strokeColor="#deb992"
-        app:strokeWidth="2dp"/>
-
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/allBtn"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
