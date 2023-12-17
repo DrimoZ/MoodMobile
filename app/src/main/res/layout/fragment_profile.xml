@@ -11,7 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:ignore="ExtraText">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_fragmentProfile_userImage"
@@ -26,8 +27,19 @@
             app:civ_border_color="#deb996"
             tools:ignore="MissingConstraints" />
 
+        <ImageButton
+            android:id="@+id/button"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="115dp"
+            android:background="@drawable/round_button"
+            android:src="@drawable/baseline_photo_camera_24"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_fragmentProfile_userImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:strokeColor="@color/gold"
+            app:strokeWidth="1dp" />
 
-    <TextView
+        <TextView
         android:id="@+id/tv_fragmentProfile_userUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,7 +77,7 @@
 
     <TextView
         android:id="@+id/tv_fragmentProfile_userDescription"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="25dp"
@@ -75,7 +87,7 @@
         app:layout_constraintStart_toEndOf="@+id/iv_fragmentProfile_userImage"
         app:layout_constraintTop_toBottomOf="@+id/tv_fragmentProfile_userNbPublications" />
 
-    <View
+        <View
         android:id="@+id/divider"
         android:layout_width="0dp"
         android:layout_height="2dp"
