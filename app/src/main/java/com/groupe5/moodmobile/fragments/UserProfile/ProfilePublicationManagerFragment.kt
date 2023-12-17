@@ -37,20 +37,21 @@ class ProfilePublicationManagerFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         val friendId = arguments?.getString("friendId")
-        // Get the JWT token from SharedPreferences
         val prefs = requireActivity().getSharedPreferences("mood", Context.MODE_PRIVATE)
         val token = prefs.getString("jwtToken", "") ?: ""
 
-        // Directly create the ViewModel with the token
-        //viewModel = ViewModelProvider(this).get(ProfilePublicationManagerViewModel::class.java)
         viewModel = ProfilePublicationManagerViewModel(token)
 
         val profilePublicationsFragment = childFragmentManager
             .findFragmentById(R.id.fcb_profilePublicationManager_list) as ProfilePublicationsFragment
 
         viewModel.mutablePublicationLiveData.observe(viewLifecycleOwner) {
-            Log.i("Publications", it.toString())
             profilePublicationsFragment.initUIWithPublications(it)
+        }
+        viewModel.isPublicationsPublicLiveData.observe(viewLifecycleOwner) { isPublic ->
+            if (!isPublic) {
+                binding.tvFragmentProfilePublicationManagerPrivatePublications.visibility = View.VISIBLE
+            }
         }
         viewModel.startGetAllPublications(if (friendId.isNullOrEmpty()) null else friendId)
     }

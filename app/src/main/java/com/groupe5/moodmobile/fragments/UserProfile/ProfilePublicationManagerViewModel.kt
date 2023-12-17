@@ -16,6 +16,7 @@ import retrofit2.Response
 
 class ProfilePublicationManagerViewModel(private val jwtToken: String) : ViewModel() {
     val mutablePublicationLiveData: MutableLiveData<List<DtoInputPublication>> = MutableLiveData()
+    val isPublicationsPublicLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
 
     fun startGetAllPublications(friendId: String? = null) {
@@ -26,11 +27,10 @@ class ProfilePublicationManagerViewModel(private val jwtToken: String) : ViewMod
                 call1.enqueue(object : Callback<DtoInputUserIdAndRole> {
                     override fun onResponse(call: Call<DtoInputUserIdAndRole>, response: Response<DtoInputUserIdAndRole>) {
                         if (response.isSuccessful) {
-                            Log.e("friendID", "firend id : " + friendId)
                             val userId = friendId ?: response.body()?.userId
                             Log.d("userId", userId.toString())
                             userId?.let {
-                                // Step 2: Use the ID/Login to call the API to get the user's publications
+                                Log.e("",userId)
                                 getUserPublications(it)
                             }
                         } else {
@@ -54,9 +54,17 @@ class ProfilePublicationManagerViewModel(private val jwtToken: String) : ViewMod
             override fun onResponse(call: Call<DtoInputPublicationsResponse>, response: Response<DtoInputPublicationsResponse>) {
                 if (response.isSuccessful) {
                     val publicationsResponse = response.body()
-                    val publications = publicationsResponse?.publications
-                    Log.d("Publications", publications.toString())
-                    mutablePublicationLiveData.postValue(publications)
+                    if (publicationsResponse != null) {
+                        if (publicationsResponse.isPublicationsPublic){
+                            val publications = publicationsResponse?.publications
+                            Log.d("Publications", publications.toString())
+                            mutablePublicationLiveData.postValue(publications)
+                        }
+                        else{
+                            isPublicationsPublicLiveData.postValue(false)
+                        }
+                    }
+
                 } else {
                     handleApiError(response)
                 }

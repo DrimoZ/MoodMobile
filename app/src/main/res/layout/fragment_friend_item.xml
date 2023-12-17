@@ -73,12 +73,12 @@
 
     <Button
         android:id="@+id/btn_ProfileFriend_acceptFriend"
-        android:layout_width="60dp"
+        android:layout_width="55dp"
         android:layout_height="45dp"
         android:layout_below="@id/btn_ProfileFriend_deleteFriend"
         android:layout_alignRight="@id/btn_ProfileFriend_deleteFriend"
         android:layout_marginTop="-45dp"
-        android:layout_marginRight="32dp"
+        android:layout_marginRight="50dp"
         android:backgroundTint="#00FFFFFF"
         android:text="v"
         android:textColor="@color/green"
@@ -90,12 +90,12 @@
 
     <Button
         android:id="@+id/btn_ProfileFriend_rejectFriend"
-        android:layout_width="60dp"
+        android:layout_width="55dp"
         android:layout_height="45dp"
         android:layout_below="@id/btn_ProfileFriend_deleteFriend"
         android:layout_alignRight="@id/btn_ProfileFriend_deleteFriend"
         android:layout_marginTop="-45dp"
-        android:layout_marginRight="-32dp"
+        android:layout_marginRight="-10dp"
         android:backgroundTint="#00FFFFFF"
         android:text="x"
         android:textColor="@color/red"

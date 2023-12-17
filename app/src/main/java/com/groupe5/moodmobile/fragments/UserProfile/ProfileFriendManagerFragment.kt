@@ -55,6 +55,12 @@ class ProfileFriendManagerFragment : Fragment() {
             sharedViewModel.friendData.value = friend
         }
 
+        viewModel.isFriendListPublicLiveData.observe(viewLifecycleOwner) { isPublic ->
+            if (!isPublic) {
+                binding.tvFragmentProfileFriendManagerPrivateFriendList.visibility = View.VISIBLE
+            }
+        }
+
         viewModel.mutableFriendDeleteData.observe(viewLifecycleOwner){
             if (friendId != null) {
                 profileFriendsFragment.deleteFriendFromUI(it, true)

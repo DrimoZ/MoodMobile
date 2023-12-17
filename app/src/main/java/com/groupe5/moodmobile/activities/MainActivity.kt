@@ -36,10 +36,6 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
             finish()
         }
 
-        setUpListeners()
-    }
-
-    override fun onStart() {
         supportFragmentManager
             .beginTransaction()
             .add(
@@ -48,17 +44,28 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
                 "NewsFeedFragment"
             )
             .commit()
-        super.onStart()
+
+        setUpListeners()
     }
 
-    fun onRefresh(friend: DtoInputFriend) {
-        Log.e("",""+friend.isFriendWithConnected)
+    fun onRefreshOtherUser(friend: DtoInputFriend) {
         supportFragmentManager
             .beginTransaction()
             .replace(
                 R.id.fragmentContainerView_mainActivity,
                 OtherUserProfileFragment.newInstance(friend),
                 "OtherUserProfileFragment"
+            )
+            .commit()
+    }
+
+    fun onRefreshUserProfile() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(
+                R.id.fragmentContainerView_mainActivity,
+                ProfileFragment.newInstance(),
+                "ProfileFragment"
             )
             .commit()
     }

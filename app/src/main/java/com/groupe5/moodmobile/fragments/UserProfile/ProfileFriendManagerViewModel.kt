@@ -20,6 +20,7 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
     val mutableFriendDeleteData: MutableLiveData<DtoInputFriend> = MutableLiveData()
     val mutableFriendAcceptData: MutableLiveData<DtoInputFriend> = MutableLiveData()
     val mutableFriendRefreshData: MutableLiveData<Void> = MutableLiveData()
+    val isFriendListPublicLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
     private val friendRepository = RetrofitFactory.create(jwtToken, IFriendRepository::class.java)
 
@@ -57,9 +58,18 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
             override fun onResponse(call: Call<DtoInputFriendsResponse>, response: Response<DtoInputFriendsResponse>) {
                 if (response.isSuccessful) {
                     val friendsResponse = response.body()
-                    val friends = friendsResponse?.friends
-                    Log.d("Friends", friends.toString())
-                    mutableFriendLiveData.postValue(friends)
+                    if (friendsResponse != null) {
+                        if (friendsResponse.isFriendPublic){
+                            val friends = friendsResponse?.friends
+                            Log.d("Friends", friends.toString())
+                            mutableFriendLiveData.postValue(friends)
+                        }
+                        else{
+                            isFriendListPublicLiveData.postValue(false)
+                        }
+                    }
+
+
                 } else {
                     handleApiError(response)
                 }

@@ -41,13 +41,37 @@ class ProfileFriendsFragment : Fragment() {
     }
 
     fun deleteFriendFromUI(friend: DtoInputFriend, isOtherUser: Boolean) {
-        friendUI.remove(friend)
-        profileFriendRecyclerViewAdapter.notifyDataSetChanged()
+        if(!isOtherUser){
+            friendUI.remove(friend)
+            profileFriendRecyclerViewAdapter.notifyDataSetChanged()
+        }
+        else{
+            val activity = requireActivity()
+            if (activity is MainActivity) {
+                val currentFragment = activity.supportFragmentManager.findFragmentById(R.id.fragmentContainerView_mainActivity)
+                if (currentFragment is OtherUserProfileFragment) {
+                    currentFragment.refreshFragment()
+                }
+            }
+        }
+
     }
 
     fun acceptFriendToUI(friend: DtoInputFriend, isOtherUser: Boolean) {
-        friendUI.add(friend)
-        profileFriendRecyclerViewAdapter.notifyDataSetChanged()
+        if(!isOtherUser){
+            friendUI.add(friend)
+            profileFriendRecyclerViewAdapter.notifyDataSetChanged()
+        }
+        else{
+            val activity = requireActivity()
+            if (activity is MainActivity) {
+                val currentFragment = activity.supportFragmentManager.findFragmentById(R.id.fragmentContainerView_mainActivity)
+                if (currentFragment is OtherUserProfileFragment) {
+                    currentFragment.refreshFragment()
+                }
+            }
+        }
+
     }
     fun RefreshFriendUI(friendId: String) {
         val activity = requireActivity()

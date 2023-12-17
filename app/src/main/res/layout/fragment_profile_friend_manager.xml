@@ -17,4 +17,16 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
 
+    <TextView
+        android:id="@+id/tv_fragmentProfileFriendManager_privateFriendList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="Friend list from this account is private, become friends to see it"
+        android:textColor="@color/gold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

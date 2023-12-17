@@ -71,7 +71,7 @@ class OtherUserProfileFragment(friend: DtoInputFriend) : Fragment() {
                     if (response.isSuccessful) {
                         Log.d("FriendRequestSent", "Friend request sent successfully")
                         CoroutineScope(Dispatchers.Main).launch {
-                            (requireActivity() as MainActivity).onRefresh(friendRefresh(friend))
+                            (requireActivity() as MainActivity).onRefreshOtherUser(friendRefresh(friend))
                         }
                     } else if (response.code() == 404) {
                         Log.d("FriendRequestNotSent", "Friend not found")
@@ -94,7 +94,7 @@ class OtherUserProfileFragment(friend: DtoInputFriend) : Fragment() {
                     if (response.isSuccessful) {
                         Log.d("FriendRequestCanceled", "Friend request canceled successfully")
                         CoroutineScope(Dispatchers.Main).launch {
-                            (requireActivity() as MainActivity).onRefresh(friendRefresh(friend))
+                            (requireActivity() as MainActivity).onRefreshOtherUser(friendRefresh(friend))
                         }
                     } else if (response.code() == 404) {
                         Log.d("FriendRequestNotCanceled", "Friend not found")
@@ -117,7 +117,7 @@ class OtherUserProfileFragment(friend: DtoInputFriend) : Fragment() {
                     if (response.isSuccessful) {
                         Log.d("FriendRequestAccepted", "Friend request accepted successfully")
                         CoroutineScope(Dispatchers.Main).launch {
-                            (requireActivity() as MainActivity).onRefresh(friendRefresh(friend))
+                            (requireActivity() as MainActivity).onRefreshOtherUser(friendRefresh(friend))
                         }
                     } else if (response.code() == 404) {
                         Log.d("FriendRequestNotCanceled", "Friend not found")
@@ -140,7 +140,7 @@ class OtherUserProfileFragment(friend: DtoInputFriend) : Fragment() {
                     if (response.isSuccessful) {
                         Log.d("FriendRequestRejected", "Friend request rejected successfully")
                         CoroutineScope(Dispatchers.Main).launch {
-                            (requireActivity() as MainActivity).onRefresh(friendRefresh(friend))
+                            (requireActivity() as MainActivity).onRefreshOtherUser(friendRefresh(friend))
                         }
                     } else if (response.code() == 404) {
                         Log.d("FriendRequestNotCanceled", "Friend not found")
@@ -164,7 +164,7 @@ class OtherUserProfileFragment(friend: DtoInputFriend) : Fragment() {
                     if (response.isSuccessful) {
                         Log.d("FriendDeletion", "Friend deleted successfully")
                         CoroutineScope(Dispatchers.Main).launch {
-                            (requireActivity() as MainActivity).onRefresh(friendRefresh(friend))
+                            (requireActivity() as MainActivity).onRefreshOtherUser(friendRefresh(friend))
                         }
                     } else if (response.code() == 404) {
                         Log.d("FriendDeletion", "Friend not found")

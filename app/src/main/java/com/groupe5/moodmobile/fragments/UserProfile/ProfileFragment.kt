@@ -1,19 +1,24 @@
 package com.groupe5.moodmobile.fragments.UserProfile
 
+import android.app.Activity
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.groupe5.moodmobile.R
+import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.classes.SharedViewModel
 import com.groupe5.moodmobile.databinding.FragmentProfileBinding
-import com.groupe5.moodmobile.dtos.Image.DtoInputImage
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
 import com.groupe5.moodmobile.repositories.IImageRepository
@@ -24,12 +29,14 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import java.io.FileOutputStream
-import java.util.UUID
 
 
 class ProfileFragment : Fragment() {
@@ -38,6 +45,38 @@ class ProfileFragment : Fragment() {
     private lateinit var imageRepository: IImageRepository
     private lateinit var imageService: ImageService
     private lateinit var sharedViewModel: SharedViewModel
+
+    private val imagePickerLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val imageUri: Uri? = result.data?.data
+
+                imageUri?.let {
+                    val imageFile = File(it.path)
+
+                    val requestFile: RequestBody =
+                        RequestBody.create("multipart/form-data".toMediaTypeOrNull(), imageFile)
+
+                    val imagePart: MultipartBody.Part =
+                        MultipartBody.Part.createFormData("image", imageFile.name, requestFile)
+
+                    val call = imageRepository.setUserProfileImage(imagePart)
+
+                    call.enqueue(object : Callback<Void> {
+                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            Toast.makeText(requireContext(), "Photo updated successfully", Toast.LENGTH_SHORT).show()
+                            (requireActivity() as MainActivity).onRefreshUserProfile()
+                        }
+
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            Log.e("ImagePickerLauncher", "Failed to upload image", t)
+                        }
+                    })
+                }
+            } else {
+                Log.e("ImagePickerLauncher", "Image picking canceled or failed")
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,6 +103,17 @@ class ProfileFragment : Fragment() {
         binding.btnFragmentProfileFriends.setOnClickListener {
             replaceFragment(ProfileFriendManagerFragment.newInstance(""))
         }
+
+        binding.btnFragmentProfileChangeImage.setOnClickListener {
+            val image = ImagePicker.with(this)
+                .crop()
+                .compress(1024)
+                .maxResultSize(500, 500)
+                .createIntent { intent ->
+                    imagePickerLauncher.launch(intent)
+                }
+        }
+
     }
 
     private fun replaceFragment(fragment: Fragment) {
