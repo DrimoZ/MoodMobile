@@ -20,10 +20,6 @@ class DiscoverPublicationsFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_discover_publications_list, container, false)
 
         if (view is RecyclerView) {
-            val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            view.layoutManager = layoutManager
-
-            // Pass the context to the adapter
             discoverPublicationRecyclerViewAdapter = DiscoverPublicationsRecyclerViewAdapter(requireContext(), publicationUI)
             view.adapter = discoverPublicationRecyclerViewAdapter
         }

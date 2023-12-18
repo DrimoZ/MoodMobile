@@ -7,7 +7,7 @@
     android:background="@drawable/border_shape">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_ProfileFriend_userImage"
+        android:id="@+id/iv_DiscoverUsers_userImage"
         android:layout_width="70dp"
         android:layout_height="80dp"
         android:layout_margin="10dp"
@@ -18,11 +18,11 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_toRightOf="@id/iv_ProfileFriend_userImage"
+        android:layout_toRightOf="@id/iv_DiscoverUsers_userImage"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_ProfileFriend_userUsername"
+            android:id="@+id/tv_DiscoverUsers_userUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -31,7 +31,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/tv_ProfileFriend_userCommonFriends"
+            android:id="@+id/tv_DiscoverUsers_userCommonFriends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -41,7 +41,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_ProfileFriend_deleteFriend"
+        android:id="@+id/btn_DiscoverUsers_deleteFriend"
         android:layout_width="60dp"
         android:layout_height="45dp"
         android:layout_marginLeft="290dp"
@@ -56,11 +56,11 @@
         android:enabled="false"/>
 
     <Button
-        android:id="@+id/btn_ProfileFriend_addFriend"
+        android:id="@+id/btn_DiscoverUsers_addFriend"
         android:layout_width="60dp"
         android:layout_height="45dp"
-        android:layout_below="@id/btn_ProfileFriend_deleteFriend"
-        android:layout_alignRight="@id/btn_ProfileFriend_deleteFriend"
+        android:layout_below="@id/btn_DiscoverUsers_deleteFriend"
+        android:layout_alignRight="@id/btn_DiscoverUsers_deleteFriend"
         android:layout_marginTop="-45dp"
         android:backgroundTint="#00FFFFFF"
         android:text="+"
@@ -72,11 +72,11 @@
         android:enabled="false"/>
 
     <Button
-        android:id="@+id/btn_ProfileFriend_acceptFriend"
+        android:id="@+id/btn_DiscoverUsers_acceptFriend"
         android:layout_width="55dp"
         android:layout_height="45dp"
-        android:layout_below="@id/btn_ProfileFriend_deleteFriend"
-        android:layout_alignRight="@id/btn_ProfileFriend_deleteFriend"
+        android:layout_below="@id/btn_DiscoverUsers_deleteFriend"
+        android:layout_alignRight="@id/btn_DiscoverUsers_deleteFriend"
         android:layout_marginTop="-45dp"
         android:layout_marginRight="50dp"
         android:backgroundTint="#00FFFFFF"
@@ -89,11 +89,11 @@
         android:enabled="false"/>
 
     <Button
-        android:id="@+id/btn_ProfileFriend_rejectFriend"
+        android:id="@+id/btn_DiscoverUsers_rejectFriend"
         android:layout_width="55dp"
         android:layout_height="45dp"
-        android:layout_below="@id/btn_ProfileFriend_deleteFriend"
-        android:layout_alignRight="@id/btn_ProfileFriend_deleteFriend"
+        android:layout_below="@id/btn_DiscoverUsers_deleteFriend"
+        android:layout_alignRight="@id/btn_DiscoverUsers_deleteFriend"
         android:layout_marginTop="-45dp"
         android:layout_marginRight="-10dp"
         android:backgroundTint="#00FFFFFF"
@@ -106,11 +106,11 @@
         android:enabled="false"/>
 
     <Button
-        android:id="@+id/btn_ProfileFriend_CancelFriendRequest"
+        android:id="@+id/btn_DiscoverUsers_CancelFriendRequest"
         android:layout_width="60dp"
         android:layout_height="45dp"
-        android:layout_below="@id/btn_ProfileFriend_deleteFriend"
-        android:layout_alignRight="@id/btn_ProfileFriend_deleteFriend"
+        android:layout_below="@id/btn_DiscoverUsers_deleteFriend"
+        android:layout_alignRight="@id/btn_DiscoverUsers_deleteFriend"
         android:layout_marginTop="-45dp"
         android:backgroundTint="#00FFFFFF"
         android:text="-"

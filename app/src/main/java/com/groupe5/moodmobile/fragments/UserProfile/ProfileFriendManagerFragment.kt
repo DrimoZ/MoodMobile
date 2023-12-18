@@ -62,12 +62,15 @@ class ProfileFriendManagerFragment : Fragment() {
         }
 
         viewModel.mutableFriendDeleteData.observe(viewLifecycleOwner){
-            if (friendId != null) {
-                profileFriendsFragment.deleteFriendFromUI(it, true)
-            } else {
-                profileFriendsFragment.deleteFriendFromUI(it, false)
+            if (requireActivity() is MainActivity) {
+                val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragmentContainerView_mainActivity)
+                if (currentFragment is ProfileFragment) {
+                    profileFriendsFragment.deleteFriendFromUI(it, false)
+                }
+                else{
+                    profileFriendsFragment.deleteFriendFromUI(it, true)
+                }
             }
-
         }
         viewModel.mutableFriendRefreshData.observe(viewLifecycleOwner){
             if (friendId != null) {
@@ -75,10 +78,14 @@ class ProfileFriendManagerFragment : Fragment() {
             }
         }
         viewModel.mutableFriendAcceptData.observe(viewLifecycleOwner){
-            if (friendId != null) {
-                profileFriendsFragment.acceptFriendToUI(it, true)
-            } else {
-                profileFriendsFragment.acceptFriendToUI(it, false)
+            if (requireActivity() is MainActivity) {
+                val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragmentContainerView_mainActivity)
+                if (currentFragment is ProfileFragment) {
+                    profileFriendsFragment.acceptFriendToUI(it, false)
+                }
+                else{
+                    profileFriendsFragment.acceptFriendToUI(it, true)
+                }
             }
         }
         viewModel.mutableFriendLiveData.observe(viewLifecycleOwner) {

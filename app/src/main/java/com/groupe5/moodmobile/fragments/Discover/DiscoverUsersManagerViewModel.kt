@@ -1,12 +1,11 @@
-package com.groupe5.moodmobile.fragments.UserProfile
+package com.groupe5.moodmobile.fragments.Discover
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
-import com.groupe5.moodmobile.dtos.Friend.DtoInputFriendsResponse
-import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
+import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
 import com.groupe5.moodmobile.repositories.IFriendRepository
 import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
@@ -15,33 +14,29 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() {
-    val mutableFriendLiveData: MutableLiveData<List<DtoInputFriend>> = MutableLiveData()
-    val mutableFriendDeleteData: MutableLiveData<DtoInputFriend> = MutableLiveData()
-    val mutableFriendAcceptData: MutableLiveData<DtoInputFriend> = MutableLiveData()
-    val mutableFriendRefreshData: MutableLiveData<Void> = MutableLiveData()
-    val isFriendListPublicLiveData: MutableLiveData<Boolean> = MutableLiveData()
+class DiscoverUsersManagerViewModel(private val jwtToken: String, private val searchValue: String) : ViewModel() {
+    val mutableUserLiveData: MutableLiveData<List<DtoInputFriend>> = MutableLiveData()
+    val mutableUserRefreshData: MutableLiveData<Void> = MutableLiveData()
     private val userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
     private val friendRepository = RetrofitFactory.create(jwtToken, IFriendRepository::class.java)
+    private var showCount = 10
+    private var searchBarValue = searchValue
 
-    fun startGetAllFriends(friendId: String? = null) {
+    fun startGetAllUsers() {
         viewModelScope.launch {
             try {
-                val call1 = userRepository.getUserIdAndRole()
-                call1.enqueue(object : Callback<DtoInputUserIdAndRole> {
-                    override fun onResponse(call: Call<DtoInputUserIdAndRole>, response: Response<DtoInputUserIdAndRole>) {
+                val usersCall = userRepository.getDiscoverUsers(showCount, searchBarValue)
+                usersCall.enqueue(object : Callback<List<DtoInputFriend>> {
+                    override fun onResponse(call: Call<List<DtoInputFriend>>, response: Response<List<DtoInputFriend>>) {
                         if (response.isSuccessful) {
-                            val userId = friendId ?: response.body()?.userId
-                            Log.d("userId", userId.toString())
-                            userId?.let {
-                                getUserFriends(it)
-                            }
+                            Log.d("",""+response.body())
+                            mutableUserLiveData.postValue(response.body())
                         } else {
                             handleApiError(response)
                         }
                     }
 
-                    override fun onFailure(call: Call<DtoInputUserIdAndRole>, t: Throwable) {
+                    override fun onFailure(call: Call<List<DtoInputFriend>>, t: Throwable) {
                         handleNetworkError(t)
                     }
                 })
@@ -49,36 +44,6 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
                 handleException(e)
             }
         }
-    }
-
-
-    private fun getUserFriends(userId: String) {
-        val call2 = userRepository.getUserFriends(userId)
-        call2.enqueue(object : Callback<DtoInputFriendsResponse> {
-            override fun onResponse(call: Call<DtoInputFriendsResponse>, response: Response<DtoInputFriendsResponse>) {
-                if (response.isSuccessful) {
-                    val friendsResponse = response.body()
-                    if (friendsResponse != null) {
-                        if (friendsResponse.isFriendPublic){
-                            val friends = friendsResponse?.friends
-                            Log.d("Friends", friends.toString())
-                            mutableFriendLiveData.postValue(friends)
-                        }
-                        else{
-                            isFriendListPublicLiveData.postValue(false)
-                        }
-                    }
-
-
-                } else {
-                    handleApiError(response)
-                }
-            }
-
-            override fun onFailure(call: Call<DtoInputFriendsResponse>, t: Throwable) {
-                handleNetworkError(t)
-            }
-        })
     }
 
     fun deleteFriend(friend: DtoInputFriend) {
@@ -90,7 +55,7 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
                         Log.d("FriendDeletion", "Friend deleted successfully")
-                        mutableFriendDeleteData.postValue(friend)
+                        mutableUserRefreshData.postValue(null)
                     } else if (response.code() == 404) {
                         Log.d("FriendDeletion", "Friend not found")
                     }else {
@@ -116,7 +81,7 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
                         Log.d("FriendRequestSent", "Friend request sent successfully")
-                        mutableFriendRefreshData.postValue(null)
+                        mutableUserRefreshData.postValue(null)
                     } else if (response.code() == 404) {
                         Log.d("FriendRequestNotSent", "Friend not found")
                     }else {
@@ -143,7 +108,7 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
                         Log.d("FriendRequestCanceled", "Friend request canceled successfully")
-                        mutableFriendRefreshData.postValue(null)
+                        mutableUserRefreshData.postValue(null)
                     } else if (response.code() == 404) {
                         Log.d("FriendRequestNotCanceled", "Friend not found")
                     }else {
@@ -170,7 +135,7 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
                         Log.d("FriendRequestAccepted", "Friend request accepted successfully")
-                        mutableFriendAcceptData.postValue(friend)
+                        mutableUserRefreshData.postValue(null)
                     } else if (response.code() == 404) {
                         Log.d("FriendRequestNotCanceled", "Friend not found")
                     }else {
@@ -197,7 +162,6 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
                         Log.d("FriendRequestRejected", "Friend request rejected successfully")
-                        mutableFriendRefreshData.postValue(null)
                     } else if (response.code() == 404) {
                         Log.d("FriendRequestNotCanceled", "Friend not found")
                     }else {
@@ -214,6 +178,7 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
             })
         }
     }
+
 
     private fun handleApiError(response: Response<*>) {
         val message = "API error: ${response.message()}"

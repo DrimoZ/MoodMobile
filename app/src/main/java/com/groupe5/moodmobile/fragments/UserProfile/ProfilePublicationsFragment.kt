@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
+import com.groupe5.moodmobile.fragments.Discover.DiscoverPublicationsRecyclerViewAdapter
 
 class ProfilePublicationsFragment : Fragment() {
     private val publicationUI: ArrayList<DtoInputPublication> = arrayListOf()
@@ -22,10 +23,6 @@ class ProfilePublicationsFragment : Fragment() {
 
         // Set the adapter
         if (view is RecyclerView) {
-            val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            view.layoutManager = layoutManager
-
-            // Pass the context to the adapter
             profilePublicationRecyclerViewAdapter = ProfilePublicationsRecyclerViewAdapter(requireContext(), publicationUI)
             view.adapter = profilePublicationRecyclerViewAdapter
         }

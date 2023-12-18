@@ -1,5 +1,6 @@
 package com.groupe5.moodmobile.repositories
 
+import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriendsResponse
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationsResponse
@@ -37,6 +38,11 @@ interface IUserRepository {
     ): Call<List<DtoInputPublication>>
     @GET("/api/v1/user/{userLogin}/friends")
     fun getUserFriends(@Path("userLogin") userLogin: String): Call<DtoInputFriendsResponse>
+    @GET("/api/v1/user/discover/users")
+    fun getDiscoverUsers(
+        @Query("userCount") count: Int,
+        @Query("searchValue") search: String
+    ): Call<List<DtoInputFriend>>
     @GET("/api/v1/user/privacy")
     fun getUserPrivacy(): Call<DtoInputUserPrivacy>
     @PATCH("/api/v1/user")

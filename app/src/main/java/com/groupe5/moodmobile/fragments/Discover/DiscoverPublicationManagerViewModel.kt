@@ -12,12 +12,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DiscoverPublicationManagerViewModel(private val jwtToken: String) : ViewModel() {
+class DiscoverPublicationManagerViewModel(private val jwtToken: String, private val searchValue: String) : ViewModel() {
     val mutablePublicationLiveData: MutableLiveData<List<DtoInputPublication>> = MutableLiveData()
     val isPublicationsPublicLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
     private var showCount = 30
-    private var searchBarValue = ""
+    private var searchBarValue = searchValue
 
     fun startGetAllPublications() {
         viewModelScope.launch {
@@ -26,7 +26,7 @@ class DiscoverPublicationManagerViewModel(private val jwtToken: String) : ViewMo
                 publicationsCall.enqueue(object : Callback<List<DtoInputPublication>> {
                     override fun onResponse(call: Call<List<DtoInputPublication>>, response: Response<List<DtoInputPublication>>) {
                         if (response.isSuccessful) {
-                            Log.e("",""+response.body())
+                            Log.d("",""+response.body())
                             mutablePublicationLiveData.postValue(response.body())
                         } else {
                             handleApiError(response)
