@@ -17,32 +17,48 @@ import retrofit2.Response
 class DiscoverUsersManagerViewModel(private val jwtToken: String, private val searchValue: String) : ViewModel() {
     val mutableUserLiveData: MutableLiveData<List<DtoInputFriend>> = MutableLiveData()
     val mutableUserRefreshData: MutableLiveData<Void> = MutableLiveData()
+    val mutableCount: MutableLiveData<Int> = MutableLiveData()
     private val userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
     private val friendRepository = RetrofitFactory.create(jwtToken, IFriendRepository::class.java)
-    private var showCount = 10
+    var showCount = 10
     private var searchBarValue = searchValue
 
     fun startGetAllUsers() {
-        viewModelScope.launch {
-            try {
-                val usersCall = userRepository.getDiscoverUsers(showCount, searchBarValue)
-                usersCall.enqueue(object : Callback<List<DtoInputFriend>> {
-                    override fun onResponse(call: Call<List<DtoInputFriend>>, response: Response<List<DtoInputFriend>>) {
-                        if (response.isSuccessful) {
-                            Log.d("",""+response.body())
-                            mutableUserLiveData.postValue(response.body())
-                        } else {
-                            handleApiError(response)
+        try {
+            val usersCall = userRepository.getDiscoverUsers(showCount, searchBarValue)
+            usersCall.enqueue(object : Callback<List<DtoInputFriend>> {
+                override fun onResponse(call: Call<List<DtoInputFriend>>, response: Response<List<DtoInputFriend>>) {
+                    if (response.isSuccessful) {
+                        val num = response.body()?.size
+                        if (num != null) {
+                            if(num == showCount){
+                                mutableCount.postValue(num)
+                                val startIndex = if (num != null && num >= 10) {
+                                    (showCount - 10) % num
+                                } else {
+                                    0
+                                }
+                                val slicedUsers = response.body()?.slice(startIndex until startIndex + 10)
+                                mutableUserLiveData.postValue(slicedUsers)
+                            }else{
+                                mutableCount.postValue(-1)
+                                val startIndex = 0
+                                val slicedUsers = response.body()?.slice(startIndex until startIndex + num)
+                                mutableUserLiveData.postValue(slicedUsers)
+                            }
                         }
-                    }
 
-                    override fun onFailure(call: Call<List<DtoInputFriend>>, t: Throwable) {
-                        handleNetworkError(t)
+                    } else {
+                        handleApiError(response)
                     }
-                })
-            } catch (e: Exception) {
-                handleException(e)
-            }
+                }
+
+                override fun onFailure(call: Call<List<DtoInputFriend>>, t: Throwable) {
+                    handleNetworkError(t)
+                }
+            })
+        } catch (e: Exception) {
+            handleException(e)
         }
     }
 

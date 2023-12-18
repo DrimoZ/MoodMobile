@@ -50,6 +50,23 @@ class DiscoverPublicationManagerFragment : Fragment() {
         viewModel.mutablePublicationLiveData.observe(viewLifecycleOwner) {
             discoverPublicationsFragment.initUIWithPublications(it)
         }
+        viewModel.mutableCount.observe(viewLifecycleOwner){
+            if(it == -1){
+                binding.btnDiscoverPublicationsManagerLoadMorePublications.visibility = View.INVISIBLE
+                binding.btnDiscoverPublicationsManagerLoadMorePublications.isEnabled = false
+            }else if(it % 4 == 0){
+                binding.btnDiscoverPublicationsManagerLoadMorePublications.visibility = View.VISIBLE
+                binding.btnDiscoverPublicationsManagerLoadMorePublications.isEnabled = true
+            }else{
+                binding.btnDiscoverPublicationsManagerLoadMorePublications.visibility = View.INVISIBLE
+                binding.btnDiscoverPublicationsManagerLoadMorePublications.isEnabled = false
+            }
+        }
+
+        binding.btnDiscoverPublicationsManagerLoadMorePublications.setOnClickListener {
+            viewModel.showCount += 30
+            viewModel.startGetAllPublications()
+        }
         viewModel.startGetAllPublications()
     }
 }

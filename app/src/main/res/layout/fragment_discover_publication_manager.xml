@@ -16,16 +16,20 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
-    <TextView
-        android:id="@+id/tv_fragmentDiscoverPublicationManager_privatePublications"
+
+    <Button
+        android:id="@+id/btn_discoverPublicationsManager_loadMorePublications"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Posts from this account are private, become friends to see them"
+        android:backgroundTint="@android:color/transparent"
+        android:text="Load more publications"
         android:textColor="@color/gold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toBottomOf="@+id/fcb_discoverPublicationManager_list"
+        app:strokeColor="@color/gold"
+        app:strokeWidth="1dp"
+        android:visibility="invisible"
+        android:enabled="false"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

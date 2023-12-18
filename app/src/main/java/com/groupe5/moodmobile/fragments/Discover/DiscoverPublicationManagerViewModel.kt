@@ -14,9 +14,9 @@ import retrofit2.Response
 
 class DiscoverPublicationManagerViewModel(private val jwtToken: String, private val searchValue: String) : ViewModel() {
     val mutablePublicationLiveData: MutableLiveData<List<DtoInputPublication>> = MutableLiveData()
-    val isPublicationsPublicLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    val mutableCount: MutableLiveData<Int> = MutableLiveData()
     private val userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
-    private var showCount = 30
+    var showCount = 30
     private var searchBarValue = searchValue
 
     fun startGetAllPublications() {
@@ -26,8 +26,24 @@ class DiscoverPublicationManagerViewModel(private val jwtToken: String, private 
                 publicationsCall.enqueue(object : Callback<List<DtoInputPublication>> {
                     override fun onResponse(call: Call<List<DtoInputPublication>>, response: Response<List<DtoInputPublication>>) {
                         if (response.isSuccessful) {
-                            Log.d("",""+response.body())
-                            mutablePublicationLiveData.postValue(response.body())
+                            val num = response.body()?.size
+                            if (num != null) {
+                                if(num == showCount){
+                                    mutableCount.postValue(num)
+                                    val startIndex = if (num != null && num >= 10) {
+                                        (showCount - 10) % num
+                                    } else {
+                                        0
+                                    }
+                                    val slicedPublications = response.body()?.slice(startIndex until startIndex + 30)
+                                    mutablePublicationLiveData.postValue(slicedPublications)
+                                }else{
+                                    mutableCount.postValue(-1)
+                                    val startIndex = 0
+                                    val slicedPublications = response.body()?.slice(startIndex until startIndex + num)
+                                    mutablePublicationLiveData.postValue(slicedPublications)
+                                }
+                            }
                         } else {
                             handleApiError(response)
                         }

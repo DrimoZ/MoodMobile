@@ -6,16 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.groupe5.moodmobile.databinding.FragmentProfilePublicationManagerBinding
 import com.groupe5.moodmobile.R
 import android.content.Context
 import com.groupe5.moodmobile.activities.MainActivity
-import com.groupe5.moodmobile.classes.SharedViewModel
-import com.groupe5.moodmobile.databinding.FragmentDiscoverPublicationManagerBinding
 import com.groupe5.moodmobile.databinding.FragmentDiscoverUsersManagerBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
-import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendManagerViewModel
-import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendsRecyclerViewAdapter
 
 class DiscoverUsersManagerFragment : Fragment() {
     lateinit var binding: FragmentDiscoverUsersManagerBinding
@@ -55,10 +50,31 @@ class DiscoverUsersManagerFragment : Fragment() {
         viewModel.mutableUserLiveData.observe(viewLifecycleOwner) {
             discoverUsersFragment.initUIWithUsers(it)
         }
+//        viewModel.mutableUserAddData.observe(viewLifecycleOwner) {
+//            discoverUsersFragment.addUIToUsers(it)
+//        }
         viewModel.startGetAllUsers()
 
         viewModel.mutableUserRefreshData.observe(viewLifecycleOwner){
             discoverUsersFragment.deleteOrAcceptUserUI()
+        }
+
+        viewModel.mutableCount.observe(viewLifecycleOwner){
+            if(it == -1){
+                binding.btnDiscoverUsersManagerLoadMoreUsers.visibility = View.INVISIBLE
+                binding.btnDiscoverUsersManagerLoadMoreUsers.isEnabled = false
+            }else if(it % 10 == 0){
+                binding.btnDiscoverUsersManagerLoadMoreUsers.visibility = View.VISIBLE
+                binding.btnDiscoverUsersManagerLoadMoreUsers.isEnabled = true
+            }else{
+                binding.btnDiscoverUsersManagerLoadMoreUsers.visibility = View.INVISIBLE
+                binding.btnDiscoverUsersManagerLoadMoreUsers.isEnabled = false
+            }
+        }
+
+        binding.btnDiscoverUsersManagerLoadMoreUsers.setOnClickListener {
+            viewModel.showCount += 10
+            viewModel.startGetAllUsers()
         }
 
         discoverUsersFragment.discoverUsersRecyclerViewAdapter.setOnDeleteClickListener(object :

@@ -44,7 +44,6 @@ class DiscoverUsersFragment : Fragment() {
 
     fun deleteOrAcceptUserUI() {
         val activity = requireActivity()
-        Log.e("","Je sais meme plus a quoi ca sert lol")
         if (activity is MainActivity) {
             val currentFragment = activity.supportFragmentManager.findFragmentById(R.id.fragmentContainerView_mainActivity)
             if (currentFragment is DiscoverFragment) {
