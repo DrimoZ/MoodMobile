@@ -2,11 +2,10 @@ package com.groupe5.moodmobile.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.groupe5.moodmobile.R
-import com.groupe5.moodmobile.fragments.SearchFragment
+import com.groupe5.moodmobile.fragments.Discover.DiscoverFragment
 import com.groupe5.moodmobile.databinding.ActivityMainBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.fragments.MessageFragment
@@ -105,7 +104,7 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
                         .beginTransaction()
                         .replace(
                             R.id.fragmentContainerView_mainActivity,
-                            SearchFragment.newInstance(),
+                            DiscoverFragment.newInstance(),
                             "SearchFragment"
                         )
                         .commit()

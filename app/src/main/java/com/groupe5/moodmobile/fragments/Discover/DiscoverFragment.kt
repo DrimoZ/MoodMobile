@@ -1,4 +1,4 @@
-package com.groupe5.moodmobile.fragments
+package com.groupe5.moodmobile.fragments.Discover
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,18 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import com.groupe5.moodmobile.R
 
-class SearchFragment : Fragment() {
+class DiscoverFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
+        return inflater.inflate(R.layout.fragment_discover, container, false)
     }
 
     companion object {
         @JvmStatic
-        fun newInstance() = SearchFragment()
+        fun newInstance() = DiscoverFragment()
     }
 }
