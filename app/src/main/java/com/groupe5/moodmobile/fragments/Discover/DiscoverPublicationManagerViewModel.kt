@@ -4,9 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.groupe5.moodmobile.dtos.Publication.DtoInputPublication
-import com.groupe5.moodmobile.dtos.Publication.DtoInputPublicationsResponse
-import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
+import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
 import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import kotlinx.coroutines.launch
@@ -18,27 +16,24 @@ class DiscoverPublicationManagerViewModel(private val jwtToken: String) : ViewMo
     val mutablePublicationLiveData: MutableLiveData<List<DtoInputPublication>> = MutableLiveData()
     val isPublicationsPublicLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
+    private var showCount = 30
+    private var searchBarValue = ""
 
-    fun startGetAllPublications(friendId: String? = null) {
+    fun startGetAllPublications() {
         viewModelScope.launch {
             try {
-                // Step 1: Get user ID and role
-                val call1 = userRepository.getUserIdAndRole()
-                call1.enqueue(object : Callback<DtoInputUserIdAndRole> {
-                    override fun onResponse(call: Call<DtoInputUserIdAndRole>, response: Response<DtoInputUserIdAndRole>) {
+                val publicationsCall = userRepository.getDiscoverPublications(showCount, searchBarValue)
+                publicationsCall.enqueue(object : Callback<List<DtoInputPublication>> {
+                    override fun onResponse(call: Call<List<DtoInputPublication>>, response: Response<List<DtoInputPublication>>) {
                         if (response.isSuccessful) {
-                            val userId = friendId ?: response.body()?.userId
-                            Log.d("userId", userId.toString())
-                            userId?.let {
-                                Log.e("",userId)
-                                getUserPublications(it)
-                            }
+                            Log.e("",""+response.body())
+                            mutablePublicationLiveData.postValue(response.body())
                         } else {
                             handleApiError(response)
                         }
                     }
 
-                    override fun onFailure(call: Call<DtoInputUserIdAndRole>, t: Throwable) {
+                    override fun onFailure(call: Call<List<DtoInputPublication>>, t: Throwable) {
                         handleNetworkError(t)
                     }
                 })
@@ -46,34 +41,6 @@ class DiscoverPublicationManagerViewModel(private val jwtToken: String) : ViewMo
                 handleException(e)
             }
         }
-    }
-
-    private fun getUserPublications(userId: String) {
-        val call2 = userRepository.getUserPublications(userId)
-        call2.enqueue(object : Callback<DtoInputPublicationsResponse> {
-            override fun onResponse(call: Call<DtoInputPublicationsResponse>, response: Response<DtoInputPublicationsResponse>) {
-                if (response.isSuccessful) {
-                    val publicationsResponse = response.body()
-                    if (publicationsResponse != null) {
-                        if (publicationsResponse.isPublicationsPublic){
-                            val publications = publicationsResponse?.publications
-                            Log.d("Publications", publications.toString())
-                            mutablePublicationLiveData.postValue(publications)
-                        }
-                        else{
-                            isPublicationsPublicLiveData.postValue(false)
-                        }
-                    }
-
-                } else {
-                    handleApiError(response)
-                }
-            }
-
-            override fun onFailure(call: Call<DtoInputPublicationsResponse>, t: Throwable) {
-                handleNetworkError(t)
-            }
-        })
     }
 
 

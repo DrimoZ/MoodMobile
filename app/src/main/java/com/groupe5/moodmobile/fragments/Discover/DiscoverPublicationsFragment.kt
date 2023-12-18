@@ -8,22 +8,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.groupe5.moodmobile.R
-import com.groupe5.moodmobile.placeholder.PlaceholderContent
+import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
+
 class DiscoverPublicationsFragment : Fragment() {
+    private val publicationUI: ArrayList<DtoInputPublication> = arrayListOf()
+    private lateinit var discoverPublicationRecyclerViewAdapter: DiscoverPublicationsRecyclerViewAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_discover_publications_list, container, false)
 
-        // Set the adapter
         if (view is RecyclerView) {
-            with(view) {
-                layoutManager = LinearLayoutManager(context)
-                adapter = DiscoverPublicationsRecyclerViewAdapter(PlaceholderContent.ITEMS)
-            }
+            val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            view.layoutManager = layoutManager
+
+            // Pass the context to the adapter
+            discoverPublicationRecyclerViewAdapter = DiscoverPublicationsRecyclerViewAdapter(requireContext(), publicationUI)
+            view.adapter = discoverPublicationRecyclerViewAdapter
         }
         return view
+    }
+
+    fun initUIWithPublications(publications: List<DtoInputPublication>?) {
+        publications?.let {
+            publicationUI.clear()
+            publicationUI.addAll(it)
+            discoverPublicationRecyclerViewAdapter.notifyDataSetChanged()
+        }
     }
 
     companion object {

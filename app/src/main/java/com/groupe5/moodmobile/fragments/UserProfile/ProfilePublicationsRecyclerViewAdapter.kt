@@ -2,15 +2,11 @@ package com.groupe5.moodmobile.fragments.UserProfile
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.groupe5.moodmobile.databinding.ProfilePublicationItemBinding
-import com.groupe5.moodmobile.dtos.Image.DtoInputImage
-import com.groupe5.moodmobile.dtos.Publication.DtoInputPublication
+import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.services.ImageService
 import com.groupe5.moodmobile.utils.RetrofitFactory
@@ -18,17 +14,6 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.ByteArrayInputStream
-import java.io.File
-import java.io.FileOutputStream
-import kotlin.math.min
-import java.util.UUID
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 class ProfilePublicationsRecyclerViewAdapter(
     private val context: Context,

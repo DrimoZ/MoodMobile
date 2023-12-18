@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.groupe5.moodmobile.R
-import com.groupe5.moodmobile.dtos.Publication.DtoInputPublication
+import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
 
 class ProfilePublicationsFragment : Fragment() {
     private val publicationUI: ArrayList<DtoInputPublication> = arrayListOf()
