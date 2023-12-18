@@ -394,6 +394,42 @@
             android:text="When this parameter is set to public, your publications are visible to everyone, whether they are friends with you or not. When your account is private, only your friends can see your posts."
             android:textColor="@color/gray"
             android:textStyle="italic" />
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="5dp"
+            android:background="#deb992"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/tv_fragmentParameters_deleteAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="130dp"
+            android:text="Delete Account"
+            android:textColor="@color/gold"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/btn_fragmentParameters_deleteAccount"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="110dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#00FFFFFF"
+            android:text="Delete Account"
+            android:textColor="@color/red"
+            android:textColorHighlight="@color/red"
+            app:cornerRadius="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_fragmentParameters_deleteAccount"
+            app:strokeColor="@color/red"
+            app:strokeWidth="2dp"/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

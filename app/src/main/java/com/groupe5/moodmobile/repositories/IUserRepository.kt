@@ -49,5 +49,7 @@ interface IUserRepository {
     fun setUserPrivacy(@Body userPrivacy: DtoOutputUserPrivacy): Call<Void>
     @POST("/api/v1/user/userPassword")
     fun setUserPassword(@Body userPassword: DtoOutputUserPassword): Call<Void>
+    @POST("/api/v1/user/delete")
+    fun deleteAccount(): Call<Void>
 }
 

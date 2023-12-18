@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.databinding.FragmentParametersBinding
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserAccount
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
@@ -62,6 +63,29 @@ class ParametersFragment : Fragment() {
         binding.switchFragmentParametersMakeFriendsListPrivate.setOnClickListener {
             updateUserPrivacy("isFriendPublic", false)
         }
+        binding.btnFragmentParametersDeleteAccount.setOnClickListener {
+            deleteAccount()
+        }
+    }
+
+    private fun deleteAccount() {
+        val deleteCall = userRepository.deleteAccount()
+        deleteCall.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    (requireActivity() as MainActivity).signOut()
+                    Toast.makeText(requireContext(), "Profile deleted successfully", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "Failed to delete profile", Toast.LENGTH_SHORT).show()
+                    Log.d("UpdateProfile", "Failed to delete profile : ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error deleting profile", Toast.LENGTH_SHORT).show()
+                Log.e("UpdateProfile", "Error deleting profile : ${t.message}", t)
+            }
+        })
     }
 
     private fun updateUserPrivacy(switch: String, all: Boolean) {
