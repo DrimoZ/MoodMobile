@@ -1,14 +1,12 @@
-package com.groupe5.moodmobile.fragments.UserProfile
+package com.groupe5.moodmobile.fragments.UserProfile.UserFriends
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.databinding.FragmentFriendItemBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.repositories.IImageRepository

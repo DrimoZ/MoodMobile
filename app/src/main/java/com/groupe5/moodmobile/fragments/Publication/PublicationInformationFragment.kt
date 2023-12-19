@@ -13,7 +13,8 @@ import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.databinding.FragmentPublicationInformationBinding
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubLike
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationInformation
-import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserPrivacy
+import com.groupe5.moodmobile.fragments.Publication.Comments.PublicationInformationCommentManagerFragment
+import com.groupe5.moodmobile.fragments.Publication.Element.PublicationInformationElementManagerFragment
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.repositories.IPublicationRepository
 import com.groupe5.moodmobile.services.ImageService
@@ -35,6 +36,7 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
     var idPublication = idPublication
     var liked = false
     var likeCount = 0
+    var commentDisplay = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,6 +62,31 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
             setPublicationLike()
         }
 
+        binding.imFragmentPublicationInformationComment.setOnClickListener{
+            setPublicationDisplaysComments()
+        }
+
+        binding.tvFragmentPublicationInformationComment.setOnClickListener {
+            setPublicationDisplaysComments()
+        }
+
+    }
+
+    private fun setPublicationDisplaysComments() {
+        if(!commentDisplay){
+            binding.llFragmentPublicationInformationComments.visibility = View.VISIBLE
+            binding.divider3.visibility = View.VISIBLE
+            binding.divider4.visibility = View.VISIBLE
+            binding.fcvFragmentPublicationInformationComments.visibility = View.VISIBLE
+            commentDisplay = !commentDisplay
+            startComments()
+        }else{
+            binding.llFragmentPublicationInformationComments.visibility = View.GONE
+            binding.divider3.visibility = View.GONE
+            binding.divider4.visibility = View.GONE
+            binding.fcvFragmentPublicationInformationComments.visibility = View.GONE
+            commentDisplay = !commentDisplay
+        }
     }
 
     private fun startPublicationInformationData() {
@@ -176,6 +203,16 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
                 R.id.fcv_fragmentPublicationInformation_publications,
                 PublicationInformationElementManagerFragment.newInstance(dto),
                 "PublicationInformationElementManagerFragment"
+            )
+            .commit()
+    }
+    private fun startComments(){
+        childFragmentManager
+            .beginTransaction()
+            .add(
+                R.id.fcv_fragmentPublicationInformation_comments,
+                PublicationInformationCommentManagerFragment.newInstance(idPublication),
+                "PublicationInformationCommentManagerFragment"
             )
             .commit()
     }

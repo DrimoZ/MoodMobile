@@ -1,4 +1,4 @@
-package com.groupe5.moodmobile.fragments.Publication
+package com.groupe5.moodmobile.fragments.Publication.Element
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

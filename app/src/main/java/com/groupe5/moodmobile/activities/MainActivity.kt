@@ -14,7 +14,7 @@ import com.groupe5.moodmobile.fragments.NewsFeedFragment
 import com.groupe5.moodmobile.fragments.Publication.PublicationInformationFragment
 import com.groupe5.moodmobile.fragments.UserProfile.OtherUserProfileFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFragment
-import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendsRecyclerViewAdapter
+import com.groupe5.moodmobile.fragments.UserProfile.UserFriends.ProfileFriendsRecyclerViewAdapter
 import com.groupe5.moodmobile.services.UserService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

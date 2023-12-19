@@ -8,5 +8,5 @@
     android:layout_height="wrap_content"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     android:orientation="horizontal"
-    tools:context=".fragments.Publication.PublicationInformationElementFragment"
+    tools:context=".fragments.Publication.Element.PublicationInformationElementFragment"
     tools:listitem="@layout/publication_information_content_item" />

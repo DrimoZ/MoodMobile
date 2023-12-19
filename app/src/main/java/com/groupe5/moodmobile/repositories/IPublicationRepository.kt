@@ -1,5 +1,6 @@
 package com.groupe5.moodmobile.repositories
 
+import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubComment
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubLike
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationInformation
 import retrofit2.Call
@@ -11,6 +12,8 @@ import retrofit2.http.Path
 interface IPublicationRepository {
     @GET("api/v1/publication/{id}")
     fun getPublicationInformation(@Path("id") id: Int): Call<DtoInputPublicationInformation>
+    @GET("api/v1/publication/{id}/comments")
+    fun getPublicationComments(@Path("id") id: Int): Call<List<DtoInputPubComment>>
     @POST("api/v1/publication/like")
     fun setPublicationLike(@Body dto: DtoInputPubLike): Call<Void>
 }

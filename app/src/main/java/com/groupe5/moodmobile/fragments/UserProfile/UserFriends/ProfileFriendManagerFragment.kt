@@ -1,7 +1,6 @@
-package com.groupe5.moodmobile.fragments.UserProfile
+package com.groupe5.moodmobile.fragments.UserProfile.UserFriends
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.classes.SharedViewModel
 import com.groupe5.moodmobile.databinding.FragmentProfileFriendManagerBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
+import com.groupe5.moodmobile.fragments.UserProfile.ProfileFragment
 
 class ProfileFriendManagerFragment : Fragment() {
     lateinit var binding: FragmentProfileFriendManagerBinding

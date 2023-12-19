@@ -8,10 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-import com.groupe5.moodmobile.placeholder.PlaceholderContent.PlaceholderItem
 import com.groupe5.moodmobile.databinding.FragmentDiscoverUsersItemBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
-import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendsRecyclerViewAdapter
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.services.ImageService
 import com.groupe5.moodmobile.services.UserService

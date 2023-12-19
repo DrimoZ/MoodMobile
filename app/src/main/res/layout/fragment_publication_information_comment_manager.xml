@@ -6,9 +6,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <TextView
+        android:id="@+id/tv_publicationInformationComments_noComment"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:text="No comment yet"
+        android:textColor="@color/gold"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fcb_publicationInformationElement_list"
-        android:name="com.groupe5.moodmobile.fragments.Publication.Element.PublicationInformationElementFragment"
+        android:id="@+id/fcb_publicationInformationComments_list"
+        android:name="com.groupe5.moodmobile.fragments.Publication.Comments.PublicationInformationCommentFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="26dp"

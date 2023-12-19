@@ -1,14 +1,12 @@
-package com.groupe5.moodmobile.fragments.UserProfile
+package com.groupe5.moodmobile.fragments.UserProfile.UserPublications
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.groupe5.moodmobile.databinding.ProfilePublicationItemBinding
-import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.services.ImageService
@@ -26,7 +24,7 @@ class ProfilePublicationsRecyclerViewAdapter(
     private lateinit var imageRepository: IImageRepository
     private lateinit var imageService: ImageService
     lateinit var prefs: SharedPreferences
-    private var openClickListener: ProfilePublicationsRecyclerViewAdapter.OnOpenClickListener? = null
+    private var openClickListener: OnOpenClickListener? = null
     interface OnOpenClickListener {
         fun onOpenClick(imagePublication: Int)
     }
@@ -45,7 +43,7 @@ class ProfilePublicationsRecyclerViewAdapter(
         )
     }
 
-    fun setOnOpenClickListener(listener: ProfilePublicationsRecyclerViewAdapter.OnOpenClickListener) {
+    fun setOnOpenClickListener(listener: OnOpenClickListener) {
         openClickListener = listener
     }
 

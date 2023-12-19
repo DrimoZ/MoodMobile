@@ -3,17 +3,12 @@ package com.groupe5.moodmobile.fragments.Discover
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.get
 import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.databinding.FragmentDiscoverBinding
-import com.groupe5.moodmobile.databinding.FragmentOtherUserProfileBinding
-import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendManagerFragment
-import com.groupe5.moodmobile.fragments.UserProfile.ProfilePublicationManagerFragment
 
 class DiscoverFragment : Fragment() {
     private lateinit var binding: FragmentDiscoverBinding

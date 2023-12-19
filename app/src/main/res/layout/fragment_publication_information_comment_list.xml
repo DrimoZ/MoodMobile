@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list"
-    android:name="com.groupe5.moodmobile.ProfileFriendsFragment"
+    android:name="com.groupe5.moodmobile.PublicationInformationCommentFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".fragments.UserProfile.UserFriends.ProfileFriendsFragment"
-    tools:listitem="@layout/fragment_friend_item" />
+    tools:context=".fragments.Publication.Comments.PublicationInformationCommentFragment"
+    tools:listitem="@layout/fragment_publication_information_comment_item" />

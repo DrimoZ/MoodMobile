@@ -1,4 +1,4 @@
-package com.groupe5.moodmobile.fragments.UserProfile
+package com.groupe5.moodmobile.fragments.UserProfile.UserFriends
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
