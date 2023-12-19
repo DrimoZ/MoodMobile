@@ -11,6 +11,7 @@ import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.fragments.MessageFragment
 import com.groupe5.moodmobile.fragments.More.ParametersFragment
 import com.groupe5.moodmobile.fragments.NewsFeedFragment
+import com.groupe5.moodmobile.fragments.Publication.PublicationInformationFragment
 import com.groupe5.moodmobile.fragments.UserProfile.OtherUserProfileFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFriendsRecyclerViewAdapter
@@ -45,6 +46,31 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
             .commit()
 
         setUpListeners()
+    }
+
+    fun openPublicationInformation(idPublication: Int){
+
+        binding.nestedScrollView2.visibility = View.VISIBLE
+        binding.nestedScrollView2.isEnabled = true
+        binding.nestedScrollView2.isClickable = true
+        supportFragmentManager
+            .beginTransaction()
+            .add(
+                R.id.fragmentContainerView_mainActivitySpecialPublication,
+                PublicationInformationFragment.newInstance(idPublication),
+                "PublicationInformationFragment"
+            )
+            .commit()
+    }
+    fun closePublicationInformation(){
+        val fragment = supportFragmentManager.findFragmentByTag("PublicationInformationFragment")
+
+        if (fragment != null) {
+            supportFragmentManager.beginTransaction().remove(fragment).commit()
+        }
+        binding.nestedScrollView2.visibility = View.INVISIBLE
+        binding.nestedScrollView2.isEnabled = false
+        binding.nestedScrollView2.isClickable = false
     }
 
     fun onRefreshOtherUser(friend: DtoInputFriend) {
@@ -88,6 +114,7 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
                             "NewsFeedFragment"
                         )
                         .commit()
+                    closePublicationInformation()
                 }
                 R.id.navbar_messages -> {
                     supportFragmentManager
@@ -98,6 +125,7 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
                             "MessageFragment"
                         )
                         .commit()
+                    closePublicationInformation()
                 }
                 R.id.navbar_search -> {
                     supportFragmentManager
@@ -108,6 +136,7 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
                             "SearchFragment"
                         )
                         .commit()
+                    closePublicationInformation()
                 }
                 R.id.navbar_profile -> {
                     supportFragmentManager
@@ -118,6 +147,7 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
                             "ProfileFragment"
                         )
                         .commit()
+                    closePublicationInformation()
                 }
                 R.id.navbar_more -> {
                     if(isParameters){

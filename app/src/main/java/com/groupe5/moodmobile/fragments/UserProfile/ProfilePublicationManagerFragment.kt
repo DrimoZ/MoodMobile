@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import com.groupe5.moodmobile.databinding.FragmentProfilePublicationManagerBinding
 import com.groupe5.moodmobile.R
 import android.content.Context
+import com.groupe5.moodmobile.activities.MainActivity
+import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 
 class ProfilePublicationManagerFragment : Fragment() {
     lateinit var binding: FragmentProfilePublicationManagerBinding
@@ -54,5 +56,12 @@ class ProfilePublicationManagerFragment : Fragment() {
             }
         }
         viewModel.startGetAllPublications(if (friendId.isNullOrEmpty()) null else friendId)
+
+        profilePublicationsFragment.profilePublicationRecyclerViewAdapter.setOnOpenClickListener(object :
+            ProfilePublicationsRecyclerViewAdapter.OnOpenClickListener {
+            override fun onOpenClick(idPublication: Int) {
+               (requireActivity() as MainActivity).openPublicationInformation(idPublication)
+            }
+        })
     }
 }

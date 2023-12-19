@@ -2,10 +2,13 @@ package com.groupe5.moodmobile.fragments.UserProfile
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.groupe5.moodmobile.databinding.ProfilePublicationItemBinding
+import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.services.ImageService
@@ -23,6 +26,10 @@ class ProfilePublicationsRecyclerViewAdapter(
     private lateinit var imageRepository: IImageRepository
     private lateinit var imageService: ImageService
     lateinit var prefs: SharedPreferences
+    private var openClickListener: ProfilePublicationsRecyclerViewAdapter.OnOpenClickListener? = null
+    interface OnOpenClickListener {
+        fun onOpenClick(imagePublication: Int)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         prefs = context.getSharedPreferences("mood", Context.MODE_PRIVATE)
@@ -38,9 +45,16 @@ class ProfilePublicationsRecyclerViewAdapter(
         )
     }
 
+    fun setOnOpenClickListener(listener: ProfilePublicationsRecyclerViewAdapter.OnOpenClickListener) {
+        openClickListener = listener
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         if (item.elements.isNotEmpty()) {
+            if(item.elements.size > 1){
+                holder.moreContent.visibility = View.VISIBLE
+            }
             val element = item.elements[0]
 
             CoroutineScope(Dispatchers.Main).launch {
@@ -64,6 +78,14 @@ class ProfilePublicationsRecyclerViewAdapter(
             )
             Picasso.with(holder.content.context).load(resourceId).into(holder.content)
         }
+
+        holder.content.setOnClickListener {
+            openClickListener?.onOpenClick(item.id)
+        }
+
+        holder.moreContent.setOnClickListener {
+            openClickListener?.onOpenClick(item.id)
+        }
     }
 
     override fun getItemCount(): Int = values.size
@@ -71,5 +93,6 @@ class ProfilePublicationsRecyclerViewAdapter(
     inner class ViewHolder(binding: ProfilePublicationItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val content = binding.imProfilePublicationItemContent
+        val moreContent = binding.imProfilePublicationItemMoreContent
     }
 }

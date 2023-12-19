@@ -13,7 +13,7 @@ import com.groupe5.moodmobile.fragments.Discover.DiscoverPublicationsRecyclerVie
 
 class ProfilePublicationsFragment : Fragment() {
     private val publicationUI: ArrayList<DtoInputPublication> = arrayListOf()
-    private lateinit var profilePublicationRecyclerViewAdapter: ProfilePublicationsRecyclerViewAdapter
+    lateinit var profilePublicationRecyclerViewAdapter: ProfilePublicationsRecyclerViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
