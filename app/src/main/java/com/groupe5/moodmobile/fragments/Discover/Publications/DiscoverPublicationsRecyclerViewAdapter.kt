@@ -1,4 +1,4 @@
-package com.groupe5.moodmobile.fragments.Discover
+package com.groupe5.moodmobile.fragments.Discover.Publications
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 
 import com.groupe5.moodmobile.databinding.FragmentDiscoverPublicationsItemBinding
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
+import com.groupe5.moodmobile.fragments.UserProfile.UserPublications.ProfilePublicationsRecyclerViewAdapter
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.services.ImageService
 import com.groupe5.moodmobile.utils.RetrofitFactory
@@ -24,6 +25,11 @@ class DiscoverPublicationsRecyclerViewAdapter(
     private lateinit var imageRepository: IImageRepository
     private lateinit var imageService: ImageService
     lateinit var prefs: SharedPreferences
+    private var openClickListener: ProfilePublicationsRecyclerViewAdapter.OnOpenClickListener? = null
+
+    interface OnOpenClickListener : ProfilePublicationsRecyclerViewAdapter.OnOpenClickListener {
+        override fun onOpenClick(imagePublication: Int)
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         prefs = context.getSharedPreferences("mood", Context.MODE_PRIVATE)
         jwtToken = prefs.getString("jwtToken", "") ?: ""
@@ -36,7 +42,9 @@ class DiscoverPublicationsRecyclerViewAdapter(
                 false
             )
         )
-
+    }
+    fun setOnOpenClickListener(listener: OnOpenClickListener) {
+        openClickListener = listener
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -65,6 +73,14 @@ class DiscoverPublicationsRecyclerViewAdapter(
             )
             Picasso.with(holder.image.context).load(resourceId).into(holder.image)
         }
+
+        holder.image.setOnClickListener {
+            openClickListener?.onOpenClick(item.id)
+        }
+
+        /*holder.moreContent.setOnClickListener {
+            openClickListener?.onOpenClick(item.id)
+        }*/
     }
 
     override fun getItemCount(): Int = values.size

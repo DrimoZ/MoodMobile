@@ -1,4 +1,4 @@
-package com.groupe5.moodmobile.fragments.Discover
+package com.groupe5.moodmobile.fragments.Discover.Users
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,6 +11,7 @@ import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.databinding.FragmentDiscoverUsersManagerBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
+import com.groupe5.moodmobile.fragments.Discover.DiscoverFragment
 
 class DiscoverUsersFragment : Fragment() {
     private val userUI: ArrayList<DtoInputFriend> = arrayListOf()

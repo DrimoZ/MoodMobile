@@ -173,7 +173,7 @@
             android:visibility="gone">
 
             <EditText
-                android:id="@+id/et_fragmentPublicationInformation_comments"
+                android:id="@+id/et_fragmentPublicationInformation_writeComment"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -197,7 +197,6 @@
                 app:strokeColor="@color/gold"
                 app:strokeWidth="1dp" />
         </LinearLayout>
-
 
     </LinearLayout>
 

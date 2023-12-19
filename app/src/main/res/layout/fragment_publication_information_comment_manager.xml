@@ -18,7 +18,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcb_publicationInformationComments_list"
         android:name="com.groupe5.moodmobile.fragments.Publication.Comments.PublicationInformationCommentFragment"

@@ -49,7 +49,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcv_fragmentDiscover_container"
-        android:name="com.groupe5.moodmobile.fragments.Discover.DiscoverPublicationManagerFragment"
+        android:name="com.groupe5.moodmobile.fragments.Discover.Publications.DiscoverPublicationManagerFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_fragmentDiscover_publications"

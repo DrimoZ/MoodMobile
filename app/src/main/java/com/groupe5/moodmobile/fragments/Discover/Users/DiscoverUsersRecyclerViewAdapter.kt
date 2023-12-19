@@ -1,4 +1,4 @@
-package com.groupe5.moodmobile.fragments.Discover
+package com.groupe5.moodmobile.fragments.Discover.Users
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -28,12 +28,12 @@ class DiscoverUsersRecyclerViewAdapter(
     private lateinit var imageService: ImageService
     private lateinit var userService: UserService
     lateinit var prefs: SharedPreferences
-    private var deleteClickListener: DiscoverUsersRecyclerViewAdapter.OnDeleteClickListener? = null
-    private var addClickListener: DiscoverUsersRecyclerViewAdapter.OnAddClickListener? = null
-    private var cancelClickListener: DiscoverUsersRecyclerViewAdapter.OnCancelClickListener? = null
-    private var acceptClickListener: DiscoverUsersRecyclerViewAdapter.OnAcceptClickListener? = null
-    private var rejectClickListener: DiscoverUsersRecyclerViewAdapter.OnRejectClickListener? = null
-    private var userClickListener: DiscoverUsersRecyclerViewAdapter.OnUserClickListener? = null
+    private var deleteClickListener: OnDeleteClickListener? = null
+    private var addClickListener: OnAddClickListener? = null
+    private var cancelClickListener: OnCancelClickListener? = null
+    private var acceptClickListener: OnAcceptClickListener? = null
+    private var rejectClickListener: OnRejectClickListener? = null
+    private var userClickListener: OnUserClickListener? = null
 
     interface OnDeleteClickListener {
         fun onDeleteClick(user: DtoInputFriend)
@@ -69,22 +69,22 @@ class DiscoverUsersRecyclerViewAdapter(
 
     }
 
-    fun setOnDeleteClickListener(listener: DiscoverUsersRecyclerViewAdapter.OnDeleteClickListener) {
+    fun setOnDeleteClickListener(listener: OnDeleteClickListener) {
         deleteClickListener = listener
     }
-    fun setOnAddClickListener(listener: DiscoverUsersRecyclerViewAdapter.OnAddClickListener) {
+    fun setOnAddClickListener(listener: OnAddClickListener) {
         addClickListener = listener
     }
-    fun setOnCancelClickListener(listener: DiscoverUsersRecyclerViewAdapter.OnCancelClickListener) {
+    fun setOnCancelClickListener(listener: OnCancelClickListener) {
         cancelClickListener = listener
     }
-    fun setOnAcceptClickListener(listener: DiscoverUsersRecyclerViewAdapter.OnAcceptClickListener) {
+    fun setOnAcceptClickListener(listener: OnAcceptClickListener) {
         acceptClickListener = listener
     }
-    fun setOnRejectClickListener(listener: DiscoverUsersRecyclerViewAdapter.OnRejectClickListener) {
+    fun setOnRejectClickListener(listener: OnRejectClickListener) {
         rejectClickListener = listener
     }
-    fun setOnUserClickListener(listener: DiscoverUsersRecyclerViewAdapter.OnUserClickListener) {
+    fun setOnUserClickListener(listener: OnUserClickListener) {
         userClickListener = listener
     }
 

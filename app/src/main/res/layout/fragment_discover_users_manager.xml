@@ -8,7 +8,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcb_discoverUsersManager_list"
-        android:name="com.groupe5.moodmobile.fragments.Discover.DiscoverUsersFragment"
+        android:name="com.groupe5.moodmobile.fragments.Discover.Users.DiscoverUsersFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="26dp"

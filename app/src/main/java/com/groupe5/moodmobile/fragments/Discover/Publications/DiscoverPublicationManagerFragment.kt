@@ -1,4 +1,4 @@
-package com.groupe5.moodmobile.fragments.Discover
+package com.groupe5.moodmobile.fragments.Discover.Publications
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.groupe5.moodmobile.R
 import android.content.Context
+import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.databinding.FragmentDiscoverPublicationManagerBinding
 
 class DiscoverPublicationManagerFragment : Fragment() {
@@ -59,6 +60,12 @@ class DiscoverPublicationManagerFragment : Fragment() {
                 binding.btnDiscoverPublicationsManagerLoadMorePublications.isEnabled = false
             }
         }
+        discoverPublicationsFragment.discoverPublicationRecyclerViewAdapter.setOnOpenClickListener(object :
+            DiscoverPublicationsRecyclerViewAdapter.OnOpenClickListener {
+            override fun onOpenClick(idPublication: Int) {
+                (requireActivity() as MainActivity).openPublicationInformation(idPublication)
+            }
+        })
 
         binding.btnDiscoverPublicationsManagerLoadMorePublications.setOnClickListener {
             viewModel.showCount += 30

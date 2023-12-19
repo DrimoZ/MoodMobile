@@ -7,16 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.databinding.FragmentPublicationInformationBinding
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubLike
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationInformation
+import com.groupe5.moodmobile.dtos.Publication.Output.DtoOutputPubComment
 import com.groupe5.moodmobile.fragments.Publication.Comments.PublicationInformationCommentManagerFragment
 import com.groupe5.moodmobile.fragments.Publication.Element.PublicationInformationElementManagerFragment
+import com.groupe5.moodmobile.repositories.IFriendRepository
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.repositories.IPublicationRepository
+import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.services.ImageService
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import com.squareup.picasso.Picasso
@@ -37,6 +41,7 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
     var liked = false
     var likeCount = 0
     var commentDisplay = false
+    var commentCount = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,6 +75,11 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
             setPublicationDisplaysComments()
         }
 
+        binding.btnFragmentPublicationInformationSendComment.setOnClickListener {
+            val comment = binding.etFragmentPublicationInformationWriteComment.text.toString()
+            binding.etFragmentPublicationInformationWriteComment.text.clear()
+            addPublicationComment(comment)
+        }
     }
 
     private fun setPublicationDisplaysComments() {
@@ -104,6 +114,7 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
                     userProfile?.let { up ->
                         liked = userProfile.hasConnectedLiked
                         likeCount = userProfile.likeCount
+                        commentCount = userProfile.commentCount
                         startElements(userProfile)
                         binding.tvFragmentPublicationInformationUserUsername.text = up.nameAuthor
                         binding.tvFragmentPublicationInformationContent.text = up.content
@@ -196,6 +207,43 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
         })
     }
 
+    private fun addPublicationComment(comment: String){
+        val dto = DtoOutputPubComment(
+            idPublication = idPublication,
+            content = comment
+        )
+        val addCommentCall = publicationRepository.setPublicationComment(dto)
+        addCommentCall.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    restartComments(false)
+                    commentCount+=1
+                    if(commentCount > 1){
+                        binding.tvFragmentPublicationInformationComment.text = "Comments ( ${commentCount} )"
+                    }else{
+                        binding.tvFragmentPublicationInformationComment.text = "Comment ( ${commentCount} )"
+                    }
+                } else {
+                    val message = "echec : ${response.message()}"
+                    Log.d("Echec", message)
+                }
+            }
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                val message = "Echec DB: ${t.message}"
+                Log.e("EchecDb", message, t)
+            }
+        })
+    }
+
+    private fun removePublicationComment(){
+        commentCount-=1
+        if(commentCount > 1){
+            binding.tvFragmentPublicationInformationComment.text = "Comments ( ${commentCount} )"
+        }else{
+            binding.tvFragmentPublicationInformationComment.text = "Comment ( ${commentCount} )"
+        }
+    }
+
     private fun startElements(dto: DtoInputPublicationInformation){
         childFragmentManager
             .beginTransaction()
@@ -215,6 +263,20 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
                 "PublicationInformationCommentManagerFragment"
             )
             .commit()
+    }
+
+    fun restartComments(delete: Boolean){
+        childFragmentManager
+            .beginTransaction()
+            .replace(
+                R.id.fcv_fragmentPublicationInformation_comments,
+                PublicationInformationCommentManagerFragment.newInstance(idPublication),
+                "PublicationInformationCommentManagerFragment"
+            )
+            .commit()
+        if(delete){
+            removePublicationComment()
+        }
     }
 
     companion object {

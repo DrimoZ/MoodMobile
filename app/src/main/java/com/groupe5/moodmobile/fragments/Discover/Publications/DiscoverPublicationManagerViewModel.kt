@@ -1,4 +1,4 @@
-package com.groupe5.moodmobile.fragments.Discover
+package com.groupe5.moodmobile.fragments.Discover.Publications
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
