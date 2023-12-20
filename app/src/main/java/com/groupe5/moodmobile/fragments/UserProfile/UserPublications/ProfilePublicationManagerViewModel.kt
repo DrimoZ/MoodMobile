@@ -1,11 +1,11 @@
-package com.groupe5.moodmobile.fragments.UserProfile
+package com.groupe5.moodmobile.fragments.UserProfile.UserPublications
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.groupe5.moodmobile.dtos.Publication.DtoInputPublication
-import com.groupe5.moodmobile.dtos.Publication.DtoInputPublicationsResponse
+import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
+import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationsResponse
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory

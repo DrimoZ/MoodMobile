@@ -1,16 +1,14 @@
-package com.groupe5.moodmobile.fragments.UserProfile
+package com.groupe5.moodmobile.fragments.Discover.Publications
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Base64
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.groupe5.moodmobile.databinding.ProfilePublicationItemBinding
-import com.groupe5.moodmobile.dtos.Image.DtoInputImage
-import com.groupe5.moodmobile.dtos.Publication.DtoInputPublication
+import android.view.LayoutInflater
+import android.view.ViewGroup
+
+import com.groupe5.moodmobile.databinding.FragmentDiscoverPublicationsItemBinding
+import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
+import com.groupe5.moodmobile.fragments.UserProfile.UserPublications.ProfilePublicationsRecyclerViewAdapter
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.services.ImageService
 import com.groupe5.moodmobile.utils.RetrofitFactory
@@ -18,39 +16,35 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.ByteArrayInputStream
-import java.io.File
-import java.io.FileOutputStream
-import kotlin.math.min
-import java.util.UUID
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
-class ProfilePublicationsRecyclerViewAdapter(
+class DiscoverPublicationsRecyclerViewAdapter(
     private val context: Context,
     private val values: List<DtoInputPublication>
-) : RecyclerView.Adapter<ProfilePublicationsRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<DiscoverPublicationsRecyclerViewAdapter.ViewHolder>() {
     lateinit var jwtToken: String
     private lateinit var imageRepository: IImageRepository
     private lateinit var imageService: ImageService
     lateinit var prefs: SharedPreferences
+    private var openClickListener: ProfilePublicationsRecyclerViewAdapter.OnOpenClickListener? = null
 
+    interface OnOpenClickListener : ProfilePublicationsRecyclerViewAdapter.OnOpenClickListener {
+        override fun onOpenClick(imagePublication: Int)
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         prefs = context.getSharedPreferences("mood", Context.MODE_PRIVATE)
         jwtToken = prefs.getString("jwtToken", "") ?: ""
         imageRepository = RetrofitFactory.create(jwtToken, IImageRepository::class.java)
         imageService = ImageService(context, imageRepository)
         return ViewHolder(
-            ProfilePublicationItemBinding.inflate(
+            FragmentDiscoverPublicationsItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
         )
+    }
+    fun setOnOpenClickListener(listener: OnOpenClickListener) {
+        openClickListener = listener
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -66,9 +60,9 @@ class ProfilePublicationsRecyclerViewAdapter(
                         "drawable",
                         context.packageName
                     )
-                    Picasso.with(holder.content.context).load(resourceId).into(holder.content)
+                    Picasso.with(holder.image.context).load(resourceId).into(holder.image)
                 } else {
-                    Picasso.with(holder.content.context).load(image).into(holder.content)
+                    Picasso.with(holder.image.context).load(image).into(holder.image)
                 }
             }
         } else {
@@ -77,14 +71,23 @@ class ProfilePublicationsRecyclerViewAdapter(
                 "drawable",
                 context.packageName
             )
-            Picasso.with(holder.content.context).load(resourceId).into(holder.content)
+            Picasso.with(holder.image.context).load(resourceId).into(holder.image)
         }
+
+        holder.image.setOnClickListener {
+            openClickListener?.onOpenClick(item.id)
+        }
+
+        /*holder.moreContent.setOnClickListener {
+            openClickListener?.onOpenClick(item.id)
+        }*/
     }
 
     override fun getItemCount(): Int = values.size
 
-    inner class ViewHolder(binding: ProfilePublicationItemBinding) :
+    inner class ViewHolder(binding: FragmentDiscoverPublicationsItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val content = binding.imProfilePublicationItemContent
+        val image = binding.imDiscoverPublicationItemContent
     }
+
 }

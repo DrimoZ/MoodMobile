@@ -1,4 +1,4 @@
-package com.groupe5.moodmobile.fragments.UserProfile
+package com.groupe5.moodmobile.fragments.UserProfile.UserFriends
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -197,6 +197,7 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
                         Log.d("FriendRequestRejected", "Friend request rejected successfully")
+                        mutableFriendRefreshData.postValue(null)
                     } else if (response.code() == 404) {
                         Log.d("FriendRequestNotCanceled", "Friend not found")
                     }else {

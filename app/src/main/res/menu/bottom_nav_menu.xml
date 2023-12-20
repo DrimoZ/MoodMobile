@@ -10,7 +10,7 @@
         android:icon="@drawable/baseline_chat_bubble_24"
         android:id="@+id/navbar_messages"/>
     <item
-        android:title="Search"
+        android:title="Discover"
         android:icon="@drawable/baseline_zoom_in_24"
         android:id="@+id/navbar_search"/>
     <item

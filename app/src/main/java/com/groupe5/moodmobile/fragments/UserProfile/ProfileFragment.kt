@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +20,8 @@ import com.groupe5.moodmobile.classes.SharedViewModel
 import com.groupe5.moodmobile.databinding.FragmentProfileBinding
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
+import com.groupe5.moodmobile.fragments.UserProfile.UserFriends.ProfileFriendManagerFragment
+import com.groupe5.moodmobile.fragments.UserProfile.UserPublications.ProfilePublicationManagerFragment
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.services.ImageService
@@ -29,7 +30,6 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody

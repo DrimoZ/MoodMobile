@@ -1,8 +1,6 @@
-package com.groupe5.moodmobile.fragments.UserProfile
+package com.groupe5.moodmobile.fragments.UserProfile.UserFriends
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +11,7 @@ import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.databinding.FragmentProfileFriendManagerBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
-import com.groupe5.moodmobile.services.UserService
+import com.groupe5.moodmobile.fragments.UserProfile.OtherUserProfileFragment
 
 class ProfileFriendsFragment : Fragment() {
     private val friendUI: ArrayList<DtoInputFriend> = arrayListOf()

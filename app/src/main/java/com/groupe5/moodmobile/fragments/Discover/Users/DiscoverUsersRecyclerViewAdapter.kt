@@ -1,15 +1,14 @@
-package com.groupe5.moodmobile.fragments.UserProfile
+package com.groupe5.moodmobile.fragments.Discover.Users
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.groupe5.moodmobile.R
-import com.groupe5.moodmobile.databinding.FragmentFriendItemBinding
+
+import com.groupe5.moodmobile.databinding.FragmentDiscoverUsersItemBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.services.ImageService
@@ -20,10 +19,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ProfileFriendsRecyclerViewAdapter(
+class DiscoverUsersRecyclerViewAdapter(
     private val context: Context,
     private val values: List<DtoInputFriend>
-) : RecyclerView.Adapter<ProfileFriendsRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<DiscoverUsersRecyclerViewAdapter.ViewHolder>() {
     lateinit var jwtToken: String
     private lateinit var imageRepository: IImageRepository
     private lateinit var imageService: ImageService
@@ -34,25 +33,25 @@ class ProfileFriendsRecyclerViewAdapter(
     private var cancelClickListener: OnCancelClickListener? = null
     private var acceptClickListener: OnAcceptClickListener? = null
     private var rejectClickListener: OnRejectClickListener? = null
-    private var friendClickListener: OnFriendClickListener? = null
+    private var userClickListener: OnUserClickListener? = null
 
     interface OnDeleteClickListener {
-        fun onDeleteClick(friend: DtoInputFriend)
+        fun onDeleteClick(user: DtoInputFriend)
     }
     interface OnAddClickListener {
-        fun onAddClick(friend: DtoInputFriend)
+        fun onAddClick(user: DtoInputFriend)
     }
     interface OnCancelClickListener {
-        fun onCancelClick(friend: DtoInputFriend)
+        fun onCancelClick(user: DtoInputFriend)
     }
     interface OnAcceptClickListener {
-        fun onAcceptClick(friend: DtoInputFriend)
+        fun onAcceptClick(user: DtoInputFriend)
     }
     interface OnRejectClickListener {
-        fun onRejectClick(friend: DtoInputFriend)
+        fun onRejectClick(user: DtoInputFriend)
     }
-    interface OnFriendClickListener {
-        fun onFriendClick(friend: DtoInputFriend)
+    interface OnUserClickListener {
+        fun onUserClick(user: DtoInputFriend)
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         prefs = context.getSharedPreferences("mood", Context.MODE_PRIVATE)
@@ -61,13 +60,15 @@ class ProfileFriendsRecyclerViewAdapter(
         imageService = ImageService(context, imageRepository)
         userService = UserService(context)
         return ViewHolder(
-            FragmentFriendItemBinding.inflate(
+            FragmentDiscoverUsersItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
         )
+
     }
+
     fun setOnDeleteClickListener(listener: OnDeleteClickListener) {
         deleteClickListener = listener
     }
@@ -83,8 +84,8 @@ class ProfileFriendsRecyclerViewAdapter(
     fun setOnRejectClickListener(listener: OnRejectClickListener) {
         rejectClickListener = listener
     }
-    fun setOnFriendClickListener(listener: OnFriendClickListener) {
-        friendClickListener = listener
+    fun setOnUserClickListener(listener: OnUserClickListener) {
+        userClickListener = listener
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -133,7 +134,7 @@ class ProfileFriendsRecyclerViewAdapter(
             holder.commonFriend.text = "${item.commonFriendCount} Friend in common"
         }
         holder.name.setOnClickListener {
-            friendClickListener?.onFriendClick(item)
+            userClickListener?.onUserClick(item)
         }
         holder.delButton.setOnClickListener {
             deleteClickListener?.onDeleteClick(item)
@@ -150,20 +151,20 @@ class ProfileFriendsRecyclerViewAdapter(
         holder.rejectButton.setOnClickListener {
             rejectClickListener?.onRejectClick(item)
         }
-
     }
 
     override fun getItemCount(): Int = values.size
 
-    inner class ViewHolder(binding: FragmentFriendItemBinding) :
+    inner class ViewHolder(binding: FragmentDiscoverUsersItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val photo = binding.ivProfileFriendUserImage
-        val name: TextView = binding.tvProfileFriendUserUsername
-        val commonFriend: TextView = binding.tvProfileFriendUserCommonFriends
-        val delButton = binding.btnProfileFriendDeleteFriend
-        val addButton = binding.btnProfileFriendAddFriend
-        val cancelButton = binding.btnProfileFriendCancelFriendRequest
-        val acceptButton = binding.btnProfileFriendAcceptFriend
-        val rejectButton = binding.btnProfileFriendRejectFriend
+        val photo = binding.ivDiscoverUsersUserImage
+        val name: TextView = binding.tvDiscoverUsersUserUsername
+        val commonFriend: TextView = binding.tvDiscoverUsersUserCommonFriends
+        val delButton = binding.btnDiscoverUsersDeleteFriend
+        val addButton = binding.btnDiscoverUsersAddFriend
+        val cancelButton = binding.btnDiscoverUsersCancelFriendRequest
+        val acceptButton = binding.btnDiscoverUsersAcceptFriend
+        val rejectButton = binding.btnDiscoverUsersRejectFriend
     }
+
 }

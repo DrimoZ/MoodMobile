@@ -27,7 +27,7 @@ object OkHttpClientFactory {
                 val cookieHeader = "MoodSession=$token"
                 requestBuilder.header("Cookie", cookieHeader)
                 val request = requestBuilder.build()
-                Log.d("RequestHeaders", request.headers.toString())
+                //Log.d("RequestHeaders", request.headers.toString())
                 chain.proceed(request)
             }
             .cookieJar(cookieJar)

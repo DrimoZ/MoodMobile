@@ -1,7 +1,9 @@
 package com.groupe5.moodmobile.repositories
 
+import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriendsResponse
-import com.groupe5.moodmobile.dtos.Publication.DtoInputPublicationsResponse
+import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
+import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationsResponse
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserAccount
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserPrivacy
@@ -16,6 +18,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface IUserRepository {
     @GET("/api/v1/user/{userLogin}")
@@ -28,14 +31,25 @@ interface IUserRepository {
     fun getUserIdAndRole(): Call<DtoInputUserIdAndRole>
     @GET("/api/v1/user/{userLogin}/publications")
     fun getUserPublications(@Path("userLogin") userLogin: String): Call<DtoInputPublicationsResponse>
+    @GET("/api/v1/user/discover/publications")
+    fun getDiscoverPublications(
+        @Query("publicationCount") count: Int,
+        @Query("searchValue") search: String
+    ): Call<List<DtoInputPublication>>
     @GET("/api/v1/user/{userLogin}/friends")
     fun getUserFriends(@Path("userLogin") userLogin: String): Call<DtoInputFriendsResponse>
+    @GET("/api/v1/user/discover/users")
+    fun getDiscoverUsers(
+        @Query("userCount") count: Int,
+        @Query("searchValue") search: String
+    ): Call<List<DtoInputFriend>>
     @GET("/api/v1/user/privacy")
     fun getUserPrivacy(): Call<DtoInputUserPrivacy>
     @PATCH("/api/v1/user")
     fun setUserPrivacy(@Body userPrivacy: DtoOutputUserPrivacy): Call<Void>
-
     @POST("/api/v1/user/userPassword")
     fun setUserPassword(@Body userPassword: DtoOutputUserPassword): Call<Void>
+    @POST("/api/v1/user/delete")
+    fun deleteAccount(): Call<Void>
 }
 

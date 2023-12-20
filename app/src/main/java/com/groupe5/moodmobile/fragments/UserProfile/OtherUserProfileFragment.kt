@@ -11,8 +11,9 @@ import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.databinding.FragmentOtherUserProfileBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
-import com.groupe5.moodmobile.dtos.Friend.DtoInputFriendsResponse
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
+import com.groupe5.moodmobile.fragments.UserProfile.UserFriends.ProfileFriendManagerFragment
+import com.groupe5.moodmobile.fragments.UserProfile.UserPublications.ProfilePublicationManagerFragment
 import com.groupe5.moodmobile.repositories.IFriendRepository
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.repositories.IUserRepository

@@ -8,7 +8,7 @@
     android:background="#010928">
 
     <EditText
-        android:id="@+id/searchInput"
+        android:id="@+id/si_fragmentDiscover_searchbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/publicationsBtn"
+        android:id="@+id/btn_fragmentDiscover_publications"
         android:layout_width="128dp"
         android:layout_height="0dp"
         android:layout_marginStart="85dp"
@@ -30,29 +30,29 @@
         android:text="Publications"
         android:textColor="#deb992"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchInput"
+        app:layout_constraintTop_toBottomOf="@id/si_fragmentDiscover_searchbar"
         app:strokeColor="#deb992"
         app:strokeWidth="2dp" />
 
     <Button
-        android:id="@+id/profilesBtn"
+        android:id="@+id/btn_fragmentDiscover_profiles"
         android:layout_width="100dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:backgroundTint="#00FFFFFF"
         android:text="Profiles"
         android:textColor="#deb992"
-        app:layout_constraintStart_toEndOf="@id/publicationsBtn"
-        app:layout_constraintTop_toBottomOf="@id/searchInput"
+        app:layout_constraintStart_toEndOf="@id/btn_fragmentDiscover_publications"
+        app:layout_constraintTop_toBottomOf="@id/si_fragmentDiscover_searchbar"
         app:strokeColor="#deb992"
         app:strokeWidth="2dp"/>
 
-    <FrameLayout
-        android:id="@+id/fragmentContainer"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_fragmentDiscover_container"
+        android:name="com.groupe5.moodmobile.fragments.Discover.Publications.DiscoverPublicationManagerFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_fragmentDiscover_publications"
+        tools:layout_editor_absoluteX="205dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
