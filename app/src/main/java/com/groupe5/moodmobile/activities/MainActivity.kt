@@ -10,7 +10,8 @@ import com.groupe5.moodmobile.databinding.ActivityMainBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.fragments.MessageFragment
 import com.groupe5.moodmobile.fragments.More.ParametersFragment
-import com.groupe5.moodmobile.fragments.NewsFeedFragment
+import com.groupe5.moodmobile.fragments.NewsFeed.NewsFeedFragment
+import com.groupe5.moodmobile.fragments.NewsFeed.NewsFeedPublicationManagerFragment
 import com.groupe5.moodmobile.fragments.Publication.PublicationInformationFragment
 import com.groupe5.moodmobile.fragments.UserProfile.OtherUserProfileFragment
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFragment
@@ -40,8 +41,8 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
             .beginTransaction()
             .add(
                 R.id.fragmentContainerView_mainActivity,
-                NewsFeedFragment.newInstance(),
-                "NewsFeedFragment"
+                NewsFeedPublicationManagerFragment.newInstance(),
+                "NewsFeedPublicationManagerFragment"
             )
             .commit()
 
@@ -110,8 +111,8 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
                         .beginTransaction()
                         .replace(
                             R.id.fragmentContainerView_mainActivity,
-                            NewsFeedFragment.newInstance(),
-                            "NewsFeedFragment"
+                            NewsFeedPublicationManagerFragment.newInstance(),
+                            "NewsFeedPublicationManagerFragment"
                         )
                         .commit()
                     closePublicationInformation()

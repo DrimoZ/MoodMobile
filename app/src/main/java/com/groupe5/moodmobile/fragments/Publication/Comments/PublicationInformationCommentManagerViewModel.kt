@@ -4,13 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.groupe5.moodmobile.R
-import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubComment
-import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubElement
-import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationInformation
-import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
-import com.groupe5.moodmobile.fragments.Publication.PublicationInformationFragment
 import com.groupe5.moodmobile.repositories.IPublicationRepository
 import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory

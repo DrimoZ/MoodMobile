@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout8"
     android:background="#010928"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".fragments.Publication.PublicationInformationFragment">
 
     <LinearLayout
@@ -22,79 +22,66 @@
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_fragmentPublicationInformation_userImage"
+                android:id="@+id/iv_newsFeedPublicationInformation_userImage"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="36dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:src="@drawable/back"
                 app:civ_border_color="#deb996"
                 app:civ_border_width="2dp"
                 tools:ignore="MissingConstraints" />
 
-            <LinearLayout
-                android:layout_width="200dp"
+            <TextView
+                android:id="@+id/tv_newsFeedPublicationInformation_userUsername"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_fragmentPublicationInformation_userUsername"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="25dp"
-                    android:text=""
-                    android:textColor="@color/gold"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/tv_fragmentPublicationInformation_content"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="5dp"
-                    android:text=""
-                    android:textColor="@color/gold"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/btn_fragmentPublicationInformation_close"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:backgroundTint="@android:color/transparent"
-                android:text="x"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="35dp"
+                android:text=""
                 android:textColor="@color/gold"
-                android:textSize="26sp" />
+                android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/tv_newsFeedPublicationInformation_date"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:text=""
+                android:textColor="#6BDDB891"
+                android:textSize="14sp" />
 
         </LinearLayout>
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="500dp"
-            android:layout_height="2dp"
-            android:layout_marginTop="20dp"
-            android:background="#deb992" />
 
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fcv_fragmentPublicationInformation_publications"
+                android:id="@+id/fcv_newsFeedPublicationInformation_publications"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
         </HorizontalScrollView>
 
+        <TextView
+            android:id="@+id/tv_newsFeedPublicationInformation_content"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="20dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/gold"
+            android:textSize="20sp" />
+
         <View
-            android:id="@+id/divider2"
-            android:layout_width="500dp"
+            android:id="@+id/divider"
+            android:layout_width="300dp"
             android:layout_height="2dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="20dp"
             android:background="#deb992" />
 
 
@@ -104,16 +91,16 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/im_fragmentPublicationInformation_like"
+                android:id="@+id/im_newsFeedPublicationInformation_like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="85dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="25dp"
+                android:layout_marginBottom="10dp"
                 android:src="@drawable/baseline_star_border_purple500_24" />
 
             <TextView
-                android:id="@+id/tv_fragmentPublicationInformation_like"
+                android:id="@+id/tv_newsFeedPublicationInformation_like"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -123,7 +110,7 @@
                 android:textSize="14sp" />
 
             <ImageView
-                android:id="@+id/im_fragmentPublicationInformation_comment"
+                android:id="@+id/im_newsFeedPublicationInformation_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -131,7 +118,7 @@
                 android:src="@drawable/baseline_question_answer_24" />
 
             <TextView
-                android:id="@+id/tv_fragmentPublicationInformation_comment"
+                android:id="@+id/tv_newsFeedPublicationInformation_comment"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -143,29 +130,30 @@
         </LinearLayout>
 
         <View
-            android:id="@+id/divider3"
-            android:layout_width="500dp"
+            android:id="@+id/v_newsFeedPublicationInformation_divider"
+            android:layout_width="300dp"
             android:layout_height="2dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginBottom="20dp"
             android:background="#deb992"
             android:visibility="gone"/>
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fcv_fragmentPublicationInformation_comments"
+            android:id="@+id/fcv_newsFeedPublicationInformation_comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
         <LinearLayout
-            android:id="@+id/ll_fragmentPublicationInformation_comments"
+            android:id="@+id/ll_newsFeedPublicationInformation_comments"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:visibility="gone">
 
             <EditText
-                android:id="@+id/et_fragmentPublicationInformation_writeComment"
-                android:layout_width="200dp"
+                android:id="@+id/et_newsFeedPublicationInformation_writeComment"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
@@ -177,17 +165,24 @@
                 android:textColorHint="#43E8C8A5" />
 
             <Button
-                android:id="@+id/btn_fragmentPublicationInformation_sendComment"
+                android:id="@+id/btn_newsFeedPublicationInformation_sendComment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/transparent"
-                android:text="Send comment"
+                android:text="Comment"
                 android:textColor="@color/gold"
                 app:cornerRadius="1dp"
                 app:strokeColor="@color/gold"
                 app:strokeWidth="1dp" />
         </LinearLayout>
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="500dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:background="#deb992" />
 
     </LinearLayout>
 

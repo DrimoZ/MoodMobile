@@ -9,12 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.activities.MainActivity
+import com.groupe5.moodmobile.classes.SharedViewModel
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubComment
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubElement
 import com.groupe5.moodmobile.dtos.Publication.Output.DtoOutputPubComment
+import com.groupe5.moodmobile.fragments.NewsFeed.NewsFeedPublicationFragment
+import com.groupe5.moodmobile.fragments.NewsFeed.NewsFeedPublicationRecyclerViewAdapter
 import com.groupe5.moodmobile.fragments.Publication.Element.PublicationInformationElementRecyclerViewAdapter
 import com.groupe5.moodmobile.fragments.Publication.PublicationInformationFragment
 import com.groupe5.moodmobile.fragments.UserProfile.OtherUserProfileFragment
@@ -40,23 +44,17 @@ class PublicationInformationCommentFragment : Fragment() {
         return view
     }
 
-    fun initUIWithComments(publications: List<DtoInputPubComment>?) {
-        publications?.let {
+    fun initUIWithComments(comments: List<DtoInputPubComment>?) {
+        comments?.let {
             commentUI.clear()
             commentUI.addAll(it)
             publicationInformationCommentRecyclerViewAdapter.notifyDataSetChanged()
         }
     }
 
-    fun deleteFriendFromUI(dto: DtoInputPubComment) {
+    fun deleteCommentFromUI(dto: DtoInputPubComment) {
         commentUI.remove(dto)
-        val activity = requireActivity()
-        if (activity is MainActivity) {
-            val currentFragment = activity.supportFragmentManager.findFragmentById(R.id.fragmentContainerView_mainActivitySpecialPublication)
-            if (currentFragment is PublicationInformationFragment) {
-                currentFragment.restartComments(true)
-            }
-        }
+        publicationInformationCommentRecyclerViewAdapter.notifyDataSetChanged()
     }
 
     companion object {

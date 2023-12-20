@@ -33,6 +33,7 @@ import retrofit2.Response
 
 
 class PublicationInformationFragment(idPublication: Int) : Fragment() {
+    private lateinit var commentManagerFragment: PublicationInformationCommentManagerFragment
     private lateinit var binding : FragmentPublicationInformationBinding
     private lateinit var publicationRepository: IPublicationRepository
     private lateinit var imageRepository: IImageRepository
@@ -54,7 +55,6 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         startPublicationInformationData()
-
         binding.btnFragmentPublicationInformationClose.setOnClickListener {
            (requireActivity() as MainActivity).closePublicationInformation()
         }
@@ -86,14 +86,12 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
         if(!commentDisplay){
             binding.llFragmentPublicationInformationComments.visibility = View.VISIBLE
             binding.divider3.visibility = View.VISIBLE
-            binding.divider4.visibility = View.VISIBLE
             binding.fcvFragmentPublicationInformationComments.visibility = View.VISIBLE
             commentDisplay = !commentDisplay
             startComments()
         }else{
             binding.llFragmentPublicationInformationComments.visibility = View.GONE
             binding.divider3.visibility = View.GONE
-            binding.divider4.visibility = View.GONE
             binding.fcvFragmentPublicationInformationComments.visibility = View.GONE
             commentDisplay = !commentDisplay
         }
@@ -235,7 +233,7 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
         })
     }
 
-    private fun removePublicationComment(){
+    fun removePublicationComment(){
         commentCount-=1
         if(commentCount > 1){
             binding.tvFragmentPublicationInformationComment.text = "Comments ( ${commentCount} )"
@@ -274,9 +272,6 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
                 "PublicationInformationCommentManagerFragment"
             )
             .commit()
-        if(delete){
-            removePublicationComment()
-        }
     }
 
     companion object {

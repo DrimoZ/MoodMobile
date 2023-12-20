@@ -30,7 +30,6 @@
                 android:id="@+id/tv_publicationInormationComment_userUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:text=""
                 android:textColor="@color/gold"
                 android:textSize="20sp" />
