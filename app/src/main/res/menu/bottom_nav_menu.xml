@@ -6,13 +6,13 @@
         android:icon="@drawable/baseline_home_24"
         android:id="@+id/navbar_newsFeed"/>
     <item
-        android:title="Messages"
-        android:icon="@drawable/baseline_chat_bubble_24"
-        android:id="@+id/navbar_messages"/>
-    <item
         android:title="Discover"
         android:icon="@drawable/baseline_zoom_in_24"
-        android:id="@+id/navbar_search"/>
+        android:id="@+id/navbar_discover"/>
+    <item
+        android:title="New Publication"
+        android:icon="@drawable/baseline_add_a_photo_24"
+        android:id="@+id/navbar_newPublication"/>
     <item
         android:title="Profile"
         android:icon="@drawable/baseline_person_2_24"

@@ -8,9 +8,8 @@ import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.fragments.Discover.DiscoverFragment
 import com.groupe5.moodmobile.databinding.ActivityMainBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
-import com.groupe5.moodmobile.fragments.MessageFragment
+import com.groupe5.moodmobile.fragments.AddPublicationFragment
 import com.groupe5.moodmobile.fragments.More.ParametersFragment
-import com.groupe5.moodmobile.fragments.NewsFeed.NewsFeedFragment
 import com.groupe5.moodmobile.fragments.NewsFeed.NewsFeedPublicationManagerFragment
 import com.groupe5.moodmobile.fragments.Publication.PublicationInformationFragment
 import com.groupe5.moodmobile.fragments.UserProfile.OtherUserProfileFragment
@@ -117,24 +116,24 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
                         .commit()
                     closePublicationInformation()
                 }
-                R.id.navbar_messages -> {
-                    supportFragmentManager
-                        .beginTransaction()
-                        .replace(
-                            R.id.fragmentContainerView_mainActivity,
-                            MessageFragment.newInstance(),
-                            "MessageFragment"
-                        )
-                        .commit()
-                    closePublicationInformation()
-                }
-                R.id.navbar_search -> {
+                R.id.navbar_discover -> {
                     supportFragmentManager
                         .beginTransaction()
                         .replace(
                             R.id.fragmentContainerView_mainActivity,
                             DiscoverFragment.newInstance(),
-                            "SearchFragment"
+                            "DiscoverFragment"
+                        )
+                        .commit()
+                    closePublicationInformation()
+                }
+                R.id.navbar_newPublication -> {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(
+                            R.id.fragmentContainerView_mainActivity,
+                            AddPublicationFragment.newInstance(),
+                            "MessageFragment"
                         )
                         .commit()
                     closePublicationInformation()

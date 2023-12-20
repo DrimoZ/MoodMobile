@@ -7,18 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import com.groupe5.moodmobile.R
 
-class MessageFragment : Fragment() {
+class AddPublicationFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_message, container, false)
+        return inflater.inflate(R.layout.fragment_add_publication, container, false)
     }
 
     companion object {
         @JvmStatic
-        fun newInstance() = MessageFragment()
+        fun newInstance() = AddPublicationFragment()
     }
 }
