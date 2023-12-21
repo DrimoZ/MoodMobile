@@ -4,14 +4,6 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.groupe5.moodmobile.dtos.Image.DtoInputImage
-import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubComment
-import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubElement
-import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationInformation
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 
 class AddPublicationElementManagerViewModel(private val jwtToken: String) : ViewModel() {

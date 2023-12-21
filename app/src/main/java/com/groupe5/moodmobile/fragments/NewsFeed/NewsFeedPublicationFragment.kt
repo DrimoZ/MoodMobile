@@ -2,8 +2,6 @@ package com.groupe5.moodmobile.fragments.NewsFeed
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -11,10 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.classes.SharedViewModel
-import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationInformation
-import com.groupe5.moodmobile.fragments.UserProfile.UserPublications.ProfilePublicationsRecyclerViewAdapter
-import com.groupe5.moodmobile.placeholder.PlaceholderContent
 class NewsFeedPublicationFragment : Fragment() {
     private val publicationUI: ArrayList<DtoInputPublicationInformation> = arrayListOf()
     lateinit var newsFeedPublicationRecyclerViewAdapter: NewsFeedPublicationRecyclerViewAdapter

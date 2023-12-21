@@ -14,16 +14,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.groupe5.moodmobile.R
-import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.classes.SharedViewModel
 import com.groupe5.moodmobile.databinding.FragmentAddPublicationBinding
-import com.groupe5.moodmobile.databinding.FragmentProfileBinding
-import com.groupe5.moodmobile.fragments.NewsFeed.NewsFeedPublicationManagerFragment
-import com.groupe5.moodmobile.fragments.UserProfile.UserFriends.ProfileFriendManagerFragment
-import com.groupe5.moodmobile.fragments.UserProfile.UserPublications.ProfilePublicationManagerFragment
-import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.repositories.IPublicationRepository
-import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody

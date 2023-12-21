@@ -13,16 +13,11 @@ import com.groupe5.moodmobile.databinding.FragmentParametersBinding
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserAccount
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserPrivacy
-import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserAccount
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserPassword
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserPrivacy
 import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
-import com.squareup.picasso.Picasso
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

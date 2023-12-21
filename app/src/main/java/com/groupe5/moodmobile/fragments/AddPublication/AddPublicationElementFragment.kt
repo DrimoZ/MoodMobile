@@ -10,9 +10,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.classes.SharedViewModel
-import com.groupe5.moodmobile.dtos.Image.DtoInputImage
-import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubComment
-import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubElement
 
 class AddPublicationElementFragment : Fragment() {
     private val elementUI: ArrayList<Uri> = arrayListOf()

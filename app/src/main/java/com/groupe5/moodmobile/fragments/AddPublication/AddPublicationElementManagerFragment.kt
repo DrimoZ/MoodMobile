@@ -8,13 +8,7 @@ import android.view.ViewGroup
 import com.groupe5.moodmobile.R
 import android.content.Context
 import android.net.Uri
-import android.util.Log
-import androidx.lifecycle.ViewModelProvider
-import com.groupe5.moodmobile.classes.SharedViewModel
 import com.groupe5.moodmobile.databinding.FragmentAddPublicationElementManagerBinding
-import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubComment
-import com.groupe5.moodmobile.fragments.Publication.Comments.PublicationInformationCommentRecyclerViewAdapter
-import com.groupe5.moodmobile.fragments.Publication.PublicationInformationFragment
 
 class AddPublicationElementManagerFragment(image: MutableList<Uri>) : Fragment() {
     lateinit var binding: FragmentAddPublicationElementManagerBinding
