@@ -50,6 +50,9 @@ interface IUserRepository {
     @GET("/api/v1/user/privacy")
     suspend fun getUserPrivacy(): DtoInputUserPrivacy
 
+
+
+
     @PUT("/api/v1/user")
     fun setUserAccount(@Body userAccount: DtoOutputUserAccount): Call<Void>
 
@@ -58,11 +61,8 @@ interface IUserRepository {
 
     @POST("/api/v1/user/userPassword")
     fun setUserPassword(@Body userPassword: DtoOutputUserPassword): Call<Void>
-
     @POST("/api/v1/user/delete")
     fun deleteAccount(): Call<Void>
-
-
     @GET("/api/v1/user")
     fun getUserIdAndRoleService(): Call<DtoInputUserIdAndRole>
     @GET("/api/v1/user/{userLogin}")

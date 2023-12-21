@@ -69,32 +69,4 @@ class UserService(private val context: Context) {
             }
         })
     }
-
-    suspend fun getFriendList(): List<String> = suspendCoroutine{continuation ->
-        prefs = context.getSharedPreferences("mood", Context.MODE_PRIVATE)
-        val jwtToken = prefs.getString("jwtToken", "") ?: ""
-        userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
-        CoroutineScope(Dispatchers.Main).launch {
-            val call1 = userRepository.getUserFriendsService(getUserId())
-            call1.enqueue(object : Callback<DtoInputFriendsResponse> {
-                override fun onResponse(call: Call<DtoInputFriendsResponse>, response: Response<DtoInputFriendsResponse>) {
-                    if (response.isSuccessful) {
-                        val friendList = response.body()?.friends
-                        friendList?.let {
-                            val friendIds = friendList.map { friend -> friend.id }
-                            continuation.resume(friendIds)
-                        }
-                    } else {
-                        val message = "echec : ${response.message()}"
-                        Log.d("Echec", message)
-                    }
-                }
-
-                override fun onFailure(call: Call<DtoInputFriendsResponse>, t: Throwable) {
-                    val message = "Echec DB: ${t.message}"
-                    Log.e("EchecDb", message, t)
-                }
-            })
-        }
-    }
 }

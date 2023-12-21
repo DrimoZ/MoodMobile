@@ -69,129 +69,76 @@ class OtherUserProfileFragment(friend: DtoInputFriend) : Fragment() {
         }
 
         binding.btnFragmentOtherUserProfileAddFriend.setOnClickListener {
-            val addCall = friendRepository.createFriendRequest(friendId)
-            addCall.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        Log.d("FriendRequestSent", "Friend request sent successfully")
-                        CoroutineScope(Dispatchers.Main).launch {
-                            (requireActivity() as MainActivity).onRefreshOtherUser(friendRefresh(friend))
-                        }
-                    } else if (response.code() == 404) {
-                        Log.d("FriendRequestNotSent", "Friend not found")
-                    }else {
-                        val message = "erreur : ${response.message()}"
-                        Log.d("responseNotSucc",message)
-                    }
+            lifecycleScope.launch {
+                try {
+                    val response = friendRepository.createFriendRequest(friendId)
+                    Log.d("FriendRequestSent", "Friend request sent successfully")
+                    (requireActivity() as MainActivity).onRefreshOtherUser(friendRefresh(friend))
+                } catch (t: Throwable) {
+                    Log.d("Failure", "Failure")
                 }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Log.d("Failure","Failure")
-                }
-            })
+            }
         }
 
         binding.btnFragmentOtherUserProfileCancelFriendRequest.setOnClickListener {
-            val cancelCall = friendRepository.rejectFriendRequest(friendId)
-            cancelCall.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        Log.d("FriendRequestCanceled", "Friend request canceled successfully")
-                        CoroutineScope(Dispatchers.Main).launch {
-                            (requireActivity() as MainActivity).onRefreshOtherUser(friendRefresh(friend))
-                        }
-                    } else if (response.code() == 404) {
-                        Log.d("FriendRequestNotCanceled", "Friend not found")
-                    }else {
-                        val message = "erreur : ${response.message()}"
-                        Log.d("responseNotSucc",message)
-                    }
+            lifecycleScope.launch {
+                try {
+                    val response = friendRepository.rejectFriendRequest(friendId)
+                    Log.d("FriendRequestCanceled", "Friend request canceled successfully")
+                    (requireActivity() as MainActivity).onRefreshOtherUser(friendRefresh(friend))
+                } catch (t: Throwable) {
+                    Log.d("Failure", "Failure")
                 }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Log.d("Failure","Failure")
-                }
-            })
+            }
         }
 
         binding.btnFragmentOtherUserProfileAcceptFriendRequest.setOnClickListener {
-            val acceptCall = friendRepository.acceptFriendRequest(friendId)
-            acceptCall.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        Log.d("FriendRequestAccepted", "Friend request accepted successfully")
-                        CoroutineScope(Dispatchers.Main).launch {
-                            (requireActivity() as MainActivity).onRefreshOtherUser(friendRefresh(friend))
-                        }
-                    } else if (response.code() == 404) {
-                        Log.d("FriendRequestNotCanceled", "Friend not found")
-                    }else {
-                        val message = "erreur : ${response.message()}"
-                        Log.d("responseNotSucc",message)
-                    }
+            lifecycleScope.launch {
+                try {
+                    val response = friendRepository.acceptFriendRequest(friendId)
+                    Log.d("FriendRequestAccepted", "Friend request accepted successfully")
+                    (requireActivity() as MainActivity).onRefreshOtherUser(friendRefresh(friend))
+                } catch (t: Throwable) {
+                    Log.d("Failure", "Failure")
                 }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Log.d("Failure","Failure")
-                }
-            })
+            }
         }
+
 
         binding.btnFragmentOtherUserProfileRejectFriendRequest.setOnClickListener {
-            val rejectCall = friendRepository.rejectFriendRequest(friendId)
-            rejectCall.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        Log.d("FriendRequestRejected", "Friend request rejected successfully")
-                        CoroutineScope(Dispatchers.Main).launch {
-                            (requireActivity() as MainActivity).onRefreshOtherUser(friendRefresh(friend))
-                        }
-                    } else if (response.code() == 404) {
-                        Log.d("FriendRequestNotCanceled", "Friend not found")
-                    }else {
-                        val message = "erreur : ${response.message()}"
-                        Log.d("responseNotSucc",message)
-                    }
+            lifecycleScope.launch {
+                try {
+                    val response = friendRepository.rejectFriendRequest(friendId)
+                    Log.d("FriendRequestRejected", "Friend request rejected successfully")
+                    (requireActivity() as MainActivity).onRefreshOtherUser(friendRefresh(friend))
+                } catch (t: Throwable) {
+                    Log.d("Failure", "Failure")
                 }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Log.d("Failure","Failure")
-                }
-            })
+            }
         }
 
-        binding.btnFragmentOtherUserProfileDeleteFriend.setOnClickListener {
-            friendRepository.deleteFriend(friendId)
-            val deleteCall = friendRepository.deleteFriend(friendId)
-            deleteCall.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        Log.d("FriendDeletion", "Friend deleted successfully")
-                        CoroutineScope(Dispatchers.Main).launch {
-                            (requireActivity() as MainActivity).onRefreshOtherUser(friendRefresh(friend))
-                        }
-                    } else if (response.code() == 404) {
-                        Log.d("FriendDeletion", "Friend not found")
-                    }else {
-                        Log.d("responseNotSucc","responseNotSucc")
-                    }
-                }
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Log.d("Failure","Failure")
+        binding.btnFragmentOtherUserProfileDeleteFriend.setOnClickListener {
+            lifecycleScope.launch {
+                try {
+                    val response = friendRepository.deleteFriend(friendId)
+                    Log.d("FriendDeletion", "Friend deleted successfully")
+                    (requireActivity() as MainActivity).onRefreshOtherUser(friendRefresh(friend))
+                } catch (t: Throwable) {
+                    Log.d("Failure", "Failure")
                 }
-            })
+            }
         }
     }
 
-    private suspend fun friendRefresh(friend: DtoInputFriend): DtoInputFriend {
+    suspend fun friendRefresh(friend: DtoInputFriend): DtoInputFriend {
         userService = UserService(requireContext())
         val friendId = friend.id
         friend.isFriendWithConnected = userService.getUserProfile(friendId)
         return friend
     }
 
-    private fun replaceFragment(fragment: Fragment) {
+    fun replaceFragment(fragment: Fragment) {
         val transaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.fcb_otherUserProfileFriendManager_list, fragment)
         transaction.addToBackStack(null)
@@ -208,7 +155,7 @@ class OtherUserProfileFragment(friend: DtoInputFriend) : Fragment() {
     }
 
 
-    private suspend fun startUserData(friend: DtoInputFriend) {
+    suspend fun startUserData(friend: DtoInputFriend) {
         try {
             val prefs = requireActivity().getSharedPreferences("mood", Context.MODE_PRIVATE)
             val jwtToken = prefs.getString("jwtToken", "") ?: ""

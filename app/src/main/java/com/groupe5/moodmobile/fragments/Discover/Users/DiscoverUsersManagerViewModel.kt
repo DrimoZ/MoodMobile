@@ -11,6 +11,7 @@ import com.groupe5.moodmobile.utils.RetrofitFactory
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
 
 class DiscoverUsersManagerViewModel(private val jwtToken: String, private val searchValue: String) : ViewModel() {
@@ -77,28 +78,24 @@ class DiscoverUsersManagerViewModel(private val jwtToken: String, private val se
 
     fun addFriend(friend: DtoInputFriend) {
         val friendId = friend.id
-        Log.d("friendid",friendId)
-        viewModelScope.launch {
-            val addCall = friendRepository.createFriendRequest(friendId)
-            addCall.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        Log.d("FriendRequestSent", "Friend request sent successfully")
-                        mutableUserRefreshData.postValue(null)
-                    } else if (response.code() == 404) {
-                        Log.d("FriendRequestNotSent", "Friend not found")
-                    }else {
-                        handleApiError(response)
-                        val message = "erreur : ${response.message()}"
-                        Log.d("responseNotSucc",message)
-                    }
-                }
+        Log.d("friendid", friendId)
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    handleNetworkError(t)
-                    Log.d("Failure","Failure")
+        viewModelScope.launch {
+            try {
+                friendRepository.createFriendRequest(friendId)
+                Log.d("FriendRequestSent", "Friend request sent successfully")
+                mutableUserRefreshData.postValue(null)
+            } catch (e: HttpException) {
+                if (e.code() == 404) {
+                    Log.d("FriendRequestNotSent", "Friend not found")
+                } else {
+                    val message = "erreur : ${e.message()}"
+                    Log.d("responseNotSucc", message)
                 }
-            })
+            } catch (t: Throwable) {
+                handleNetworkError(t)
+                Log.d("Failure", "Failure")
+            }
         }
     }
 
