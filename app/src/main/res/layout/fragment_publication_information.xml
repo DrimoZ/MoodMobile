@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="13dp"
-                android:text="test"
+                android:text=""
                 android:textColor="@color/gold"
                 android:textSize="14sp" />
 
@@ -136,9 +136,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="13dp"
-                android:text="test"
+                android:text=""
                 android:textColor="@color/gold"
                 android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/im_fragmentPublicationInformation_commentScroll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/baseline_keyboard_double_arrow_down_24"
+                android:visibility="invisible"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/ll_fragmentPublicationInformation_remove"
@@ -151,7 +160,7 @@
                 android:id="@+id/im_fragmentPublicationInformation_removeLike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="25dp"
                 android:src="@drawable/baseline_star_border_purple500_24" />
@@ -162,7 +171,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="13dp"
-                android:text="test"
+                android:text=""
                 android:textColor="@color/gold"
                 android:textSize="14sp" />
 
@@ -180,15 +189,25 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="13dp"
-                android:text="test"
+                android:text=""
                 android:textColor="@color/gold"
                 android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/im_fragmentPublicationInformation_removeCommentScroll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/baseline_keyboard_double_arrow_down_24"
+                android:visibility="invisible"/>
 
             <ImageView
                 android:id="@+id/im_fragmentPublicationInformation_remove"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
                 android:src="@drawable/baseline_dangerous_24"/>
             <TextView
                 android:id="@+id/tv_fragmentPublicationInformation_remove"

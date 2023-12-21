@@ -40,6 +40,7 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
     var likeCount = 0
     var commentDisplay = false
     var commentCount = 0
+    var isFromConnected = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,7 +72,19 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
         binding.tvFragmentPublicationInformationComment.setOnClickListener {
             setPublicationDisplaysComments()
         }
+        binding.imFragmentPublicationInformationRemoveLike.setOnClickListener {
+            setPublicationLike()
+        }
+        binding.tvFragmentPublicationInformationRemoveLike.setOnClickListener {
+            setPublicationLike()
+        }
+        binding.imFragmentPublicationInformationRemoveComment.setOnClickListener{
+            setPublicationDisplaysComments()
+        }
 
+        binding.tvFragmentPublicationInformationRemoveComment.setOnClickListener {
+            setPublicationDisplaysComments()
+        }
         binding.btnFragmentPublicationInformationSendComment.setOnClickListener {
             val comment = binding.etFragmentPublicationInformationWriteComment.text.toString()
             binding.etFragmentPublicationInformationWriteComment.text.clear()
@@ -87,12 +100,16 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
 
     private fun setPublicationDisplaysComments() {
         if(!commentDisplay){
+            binding.imFragmentPublicationInformationRemoveCommentScroll.visibility = View.VISIBLE
+            binding.imFragmentPublicationInformationCommentScroll.visibility = View.VISIBLE
             binding.llFragmentPublicationInformationComments.visibility = View.VISIBLE
             binding.divider3.visibility = View.VISIBLE
             binding.fcvFragmentPublicationInformationComments.visibility = View.VISIBLE
             commentDisplay = !commentDisplay
             startComments()
         }else{
+            binding.imFragmentPublicationInformationRemoveCommentScroll.visibility = View.INVISIBLE
+            binding.imFragmentPublicationInformationCommentScroll.visibility = View.INVISIBLE
             binding.llFragmentPublicationInformationComments.visibility = View.GONE
             binding.divider3.visibility = View.GONE
             binding.fcvFragmentPublicationInformationComments.visibility = View.GONE
@@ -116,6 +133,7 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
                         liked = userProfile.hasConnectedLiked
                         likeCount = userProfile.likeCount
                         commentCount = userProfile.commentCount
+                        isFromConnected = userProfile.isFromConnected
                         startElements(userProfile)
                         binding.tvFragmentPublicationInformationUserUsername.text = up.nameAuthor
                         binding.tvFragmentPublicationInformationContent.text = up.content
@@ -124,22 +142,22 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
                             binding.llFragmentPublicationInformationNotRemove.visibility = View.GONE
                             binding.llFragmentPublicationInformationRemove.visibility = View.VISIBLE
                             if(up.hasConnectedLiked) {
-                                binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                binding.imFragmentPublicationInformationRemoveLike.setImageDrawable(
                                     AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_24))
-                                binding.tvFragmentPublicationInformationLike.text = "Liked ( ${up.likeCount} )"
+                                binding.tvFragmentPublicationInformationRemoveLike.text = "Liked ( ${up.likeCount} )"
                             }else if(up.likeCount > 1) {
-                                binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                binding.imFragmentPublicationInformationRemoveLike.setImageDrawable(
                                     AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
-                                binding.tvFragmentPublicationInformationLike.text = "Likes ( ${up.likeCount} )"
+                                binding.tvFragmentPublicationInformationRemoveLike.text = "Likes ( ${up.likeCount} )"
                             }else {
-                                binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                binding.imFragmentPublicationInformationRemoveLike.setImageDrawable(
                                     AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
-                                binding.tvFragmentPublicationInformationLike.text = "Like ( ${up.likeCount} )"
+                                binding.tvFragmentPublicationInformationRemoveLike.text = "Like ( ${up.likeCount} )"
                             }
                             if(up.commentCount > 1){
-                                binding.tvFragmentPublicationInformationComment.text = "Comments ( ${up.commentCount} )"
+                                binding.tvFragmentPublicationInformationRemoveComment.text = "Comments ( ${up.commentCount} )"
                             }else{
-                                binding.tvFragmentPublicationInformationComment.text = "Comment ( ${up.commentCount} )"
+                                binding.tvFragmentPublicationInformationRemoveComment.text = "Comment ( ${up.commentCount} )"
                             }
                         }else{
                             if(up.hasConnectedLiked) {
@@ -206,18 +224,34 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
                     }else{
                         likeCount-=1
                     }
-                    if(liked) {
-                        binding.imFragmentPublicationInformationLike.setImageDrawable(
-                            AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_24))
-                        binding.tvFragmentPublicationInformationLike.text = "Liked ( ${likeCount} )"
-                    }else if(likeCount > 1) {
-                        binding.imFragmentPublicationInformationLike.setImageDrawable(
-                            AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
-                        binding.tvFragmentPublicationInformationLike.text = "Likes ( ${likeCount} )"
-                    }else {
-                        binding.imFragmentPublicationInformationLike.setImageDrawable(
-                            AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
-                        binding.tvFragmentPublicationInformationLike.text = "Like ( ${likeCount} )"
+                    if (isFromConnected){
+                        if(liked) {
+                            binding.imFragmentPublicationInformationRemoveLike.setImageDrawable(
+                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_24))
+                            binding.tvFragmentPublicationInformationRemoveLike.text = "Liked ( ${likeCount} )"
+                        }else if(likeCount > 1) {
+                            binding.imFragmentPublicationInformationRemoveLike.setImageDrawable(
+                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                            binding.tvFragmentPublicationInformationRemoveLike.text = "Likes ( ${likeCount} )"
+                        }else {
+                            binding.imFragmentPublicationInformationRemoveLike.setImageDrawable(
+                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                            binding.tvFragmentPublicationInformationRemoveLike.text = "Like ( ${likeCount} )"
+                        }
+                    }else{
+                        if(liked) {
+                            binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_24))
+                            binding.tvFragmentPublicationInformationLike.text = "Liked ( ${likeCount} )"
+                        }else if(likeCount > 1) {
+                            binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                            binding.tvFragmentPublicationInformationLike.text = "Likes ( ${likeCount} )"
+                        }else {
+                            binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                            binding.tvFragmentPublicationInformationLike.text = "Like ( ${likeCount} )"
+                        }
                     }
                 } else {
                     val message = "echec : ${response.message()}"

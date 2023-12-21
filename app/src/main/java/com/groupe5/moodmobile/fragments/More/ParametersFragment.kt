@@ -1,6 +1,7 @@
 package com.groupe5.moodmobile.fragments.More
 
 import IUserRepository
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.databinding.FragmentParametersBinding
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserAccount
@@ -18,6 +20,7 @@ import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserPrivacy
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserAccount
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserPassword
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserPrivacy
+import com.groupe5.moodmobile.fragments.Publication.PublicationInformationFragment
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -65,28 +68,18 @@ class ParametersFragment : Fragment() {
             updateUserPrivacy("isFriendPublic", false)
         }
         binding.btnFragmentParametersDeleteAccount.setOnClickListener {
-            deleteAccount()
+            showDeleteAccountFragment()
         }
     }
 
-    private fun deleteAccount() {
-        val deleteCall = userRepository.deleteAccount()
-        deleteCall.enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) {
-                    (requireActivity() as MainActivity).signOut()
-                    Toast.makeText(requireContext(), "Profile deleted successfully", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(requireContext(), "Failed to delete profile", Toast.LENGTH_SHORT).show()
-                    Log.d("UpdateProfile", "Failed to delete profile : ${response.message()}")
-                }
-            }
+    fun showDeleteAccountFragment() {
+        binding.fcvFragmentParametersDeleteAccount.visibility = View.VISIBLE
+        binding.fcvFragmentParametersDeleteAccount.isEnabled = true
+    }
 
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error deleting profile", Toast.LENGTH_SHORT).show()
-                Log.e("UpdateProfile", "Error deleting profile : ${t.message}", t)
-            }
-        })
+    fun hideDeleteAccountFragment() {
+        binding.fcvFragmentParametersDeleteAccount.visibility = View.INVISIBLE
+        binding.fcvFragmentParametersDeleteAccount.isEnabled = false
     }
 
     private fun updateUserPrivacy(switch: String, all: Boolean) {
@@ -271,17 +264,17 @@ class ParametersFragment : Fragment() {
     private suspend fun getUserAccount() {
         try {
             val response = userRepository.getUserAccount(idUser)
-                if (response != null) {
-                    val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
-                    val outputFormat = SimpleDateFormat("yyyy-MM-dd")
-                    val date = inputFormat.parse(response.birthDate.toString())
-                    val birthdate = outputFormat.format(date)
-                    binding.etFragmentParametersUsername.setText(response.name)
-                    binding.etFragmentParametersEmailAddress.setText(response.mail)
-                    binding.etFragmentParametersBirthdate.setText(birthdate)
-                    binding.etFragmentParametersTitle.setText(response.title)
-                    binding.etFragmentParametersDescription.setText(response.description)
-                }
+            if (response != null) {
+                val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
+                val outputFormat = SimpleDateFormat("yyyy-MM-dd")
+                val date = inputFormat.parse(response.birthDate.toString())
+                val birthdate = outputFormat.format(date)
+                binding.etFragmentParametersUsername.setText(response.name)
+                binding.etFragmentParametersEmailAddress.setText(response.mail)
+                binding.etFragmentParametersBirthdate.setText(birthdate)
+                binding.etFragmentParametersTitle.setText(response.title)
+                binding.etFragmentParametersDescription.setText(response.description)
+            }
         } catch (e: Exception) {
             val message = "Echec DB: ${e.message}"
             Log.e("EchecDb", message, e)
@@ -290,13 +283,13 @@ class ParametersFragment : Fragment() {
     private suspend fun getUserPrivacy() {
         try {
             val response = userRepository.getUserPrivacy()
-                if (response != null) {
-                    withContext(Dispatchers.Main) {
-                        binding.switchFragmentParametersMakeAccountPrivate.isChecked = !response.isPublic
-                        binding.switchFragmentParametersMakeFriendsListPrivate.isChecked = !response.isFriendPublic
-                        binding.switchFragmentParametersMakePostsPrivate.isChecked = !response.isPublicationPublic
-                    }
+            if (response != null) {
+                withContext(Dispatchers.Main) {
+                    binding.switchFragmentParametersMakeAccountPrivate.isChecked = !response.isPublic
+                    binding.switchFragmentParametersMakeFriendsListPrivate.isChecked = !response.isFriendPublic
+                    binding.switchFragmentParametersMakePostsPrivate.isChecked = !response.isPublicationPublic
                 }
+            }
         } catch (e: Exception) {
             val message = "Echec DB: ${e.message}"
             Log.e("EchecDb", message, e)

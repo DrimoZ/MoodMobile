@@ -9,7 +9,9 @@
     tools:context=".fragments.More.ParametersFragment">
 
     <!-- Common Information Section -->
+
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -33,9 +35,9 @@
                 android:id="@+id/tv_fragmentParameters_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="16dp"
                 android:text="Username"
-                android:layout_marginLeft="5dp"
                 android:textColor="@color/gold"
                 android:textSize="16sp" />
 
@@ -58,8 +60,8 @@
                 android:id="@+id/tv_fragmentParameters_emailAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="16dp"
                 android:text="Email Address"
                 android:textColor="@color/gold" />
 
@@ -82,8 +84,8 @@
                 android:id="@+id/tv_fragmentParameters_birthdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="16dp"
                 android:text="Birthdate"
                 android:textColor="@color/gold" />
 
@@ -106,8 +108,8 @@
                 android:id="@+id/tv_fragmentParameters_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="16dp"
                 android:text="Title"
                 android:textColor="@color/gold" />
 
@@ -130,8 +132,8 @@
                 android:id="@+id/tv_fragmentParameters_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="16dp"
                 android:text="Description"
                 android:textColor="@color/gold" />
 
@@ -159,7 +161,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_fragmentOtherUserProfile_userDescription"
             app:strokeColor="@color/gold"
-            app:strokeWidth="2dp"/>
+            app:strokeWidth="2dp" />
 
         <View
             android:id="@+id/divider"
@@ -174,8 +176,8 @@
             android:id="@+id/tv_fragmentParameters_personalInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginLeft="95dp"
+            android:layout_marginTop="16dp"
             android:text="Personal Information"
             android:textColor="@color/gold"
             android:textSize="24sp" />
@@ -189,8 +191,8 @@
                 android:id="@+id/tv_fragmentParameters_oldPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="16dp"
                 android:text="Old Password"
                 android:textColor="@color/gold" />
 
@@ -200,9 +202,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="103dp"
                 android:layout_marginTop="8dp"
+                android:inputType="textPassword"
                 android:textColor="@color/gold"
-                android:textColorHint="@color/gold"
-                android:inputType="textPassword"/>
+                android:textColorHint="@color/gold" />
         </LinearLayout>
 
         <LinearLayout
@@ -214,8 +216,8 @@
                 android:id="@+id/tv_fragmentParameters_newPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="16dp"
                 android:text="New Password"
                 android:textColor="@color/gold" />
 
@@ -225,9 +227,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="96dp"
                 android:layout_marginTop="8dp"
+                android:inputType="textPassword"
                 android:textColor="@color/gold"
-                android:textColorHint="@color/gold"
-                android:inputType="textPassword"/>
+                android:textColorHint="@color/gold" />
         </LinearLayout>
 
         <LinearLayout
@@ -239,8 +241,8 @@
                 android:id="@+id/tv_fragmentParameters_newPasswordConfirmation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="16dp"
                 android:text="New Password"
                 android:textColor="@color/gold" />
 
@@ -250,9 +252,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="96dp"
                 android:layout_marginTop="8dp"
+                android:inputType="textPassword"
                 android:textColor="@color/gold"
-                android:textColorHint="@color/gold"
-                android:inputType="textPassword"/>
+                android:textColorHint="@color/gold" />
         </LinearLayout>
 
         <Button
@@ -269,7 +271,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_fragmentParameters_phoneNumber"
             app:strokeColor="@color/gold"
-            app:strokeWidth="2dp"/>
+            app:strokeWidth="2dp" />
 
         <View
             android:id="@+id/divider2"
@@ -284,8 +286,8 @@
             android:id="@+id/textViewAccountPrivacy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginLeft="120dp"
+            android:layout_marginTop="16dp"
             android:text="Account Privacy"
             android:textColor="@color/gold"
             android:textSize="24sp" />
@@ -299,8 +301,8 @@
                 android:id="@+id/tvMakeAccountPrivate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="16dp"
                 android:text="Make the account private globally"
                 android:textColor="@color/gold" />
 
@@ -319,8 +321,8 @@
             android:id="@+id/tvDescriptionMakeAccountPrivate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="8dp"
             android:text="When your account is public, your profile and posts can be seen by anyone, whether they are friends with you or not. When your account is private, only the followers you've approved can see what you share, including your photos and videos on hashtag and location pages, as well as your followers and the accounts you follow."
             android:textColor="@color/gray"
             android:textStyle="italic" />
@@ -334,8 +336,8 @@
                 android:id="@+id/tvMakeFriendsListPrivate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="16dp"
                 android:text="Make friends list private"
                 android:textColor="@color/gold" />
 
@@ -354,8 +356,8 @@
             android:id="@+id/tvDescriptionMakeFriendsListPrivate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="8dp"
             android:text="When this parameter is set to public, your friend list is visible to everyone, whether they are friends with you or not. When your account is private, only your friends can see your friend list."
             android:textColor="@color/gray"
             android:textStyle="italic" />
@@ -369,8 +371,8 @@
                 android:id="@+id/tvMakePostsPrivate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="16dp"
                 android:text="Make your posts private"
                 android:textColor="@color/gold" />
 
@@ -389,8 +391,8 @@
             android:id="@+id/tvDescriptionMakePostsPrivate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="8dp"
             android:text="When this parameter is set to public, your publications are visible to everyone, whether they are friends with you or not. When your account is private, only your friends can see your posts."
             android:textColor="@color/gray"
             android:textStyle="italic" />
@@ -408,8 +410,8 @@
             android:id="@+id/tv_fragmentParameters_deleteAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginLeft="130dp"
+            android:layout_marginTop="16dp"
             android:text="Delete Account"
             android:textColor="@color/gold"
             android:textSize="24sp" />
@@ -428,8 +430,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_fragmentParameters_deleteAccount"
             app:strokeColor="@color/red"
-            app:strokeWidth="2dp"/>
+            app:strokeWidth="2dp" />
 
     </LinearLayout>
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_fragmentParameters_deleteAccount"
+        android:name="com.groupe5.moodmobile.fragments.More.DeleteAccountFragment"
+        android:layout_width="245dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="200dp"
+        android:visibility="gone"
+        android:autoHandwritingEnabled="false"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
