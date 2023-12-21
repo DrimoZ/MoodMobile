@@ -1,5 +1,6 @@
 package com.groupe5.moodmobile.fragments.UserProfile.UserPublications
 
+import IUserRepository
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationsResponse
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
-import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -19,63 +19,36 @@ class ProfilePublicationManagerViewModel(private val jwtToken: String) : ViewMod
     val isPublicationsPublicLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
 
-    fun startGetAllPublications(friendId: String? = null) {
-        viewModelScope.launch {
-            try {
-                // Step 1: Get user ID and role
-                val call1 = userRepository.getUserIdAndRole()
-                call1.enqueue(object : Callback<DtoInputUserIdAndRole> {
-                    override fun onResponse(call: Call<DtoInputUserIdAndRole>, response: Response<DtoInputUserIdAndRole>) {
-                        if (response.isSuccessful) {
-                            val userId = friendId ?: response.body()?.userId
-                            Log.d("userId", userId.toString())
-                            userId?.let {
-                                Log.e("",userId)
-                                getUserPublications(it)
-                            }
-                        } else {
-                            handleApiError(response)
-                        }
-                    }
-
-                    override fun onFailure(call: Call<DtoInputUserIdAndRole>, t: Throwable) {
-                        handleNetworkError(t)
-                    }
-                })
-            } catch (e: Exception) {
-                handleException(e)
+    suspend fun startGetAllPublications(friendId: String? = null) {
+        try {
+        val response = userRepository.getUserIdAndRole()
+            val userId = friendId ?: response.userId
+            Log.d("userId", userId.toString())
+            userId?.let {
+                Log.e("", userId)
+                getUserPublications(it)
             }
+        } catch (e: Exception) {
+            handleException(e)
         }
     }
 
-    private fun getUserPublications(userId: String) {
-        val call2 = userRepository.getUserPublications(userId)
-        call2.enqueue(object : Callback<DtoInputPublicationsResponse> {
-            override fun onResponse(call: Call<DtoInputPublicationsResponse>, response: Response<DtoInputPublicationsResponse>) {
-                if (response.isSuccessful) {
-                    val publicationsResponse = response.body()
-                    if (publicationsResponse != null) {
-                        if (publicationsResponse.isPublicationsPublic){
-                            val publications = publicationsResponse?.publications
-                            Log.d("Publications", publications.toString())
-                            mutablePublicationLiveData.postValue(publications)
-                        }
-                        else{
-                            isPublicationsPublicLiveData.postValue(false)
-                        }
-                    }
-
+    private suspend fun getUserPublications(userId: String) {
+        try {
+        val response = userRepository.getUserPublications(userId)
+            if (response != null) {
+                if (response.isPublicationsPublic) {
+                    val publications = response.publications
+                    Log.d("Publications", publications.toString())
+                    mutablePublicationLiveData.postValue(publications)
                 } else {
-                    handleApiError(response)
+                    isPublicationsPublicLiveData.postValue(false)
                 }
             }
-
-            override fun onFailure(call: Call<DtoInputPublicationsResponse>, t: Throwable) {
-                handleNetworkError(t)
-            }
-        })
+        } catch (t: Throwable) {
+            handleNetworkError(t)
+        }
     }
-
 
     private fun handleApiError(response: Response<*>) {
         val message = "API error: ${response.message()}"

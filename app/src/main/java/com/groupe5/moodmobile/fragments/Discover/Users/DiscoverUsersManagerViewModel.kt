@@ -1,12 +1,12 @@
 package com.groupe5.moodmobile.fragments.Discover.Users
 
+import IUserRepository
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.repositories.IFriendRepository
-import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -22,44 +22,32 @@ class DiscoverUsersManagerViewModel(private val jwtToken: String, private val se
     var showCount = 10
     private var searchBarValue = searchValue
 
-    fun startGetAllUsers() {
+    suspend fun startGetAllUsers() {
         try {
-            val usersCall = userRepository.getDiscoverUsers(showCount, searchBarValue)
-            usersCall.enqueue(object : Callback<List<DtoInputFriend>> {
-                override fun onResponse(call: Call<List<DtoInputFriend>>, response: Response<List<DtoInputFriend>>) {
-                    if (response.isSuccessful) {
-                        val num = response.body()?.size
-                        if (num != null) {
-                            if(num == showCount){
-                                mutableCount.postValue(num)
-                                val startIndex = if (num != null && num >= 10) {
-                                    (showCount - 10) % num
-                                } else {
-                                    0
-                                }
-                                val slicedUsers = response.body()?.slice(startIndex until startIndex + 10)
-                                mutableUserLiveData.postValue(slicedUsers)
-                            }else{
-                                mutableCount.postValue(-1)
-                                val startIndex = 0
-                                val slicedUsers = response.body()?.slice(startIndex until startIndex + num)
-                                mutableUserLiveData.postValue(slicedUsers)
-                            }
+            val response = userRepository.getDiscoverUsers(showCount, searchBarValue)
+                val num = response.size
+                if (num != null) {
+                    if (num == showCount) {
+                        mutableCount.postValue(num)
+                        val startIndex = if (num >= 10) {
+                            (showCount - 10) % num
+                        } else {
+                            0
                         }
-
+                        val slicedUsers = response.slice(startIndex until startIndex + 10)
+                        mutableUserLiveData.postValue(slicedUsers)
                     } else {
-                        handleApiError(response)
+                        mutableCount.postValue(-1)
+                        val startIndex = 0
+                        val slicedUsers = response.slice(startIndex until startIndex + num)
+                        mutableUserLiveData.postValue(slicedUsers)
                     }
                 }
-
-                override fun onFailure(call: Call<List<DtoInputFriend>>, t: Throwable) {
-                    handleNetworkError(t)
-                }
-            })
         } catch (e: Exception) {
             handleException(e)
         }
     }
+
 
     fun deleteFriend(friend: DtoInputFriend) {
         val friendId = friend.id

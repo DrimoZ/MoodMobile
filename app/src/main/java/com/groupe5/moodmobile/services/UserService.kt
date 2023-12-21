@@ -1,12 +1,12 @@
 package com.groupe5.moodmobile.services
 
+import IUserRepository
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriendsResponse
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
-import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +24,7 @@ class UserService(private val context: Context) {
         prefs = context.getSharedPreferences("mood", Context.MODE_PRIVATE)
         val jwtToken = prefs.getString("jwtToken", "") ?: ""
         userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
-        val call1 = userRepository.getUserIdAndRole()
+        val call1 = userRepository.getUserIdAndRoleService()
         call1.enqueue(object : Callback<DtoInputUserIdAndRole> {
             override fun onResponse(call: Call<DtoInputUserIdAndRole>, response: Response<DtoInputUserIdAndRole>) {
                 if (response.isSuccessful) {
@@ -49,7 +49,7 @@ class UserService(private val context: Context) {
         prefs = context.getSharedPreferences("mood", Context.MODE_PRIVATE)
         val jwtToken = prefs.getString("jwtToken", "") ?: ""
         userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
-        val call1 = userRepository.getUserProfile(friendId)
+        val call1 = userRepository.getUserProfileService(friendId)
         call1.enqueue(object : Callback<DtoInputUserProfile> {
             override fun onResponse(call: Call<DtoInputUserProfile>, response: Response<DtoInputUserProfile>) {
                 if (response.isSuccessful) {
@@ -75,7 +75,7 @@ class UserService(private val context: Context) {
         val jwtToken = prefs.getString("jwtToken", "") ?: ""
         userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
         CoroutineScope(Dispatchers.Main).launch {
-            val call1 = userRepository.getUserFriends(getUserId())
+            val call1 = userRepository.getUserFriendsService(getUserId())
             call1.enqueue(object : Callback<DtoInputFriendsResponse> {
                 override fun onResponse(call: Call<DtoInputFriendsResponse>, response: Response<DtoInputFriendsResponse>) {
                     if (response.isSuccessful) {

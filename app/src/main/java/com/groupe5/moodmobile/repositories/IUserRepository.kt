@@ -1,5 +1,3 @@
-package com.groupe5.moodmobile.repositories
-
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriendsResponse
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
@@ -12,6 +10,7 @@ import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserAccount
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserPassword
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserPrivacy
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -22,34 +21,52 @@ import retrofit2.http.Query
 
 interface IUserRepository {
     @GET("/api/v1/user/{userLogin}")
-    fun getUserProfile(@Path("userLogin") userLogin: String): Call<DtoInputUserProfile>
+    suspend fun getUserProfile(@Path("userLogin") userLogin: String): DtoInputUserProfile
+
     @GET("/api/v1/user/{userLogin}/account")
-    fun getUserAccount(@Path("userLogin") userLogin: String): Call<DtoInputUserAccount>
-    @PUT("/api/v1/user")
-    fun setUserAccount(@Body userAccount: DtoOutputUserAccount): Call<Void>
+    suspend fun getUserAccount(@Path("userLogin") userLogin: String): DtoInputUserAccount
+
     @GET("/api/v1/user")
-    fun getUserIdAndRole(): Call<DtoInputUserIdAndRole>
+    suspend fun getUserIdAndRole(): DtoInputUserIdAndRole
+
     @GET("/api/v1/user/{userLogin}/publications")
-    fun getUserPublications(@Path("userLogin") userLogin: String): Call<DtoInputPublicationsResponse>
+    suspend fun getUserPublications(@Path("userLogin") userLogin: String): DtoInputPublicationsResponse
+
     @GET("/api/v1/user/discover/publications")
-    fun getDiscoverPublications(
+    suspend fun getDiscoverPublications(
         @Query("publicationCount") count: Int,
         @Query("searchValue") search: String
-    ): Call<List<DtoInputPublication>>
+    ): Response<List<DtoInputPublication>>
+
     @GET("/api/v1/user/{userLogin}/friends")
-    fun getUserFriends(@Path("userLogin") userLogin: String): Call<DtoInputFriendsResponse>
+    suspend fun getUserFriends(@Path("userLogin") userLogin: String): DtoInputFriendsResponse
+
     @GET("/api/v1/user/discover/users")
-    fun getDiscoverUsers(
+    suspend fun getDiscoverUsers(
         @Query("userCount") count: Int,
         @Query("searchValue") search: String
-    ): Call<List<DtoInputFriend>>
+    ): List<DtoInputFriend>
+
     @GET("/api/v1/user/privacy")
-    fun getUserPrivacy(): Call<DtoInputUserPrivacy>
+    suspend fun getUserPrivacy(): DtoInputUserPrivacy
+
+    @PUT("/api/v1/user")
+    fun setUserAccount(@Body userAccount: DtoOutputUserAccount): Call<Void>
+
     @PATCH("/api/v1/user")
     fun setUserPrivacy(@Body userPrivacy: DtoOutputUserPrivacy): Call<Void>
+
     @POST("/api/v1/user/userPassword")
     fun setUserPassword(@Body userPassword: DtoOutputUserPassword): Call<Void>
+
     @POST("/api/v1/user/delete")
     fun deleteAccount(): Call<Void>
-}
 
+
+    @GET("/api/v1/user")
+    fun getUserIdAndRoleService(): Call<DtoInputUserIdAndRole>
+    @GET("/api/v1/user/{userLogin}")
+    fun getUserProfileService(@Path("userLogin") userLogin: String): Call<DtoInputUserProfile>
+    @GET("/api/v1/user/{userLogin}/friends")
+    fun getUserFriendsService(@Path("userLogin") userLogin: String): Call<DtoInputFriendsResponse>
+}

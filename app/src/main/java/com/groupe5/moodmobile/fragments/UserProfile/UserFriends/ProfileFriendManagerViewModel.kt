@@ -1,5 +1,6 @@
 package com.groupe5.moodmobile.fragments.UserProfile.UserFriends
 
+import IUserRepository
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +9,6 @@ import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriendsResponse
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.repositories.IFriendRepository
-import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -24,62 +24,36 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
     private val userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
     private val friendRepository = RetrofitFactory.create(jwtToken, IFriendRepository::class.java)
 
-    fun startGetAllFriends(friendId: String? = null) {
-        viewModelScope.launch {
-            try {
-                val call1 = userRepository.getUserIdAndRole()
-                call1.enqueue(object : Callback<DtoInputUserIdAndRole> {
-                    override fun onResponse(call: Call<DtoInputUserIdAndRole>, response: Response<DtoInputUserIdAndRole>) {
-                        if (response.isSuccessful) {
-                            val userId = friendId ?: response.body()?.userId
-                            Log.d("userId", userId.toString())
-                            userId?.let {
-                                getUserFriends(it)
-                            }
-                        } else {
-                            handleApiError(response)
-                        }
-                    }
-
-                    override fun onFailure(call: Call<DtoInputUserIdAndRole>, t: Throwable) {
-                        handleNetworkError(t)
-                    }
-                })
-            } catch (e: Exception) {
-                handleException(e)
+    suspend fun startGetAllFriends(friendId: String? = null) {
+        try {
+        val response = userRepository.getUserIdAndRole()
+            val userId = friendId ?: response.userId
+            userId?.let {
+                getUserFriends(it)
             }
+        } catch (e: Exception) {
+            handleException(e)
         }
     }
 
 
-    private fun getUserFriends(userId: String) {
-        val call2 = userRepository.getUserFriends(userId)
-        call2.enqueue(object : Callback<DtoInputFriendsResponse> {
-            override fun onResponse(call: Call<DtoInputFriendsResponse>, response: Response<DtoInputFriendsResponse>) {
-                if (response.isSuccessful) {
-                    val friendsResponse = response.body()
-                    if (friendsResponse != null) {
-                        if (friendsResponse.isFriendPublic){
-                            val friends = friendsResponse?.friends
-                            Log.d("Friends", friends.toString())
-                            mutableFriendLiveData.postValue(friends)
-                        }
-                        else{
-                            isFriendListPublicLiveData.postValue(false)
-                        }
-                    }
-
-
+    suspend fun getUserFriends(userId: String) {
+        try {
+        val response = userRepository.getUserFriends(userId)
+            if (response != null) {
+                if (response.isFriendPublic) {
+                    val friends = response.friends
+                    Log.d("Friends", friends.toString())
+                    mutableFriendLiveData.postValue(friends)
                 } else {
-                    handleApiError(response)
+                    isFriendListPublicLiveData.postValue(false)
                 }
             }
-
-            override fun onFailure(call: Call<DtoInputFriendsResponse>, t: Throwable) {
-                handleNetworkError(t)
-            }
-        })
+        } catch (t: Throwable) {
+            handleNetworkError(t)
+        }
     }
+
 
     fun deleteFriend(friend: DtoInputFriend) {
         val friendId = friend.id

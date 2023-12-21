@@ -1,5 +1,6 @@
 package com.groupe5.moodmobile.fragments.More
 
+import IUserRepository
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.databinding.FragmentParametersBinding
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserAccount
@@ -16,8 +18,10 @@ import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserPrivacy
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserAccount
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserPassword
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserPrivacy
-import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,7 +45,9 @@ class ParametersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        startUserData()
+        lifecycleScope.launch {
+            startUserData()
+        }
 
         binding.btnFragmentParametersEditProfileCommonInformation.setOnClickListener {
             updateUserAccount()
@@ -238,77 +244,65 @@ class ParametersFragment : Fragment() {
         }
     }
 
-    private fun startUserData() {
+    private suspend fun startUserData() {
         val prefs = requireActivity().getSharedPreferences("mood", Context.MODE_PRIVATE)
         val jwtToken = prefs.getString("jwtToken", "") ?: ""
         userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
-        val idCall = userRepository.getUserIdAndRole()
-        idCall.enqueue(object : Callback<DtoInputUserIdAndRole> {
-            override fun onResponse(call: Call<DtoInputUserIdAndRole>, response: Response<DtoInputUserIdAndRole>) {
-                if (response.isSuccessful) {
-                    val userId = response.body()?.userId
-                    userId?.let {
-                        idUser = userId
-                        getUserAccount()
-                        getUserPrivacy()
-                    }
-                } else {
-                    val message = "echec : ${response.message()}"
-                    Log.d("Echec", message)
-                }
-            }
 
-            override fun onFailure(call: Call<DtoInputUserIdAndRole>, t: Throwable) {
-                val message = "Echec DB: ${t.message}"
-                Log.e("EchecDb", message, t)
+        try {
+            val response = userRepository.getUserIdAndRole()
+            if (response != null) {
+                val userId = response.userId
+                userId?.let {
+                    idUser = userId
+                    getUserAccount()
+                    getUserPrivacy()
+                }
+            } else {
+                val message = "Echec : La réponse est nulle"
+                Log.d("Echec", message)
             }
-        })
+        } catch (e: Exception) {
+            val message = "Echec DB: ${e.message}"
+            Log.e("EchecDb", message, e)
+        }
     }
 
-    fun getUserAccount(){
-        val commonCall = userRepository.getUserAccount(idUser)
-        commonCall.enqueue(object : Callback<DtoInputUserAccount> {
-            override fun onResponse(call: Call<DtoInputUserAccount>, response: Response<DtoInputUserAccount>) {
-                if (response.isSuccessful) {
-                    val userAccount = response.body()
-                    if (userAccount != null) {
-                        val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
-                        val outputFormat = SimpleDateFormat("yyyy-MM-dd")
-                        val date = inputFormat.parse(userAccount.birthDate.toString())
-                        val birthdate = outputFormat.format(date)
-                        binding.etFragmentParametersUsername.setText(userAccount.name)
-                        binding.etFragmentParametersEmailAddress.setText(userAccount.mail)
-                        binding.etFragmentParametersBirthdate.setText(birthdate)
-                        binding.etFragmentParametersTitle.setText(userAccount.title)
-                        binding.etFragmentParametersDescription.setText(userAccount.description)
+    private suspend fun getUserAccount() {
+        try {
+            val response = userRepository.getUserAccount(idUser)
+                if (response != null) {
+                    val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
+                    val outputFormat = SimpleDateFormat("yyyy-MM-dd")
+                    val date = inputFormat.parse(response.birthDate.toString())
+                    val birthdate = outputFormat.format(date)
+                    binding.etFragmentParametersUsername.setText(response.name)
+                    binding.etFragmentParametersEmailAddress.setText(response.mail)
+                    binding.etFragmentParametersBirthdate.setText(birthdate)
+                    binding.etFragmentParametersTitle.setText(response.title)
+                    binding.etFragmentParametersDescription.setText(response.description)
+                }
+        } catch (e: Exception) {
+            val message = "Echec DB: ${e.message}"
+            Log.e("EchecDb", message, e)
+        }
+    }
+    private suspend fun getUserPrivacy() {
+        try {
+            val response = userRepository.getUserPrivacy()
+                if (response != null) {
+                    withContext(Dispatchers.Main) {
+                        binding.switchFragmentParametersMakeAccountPrivate.isChecked = !response.isPublic
+                        binding.switchFragmentParametersMakeFriendsListPrivate.isChecked = !response.isFriendPublic
+                        binding.switchFragmentParametersMakePostsPrivate.isChecked = !response.isPublicationPublic
                     }
                 }
-            }
-            override fun onFailure(call: Call<DtoInputUserAccount>, t: Throwable) {
-                val message = "Echec DB: ${t.message}"
-                Log.e("EchecDb", message, t)
-            }
-        })
+        } catch (e: Exception) {
+            val message = "Echec DB: ${e.message}"
+            Log.e("EchecDb", message, e)
+        }
     }
-    fun getUserPrivacy(){
-        val privacyCall = userRepository.getUserPrivacy()
-        privacyCall.enqueue(object : Callback<DtoInputUserPrivacy> {
-            override fun onResponse(call: Call<DtoInputUserPrivacy>, response: Response<DtoInputUserPrivacy>) {
-                if (response.isSuccessful) {
-                    val userPrivacy = response.body()
-                    if (userPrivacy != null) {
-                        binding.switchFragmentParametersMakeAccountPrivate.isChecked = userPrivacy.isPublic.not()
-                        binding.switchFragmentParametersMakeFriendsListPrivate.isChecked = userPrivacy.isFriendPublic.not()
-                        binding.switchFragmentParametersMakePostsPrivate.isChecked = userPrivacy.isPublicationPublic.not()
-                    }
-                }
-            }
-            override fun onFailure(call: Call<DtoInputUserPrivacy>, t: Throwable) {
-                val message = "Echec DB: ${t.message}"
-                Log.e("EchecDb", message, t)
-            }
-        })
-    }
+
 
     companion object {
         @JvmStatic

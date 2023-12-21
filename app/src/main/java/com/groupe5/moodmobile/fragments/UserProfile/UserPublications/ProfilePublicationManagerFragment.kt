@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import com.groupe5.moodmobile.databinding.FragmentProfilePublicationManagerBinding
 import com.groupe5.moodmobile.R
 import android.content.Context
+import androidx.lifecycle.lifecycleScope
 import com.groupe5.moodmobile.activities.MainActivity
+import kotlinx.coroutines.launch
 
 class ProfilePublicationManagerFragment : Fragment() {
     lateinit var binding: FragmentProfilePublicationManagerBinding
@@ -53,7 +55,9 @@ class ProfilePublicationManagerFragment : Fragment() {
                 binding.tvFragmentProfilePublicationManagerPrivatePublications.visibility = View.VISIBLE
             }
         }
-        viewModel.startGetAllPublications(if (friendId.isNullOrEmpty()) null else friendId)
+        lifecycleScope.launch {
+            viewModel.startGetAllPublications(if (friendId.isNullOrEmpty()) null else friendId)
+        }
 
         profilePublicationsFragment.profilePublicationRecyclerViewAdapter.setOnOpenClickListener(object :
             ProfilePublicationsRecyclerViewAdapter.OnOpenClickListener {
