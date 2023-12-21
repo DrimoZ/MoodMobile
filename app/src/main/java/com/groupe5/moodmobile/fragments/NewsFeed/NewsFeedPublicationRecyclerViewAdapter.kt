@@ -22,6 +22,7 @@ import com.groupe5.moodmobile.databinding.FragmentNewsFeedPublicationItemBinding
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubLike
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationInformation
 import com.groupe5.moodmobile.dtos.Publication.Output.DtoOutputPubComment
+import com.groupe5.moodmobile.dtos.Publication.PublicationViewState
 import com.groupe5.moodmobile.fragments.Publication.Comments.PublicationInformationCommentManagerFragment
 import com.groupe5.moodmobile.fragments.Publication.Element.PublicationInformationElementManagerFragment
 import com.groupe5.moodmobile.repositories.IImageRepository
@@ -36,13 +37,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-data class PublicationViewState(
-    var id: Int = 0,
-    var liked: Boolean = false,
-    var likeCount: Int = 0,
-    var displayComments: Boolean = false,
-    var commentCount: Int = 0
-)
+
 class NewsFeedPublicationRecyclerViewAdapter(
     private val context: Context,
     private val fragmentManager: FragmentManager,
@@ -201,7 +196,6 @@ class NewsFeedPublicationRecyclerViewAdapter(
             }
         })
     }
-
 
     fun <T> SparseArray<T>.getOrPut(key: Int, defaultValue: () -> T): T {
         var value = get(key)

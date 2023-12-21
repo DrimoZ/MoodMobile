@@ -16,7 +16,7 @@ class PublicationInformationElementFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.publication_information_content_list, container, false)
+        val view = inflater.inflate(R.layout.publication_information_element_list, container, false)
 
         // Set the adapter
         if (view is RecyclerView) {
@@ -25,7 +25,7 @@ class PublicationInformationElementFragment : Fragment() {
         }
         return view
     }
-    fun initUIWithContents(publications: List<DtoInputPubElement>?) {
+    fun initUIWithElements(publications: List<DtoInputPubElement>?) {
         publications?.let {
             elementUI.clear()
             elementUI.addAll(it)

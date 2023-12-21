@@ -6,9 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.marginLeft
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.viewModelScope
 import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.databinding.FragmentPublicationInformationBinding
@@ -26,7 +30,9 @@ import com.groupe5.moodmobile.utils.RetrofitFactory
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -80,6 +86,12 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
             binding.etFragmentPublicationInformationWriteComment.text.clear()
             addPublicationComment(comment)
         }
+        binding.imFragmentPublicationInformationRemove.setOnClickListener {
+            deletePublication()
+        }
+        binding.tvFragmentPublicationInformationRemove.setOnClickListener {
+            deletePublication()
+        }
     }
 
     private fun setPublicationDisplaysComments() {
@@ -116,25 +128,48 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
                         startElements(userProfile)
                         binding.tvFragmentPublicationInformationUserUsername.text = up.nameAuthor
                         binding.tvFragmentPublicationInformationContent.text = up.content
-                        if(up.hasConnectedLiked) {
-                            binding.imFragmentPublicationInformationLike.setImageDrawable(
-                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_24))
-                            binding.tvFragmentPublicationInformationLike.text = "Liked ( ${up.likeCount} )"
-                        }else if(up.likeCount > 1) {
-                            binding.imFragmentPublicationInformationLike.setImageDrawable(
-                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
-                            binding.tvFragmentPublicationInformationLike.text = "Likes ( ${up.likeCount} )"
-                        }else {
-                            binding.imFragmentPublicationInformationLike.setImageDrawable(
-                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
-                            binding.tvFragmentPublicationInformationLike.text = "Like ( ${up.likeCount} )"
-                        }
-                        if(up.commentCount > 1){
-                            binding.tvFragmentPublicationInformationComment.text = "Comments ( ${up.commentCount} )"
-                        }else{
-                            binding.tvFragmentPublicationInformationComment.text = "Comment ( ${up.commentCount} )"
-                        }
 
+                        if(up.isFromConnected){
+                            binding.llFragmentPublicationInformationNotRemove.visibility = View.GONE
+                            binding.llFragmentPublicationInformationRemove.visibility = View.VISIBLE
+                            if(up.hasConnectedLiked) {
+                                binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                    AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_24))
+                                binding.tvFragmentPublicationInformationLike.text = "Liked ( ${up.likeCount} )"
+                            }else if(up.likeCount > 1) {
+                                binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                    AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                                binding.tvFragmentPublicationInformationLike.text = "Likes ( ${up.likeCount} )"
+                            }else {
+                                binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                    AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                                binding.tvFragmentPublicationInformationLike.text = "Like ( ${up.likeCount} )"
+                            }
+                            if(up.commentCount > 1){
+                                binding.tvFragmentPublicationInformationComment.text = "Comments ( ${up.commentCount} )"
+                            }else{
+                                binding.tvFragmentPublicationInformationComment.text = "Comment ( ${up.commentCount} )"
+                            }
+                        }else{
+                            if(up.hasConnectedLiked) {
+                                binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                    AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_24))
+                                binding.tvFragmentPublicationInformationLike.text = "Liked ( ${up.likeCount} )"
+                            }else if(up.likeCount > 1) {
+                                binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                    AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                                binding.tvFragmentPublicationInformationLike.text = "Likes ( ${up.likeCount} )"
+                            }else {
+                                binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                    AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                                binding.tvFragmentPublicationInformationLike.text = "Like ( ${up.likeCount} )"
+                            }
+                            if(up.commentCount > 1){
+                                binding.tvFragmentPublicationInformationComment.text = "Comments ( ${up.commentCount} )"
+                            }else{
+                                binding.tvFragmentPublicationInformationComment.text = "Comment ( ${up.commentCount} )"
+                            }
+                        }
                     }
                     val imageId = response.body()?.idAuthorImage
                     imageId?.let { id ->
@@ -193,6 +228,25 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
                             AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
                         binding.tvFragmentPublicationInformationLike.text = "Like ( ${likeCount} )"
                     }
+                } else {
+                    val message = "echec : ${response.message()}"
+                    Log.d("Echec", message)
+                }
+            }
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                val message = "Echec DB: ${t.message}"
+                Log.e("EchecDb", message, t)
+            }
+        })
+    }
+
+    private fun deletePublication(){
+        val addCommentCall =  publicationRepository.deletePublication(idPublication)
+        addCommentCall.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    (requireActivity() as MainActivity).onRefreshUserProfile()
+                    (requireActivity() as MainActivity).closePublicationInformation()
                 } else {
                     val message = "echec : ${response.message()}"
                     Log.d("Echec", message)

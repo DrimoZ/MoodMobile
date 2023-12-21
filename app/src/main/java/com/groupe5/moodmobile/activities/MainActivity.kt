@@ -8,7 +8,7 @@ import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.fragments.Discover.DiscoverFragment
 import com.groupe5.moodmobile.databinding.ActivityMainBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
-import com.groupe5.moodmobile.fragments.AddPublicationFragment
+import com.groupe5.moodmobile.fragments.AddPublication.AddPublicationFragment
 import com.groupe5.moodmobile.fragments.More.ParametersFragment
 import com.groupe5.moodmobile.fragments.NewsFeed.NewsFeedPublicationManagerFragment
 import com.groupe5.moodmobile.fragments.Publication.PublicationInformationFragment
