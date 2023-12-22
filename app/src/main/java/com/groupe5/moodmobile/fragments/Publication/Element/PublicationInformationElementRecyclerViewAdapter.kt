@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.groupe5.moodmobile.databinding.PublicationInformationElementItemBinding
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubElement
@@ -41,6 +42,9 @@ class PublicationInformationElementRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
+        if(values.size > 1){
+            holder.moreContent.visibility = View.VISIBLE
+        }
         CoroutineScope(Dispatchers.Main).launch {
             val image = imageService.getImageById(item.idImage)
             if (image.startsWith("@drawable/")) {
@@ -61,6 +65,7 @@ class PublicationInformationElementRecyclerViewAdapter(
     inner class ViewHolder(binding: PublicationInformationElementItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val element = binding.imPublicationInformationElementElement
+        val moreContent = binding.imPublicationInformationElementMoreContent
     }
 
 }

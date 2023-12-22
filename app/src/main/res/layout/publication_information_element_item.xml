@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/im_publicationInformationElement_element"
@@ -10,4 +9,14 @@
         android:layout_height="411dp"
         android:background="@color/black"
         android:src="@drawable/black"/>
-</LinearLayout>
+
+    <ImageView
+        android:id="@+id/im_publicationInformationElement_moreContent"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="350dp"
+        android:layout_marginTop="350dp"
+        android:src="@drawable/baseline_web_stories_24"
+        android:visibility="invisible"/>
+
+</RelativeLayout>
