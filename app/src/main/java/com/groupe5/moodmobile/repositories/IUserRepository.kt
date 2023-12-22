@@ -55,18 +55,14 @@ interface IUserRepository {
 
     @PUT("/api/v1/user")
     fun setUserAccount(@Body userAccount: DtoOutputUserAccount): Call<Void>
-
     @PATCH("/api/v1/user")
     fun setUserPrivacy(@Body userPrivacy: DtoOutputUserPrivacy): Call<Void>
-
     @POST("/api/v1/user/userPassword")
     fun setUserPassword(@Body userPassword: DtoOutputUserPassword): Call<Void>
     @POST("/api/v1/user/delete")
-    fun deleteAccount(): Call<Void>
+    suspend fun deleteAccount(): Void?
     @GET("/api/v1/user")
     fun getUserIdAndRoleService(): Call<DtoInputUserIdAndRole>
     @GET("/api/v1/user/{userLogin}")
     fun getUserProfileService(@Path("userLogin") userLogin: String): Call<DtoInputUserProfile>
-    @GET("/api/v1/user/{userLogin}/friends")
-    fun getUserFriendsService(@Path("userLogin") userLogin: String): Call<DtoInputFriendsResponse>
 }

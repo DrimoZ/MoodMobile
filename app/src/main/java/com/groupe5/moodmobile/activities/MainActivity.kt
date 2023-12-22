@@ -9,6 +9,7 @@ import com.groupe5.moodmobile.databinding.ActivityMainBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.fragments.Discover.DiscoverFragment
 import com.groupe5.moodmobile.fragments.AddPublication.AddPublicationFragment
+import com.groupe5.moodmobile.fragments.More.DeleteAccountFragment
 import com.groupe5.moodmobile.fragments.More.ParametersFragment
 import com.groupe5.moodmobile.fragments.NewsFeed.NewsFeedPublicationManagerFragment
 import com.groupe5.moodmobile.fragments.Publication.PublicationInformationFragment
@@ -43,6 +44,17 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainerView_mainActivity, NewsFeedPublicationManagerFragment.newInstance(), "NewsFeedPublicationManagerFragment")
             .commit()
+    }
+    fun toggleDeleteAccountFragment(show : Boolean) {
+        if(show){
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView_mainActivity, DeleteAccountFragment.newInstance(), "DeleteAccountFragment")
+                .commit()
+        }else{
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView_mainActivity, ParametersFragment.newInstance(), "ParametersFragment")
+                .commit()
+        }
     }
 
     private fun isTokenPresent(): Boolean = getSharedPreferences("mood", MODE_PRIVATE).getString("jwtToken", null) != null

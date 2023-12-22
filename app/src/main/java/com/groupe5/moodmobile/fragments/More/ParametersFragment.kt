@@ -68,18 +68,8 @@ class ParametersFragment : Fragment() {
             updateUserPrivacy("isFriendPublic", false)
         }
         binding.btnFragmentParametersDeleteAccount.setOnClickListener {
-            showDeleteAccountFragment()
+            (requireActivity() as MainActivity).toggleDeleteAccountFragment(true)
         }
-    }
-
-    fun showDeleteAccountFragment() {
-        binding.fcvFragmentParametersDeleteAccount.visibility = View.VISIBLE
-        binding.fcvFragmentParametersDeleteAccount.isEnabled = true
-    }
-
-    fun hideDeleteAccountFragment() {
-        binding.fcvFragmentParametersDeleteAccount.visibility = View.INVISIBLE
-        binding.fcvFragmentParametersDeleteAccount.isEnabled = false
     }
 
     private fun updateUserPrivacy(switch: String, all: Boolean) {
@@ -184,7 +174,18 @@ class ParametersFragment : Fragment() {
         }
 
         if (!isPasswordValid(newPassword)) {
-            Toast.makeText(requireContext(), "Invalid password format", Toast.LENGTH_SHORT).show()
+            val errorMsg = buildString {
+                append("Password must contain:")
+                append("\n- At least one uppercase letter")
+                append("\n- At least one lowercase letter")
+                append("\n- At least one digit (0-9)")
+                append("\n- At least one special character (!@#$%^&*()_+[]{};:<>|./?,-)")
+            }
+            Toast.makeText(
+                context,
+                errorMsg,
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
 
@@ -221,10 +222,10 @@ class ParametersFragment : Fragment() {
         val hasSpecialChar = Regex("(?=.*[!@#$%^&*()_+=\\[\\]{};:<>|./?,\\-])").containsMatchIn(password)
 
         return password.length in minLength..maxLength &&
-                hasUpperCase &&
-                hasLowerCase &&
-                hasDigit &&
-                hasSpecialChar
+            hasUpperCase &&
+            hasLowerCase &&
+            hasDigit &&
+            hasSpecialChar
     }
 
     private fun parseDateString(dateString: String): Date? {

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.groupe5.moodmobile.databinding.ActivitySigninBinding
@@ -54,6 +55,9 @@ class SigninActivity : AppCompatActivity() {
                         }
                         navigateToMainActivity()
                     } else {
+                        Toast.makeText(this@SigninActivity, "Username or Password incorrect", Toast.LENGTH_SHORT).show()
+                        binding.etSigninLogin.text.clear()
+                        binding.etSigninPassword.text.clear()
                         Log.d("EchecAuth", "Echec Auth!: ${response.message()}")
                     }
                 }
