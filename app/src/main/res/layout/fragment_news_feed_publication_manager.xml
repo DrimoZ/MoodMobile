@@ -2,20 +2,19 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout4"
+    android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#010928"
-    tools:context=".fragments.MessageFragment">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcb_newsFeedPublication_list"
+        android:name="com.groupe5.moodmobile.fragments.NewsFeed.NewsFeedPublicationFragment"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="MessageFragment"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="26dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:ignore="MissingConstraints" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

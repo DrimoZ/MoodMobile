@@ -7,18 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import com.groupe5.moodmobile.R
 import android.content.Context
-import android.util.Log
+import androidx.lifecycle.ViewModelProvider
+import com.groupe5.moodmobile.classes.SharedViewModel
 import com.groupe5.moodmobile.databinding.FragmentPublicationInformationCommentManagerBinding
-import com.groupe5.moodmobile.databinding.FragmentPublicationInformationContentManagerBinding
-import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubComment
-import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationInformation
 import com.groupe5.moodmobile.fragments.Publication.PublicationInformationFragment
-import com.groupe5.moodmobile.fragments.UserProfile.UserFriends.ProfileFriendsRecyclerViewAdapter
 
 class PublicationInformationCommentManagerFragment(id: Int) : Fragment() {
     lateinit var binding: FragmentPublicationInformationCommentManagerBinding
+    private lateinit var sharedViewModel: SharedViewModel
     val idPublication = id
+
+
 
     companion object {
         fun newInstance(id : Int) = PublicationInformationCommentManagerFragment(id)
@@ -41,22 +41,32 @@ class PublicationInformationCommentManagerFragment(id: Int) : Fragment() {
 
         viewModel = PublicationInformationCommentManagerViewModel(token)
 
+
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+
         val publicationInformationCommentFragment = childFragmentManager
             .findFragmentById(R.id.fcb_publicationInformationComments_list) as PublicationInformationCommentFragment
 
         viewModel.mutableCommentLiveData.observe(viewLifecycleOwner) { comments ->
             if (comments.size != 0) {
-                binding.tvPublicationInformationCommentsNoComment.visibility = View.INVISIBLE
+                //binding.tvPublicationInformationCommentsNoComment.visibility = View.INVISIBLE
                 publicationInformationCommentFragment.initUIWithComments(comments)
             } else {
-                binding.tvPublicationInformationCommentsNoComment.visibility = View.VISIBLE
+                //binding.tvPublicationInformationCommentsNoComment.visibility = View.VISIBLE
             }
         }
         publicationInformationCommentFragment.publicationInformationCommentRecyclerViewAdapter.setOnDeleteClickListener(object :
             PublicationInformationCommentRecyclerViewAdapter.OnDeleteClickListener {
             override fun onDeleteClick(dto: DtoInputPubComment) {
                 viewModel.deleteFriend(dto)
-                publicationInformationCommentFragment.deleteFriendFromUI(dto)
+                publicationInformationCommentFragment.deleteCommentFromUI(dto)
+                val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragmentContainerView_mainActivitySpecialPublication)
+
+                if (currentFragment is PublicationInformationFragment) {
+                    currentFragment.removePublicationComment()
+                }else{
+                    sharedViewModel.numberCommentAfterDelete.value = idPublication
+                }
             }
         })
         viewModel.startGetAllComment(idPublication)

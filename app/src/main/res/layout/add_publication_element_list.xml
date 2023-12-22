@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list"
-    android:name="com.groupe5.moodmobile.PublicationInformationContentFragment"
+    android:name="com.groupe5.moodmobile.AddPublicationElementFragment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     android:orientation="horizontal"
-    tools:context=".fragments.Publication.Element.PublicationInformationElementFragment"
-    tools:listitem="@layout/publication_information_content_item" />
+    tools:context=".fragments.AddPublication.AddPublicationElementFragment"
+    tools:listitem="@layout/add_publication_element_item" />

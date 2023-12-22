@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.databinding.FragmentPublicationInformationBinding
@@ -17,11 +17,10 @@ import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationInformat
 import com.groupe5.moodmobile.dtos.Publication.Output.DtoOutputPubComment
 import com.groupe5.moodmobile.fragments.Publication.Comments.PublicationInformationCommentManagerFragment
 import com.groupe5.moodmobile.fragments.Publication.Element.PublicationInformationElementManagerFragment
-import com.groupe5.moodmobile.repositories.IFriendRepository
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.repositories.IPublicationRepository
-import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.services.ImageService
+import com.groupe5.moodmobile.services.UserService
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -37,11 +36,14 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
     private lateinit var publicationRepository: IPublicationRepository
     private lateinit var imageRepository: IImageRepository
     private lateinit var imageService: ImageService
+    private lateinit var userService: UserService
     var idPublication = idPublication
+    var userId = ""
     var liked = false
     var likeCount = 0
     var commentDisplay = false
     var commentCount = 0
+    var isFromConnected = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,9 +54,9 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        userService = UserService(requireContext())
 
         startPublicationInformationData()
-
         binding.btnFragmentPublicationInformationClose.setOnClickListener {
            (requireActivity() as MainActivity).closePublicationInformation()
         }
@@ -74,26 +76,51 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
         binding.tvFragmentPublicationInformationComment.setOnClickListener {
             setPublicationDisplaysComments()
         }
+        binding.imFragmentPublicationInformationRemoveLike.setOnClickListener {
+            setPublicationLike()
+        }
+        binding.tvFragmentPublicationInformationRemoveLike.setOnClickListener {
+            setPublicationLike()
+        }
+        binding.imFragmentPublicationInformationRemoveComment.setOnClickListener{
+            setPublicationDisplaysComments()
+        }
 
+        binding.tvFragmentPublicationInformationRemoveComment.setOnClickListener {
+            setPublicationDisplaysComments()
+        }
         binding.btnFragmentPublicationInformationSendComment.setOnClickListener {
             val comment = binding.etFragmentPublicationInformationWriteComment.text.toString()
             binding.etFragmentPublicationInformationWriteComment.text.clear()
             addPublicationComment(comment)
         }
+        binding.imFragmentPublicationInformationRemove.setOnClickListener {
+            deletePublication()
+        }
+        binding.tvFragmentPublicationInformationRemove.setOnClickListener {
+            deletePublication()
+        }
+        binding.tvFragmentPublicationInformationUserUsername.setOnClickListener {
+            lifecycleScope.launch {
+                (requireActivity() as MainActivity).onFriendClick(userService.getFriendDto(userId))
+            }
+        }
     }
 
     private fun setPublicationDisplaysComments() {
         if(!commentDisplay){
+            binding.imFragmentPublicationInformationRemoveCommentScroll.visibility = View.VISIBLE
+            binding.imFragmentPublicationInformationCommentScroll.visibility = View.VISIBLE
             binding.llFragmentPublicationInformationComments.visibility = View.VISIBLE
             binding.divider3.visibility = View.VISIBLE
-            binding.divider4.visibility = View.VISIBLE
             binding.fcvFragmentPublicationInformationComments.visibility = View.VISIBLE
             commentDisplay = !commentDisplay
             startComments()
         }else{
+            binding.imFragmentPublicationInformationRemoveCommentScroll.visibility = View.INVISIBLE
+            binding.imFragmentPublicationInformationCommentScroll.visibility = View.INVISIBLE
             binding.llFragmentPublicationInformationComments.visibility = View.GONE
             binding.divider3.visibility = View.GONE
-            binding.divider4.visibility = View.GONE
             binding.fcvFragmentPublicationInformationComments.visibility = View.GONE
             commentDisplay = !commentDisplay
         }
@@ -112,33 +139,58 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
                 if (response.isSuccessful) {
                     val userProfile = response.body()
                     userProfile?.let { up ->
+                        userId = userProfile.authorId
                         liked = userProfile.hasConnectedLiked
                         likeCount = userProfile.likeCount
                         commentCount = userProfile.commentCount
+                        isFromConnected = userProfile.isFromConnected
                         startElements(userProfile)
-                        binding.tvFragmentPublicationInformationUserUsername.text = up.nameAuthor
-                        binding.tvFragmentPublicationInformationContent.text = up.content
-                        if(up.hasConnectedLiked) {
-                            binding.imFragmentPublicationInformationLike.setImageDrawable(
-                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_24))
-                            binding.tvFragmentPublicationInformationLike.text = "Liked ( ${up.likeCount} )"
-                        }else if(up.likeCount > 1) {
-                            binding.imFragmentPublicationInformationLike.setImageDrawable(
-                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
-                            binding.tvFragmentPublicationInformationLike.text = "Likes ( ${up.likeCount} )"
-                        }else {
-                            binding.imFragmentPublicationInformationLike.setImageDrawable(
-                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
-                            binding.tvFragmentPublicationInformationLike.text = "Like ( ${up.likeCount} )"
-                        }
-                        if(up.commentCount > 1){
-                            binding.tvFragmentPublicationInformationComment.text = "Comments ( ${up.commentCount} )"
-                        }else{
-                            binding.tvFragmentPublicationInformationComment.text = "Comment ( ${up.commentCount} )"
-                        }
+                        binding.tvFragmentPublicationInformationUserUsername.text = up.authorName
+                        binding.tvFragmentPublicationInformationContent.text = up.publicationContent
 
+                        if(up.isFromConnected){
+                            binding.llFragmentPublicationInformationNotRemove.visibility = View.GONE
+                            binding.llFragmentPublicationInformationRemove.visibility = View.VISIBLE
+                            if(up.hasConnectedLiked) {
+                                binding.imFragmentPublicationInformationRemoveLike.setImageDrawable(
+                                    AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_24))
+                                binding.tvFragmentPublicationInformationRemoveLike.text = "Liked ( ${up.likeCount} )"
+                            }else if(up.likeCount > 1) {
+                                binding.imFragmentPublicationInformationRemoveLike.setImageDrawable(
+                                    AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                                binding.tvFragmentPublicationInformationRemoveLike.text = "Likes ( ${up.likeCount} )"
+                            }else {
+                                binding.imFragmentPublicationInformationRemoveLike.setImageDrawable(
+                                    AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                                binding.tvFragmentPublicationInformationRemoveLike.text = "Like ( ${up.likeCount} )"
+                            }
+                            if(up.commentCount > 1){
+                                binding.tvFragmentPublicationInformationRemoveComment.text = "Comments ( ${up.commentCount} )"
+                            }else{
+                                binding.tvFragmentPublicationInformationRemoveComment.text = "Comment ( ${up.commentCount} )"
+                            }
+                        }else{
+                            if(up.hasConnectedLiked) {
+                                binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                    AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_24))
+                                binding.tvFragmentPublicationInformationLike.text = "Liked ( ${up.likeCount} )"
+                            }else if(up.likeCount > 1) {
+                                binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                    AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                                binding.tvFragmentPublicationInformationLike.text = "Likes ( ${up.likeCount} )"
+                            }else {
+                                binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                    AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                                binding.tvFragmentPublicationInformationLike.text = "Like ( ${up.likeCount} )"
+                            }
+                            if(up.commentCount > 1){
+                                binding.tvFragmentPublicationInformationComment.text = "Comments ( ${up.commentCount} )"
+                            }else{
+                                binding.tvFragmentPublicationInformationComment.text = "Comment ( ${up.commentCount} )"
+                            }
+                        }
                     }
-                    val imageId = response.body()?.idAuthorImage
+                    val imageId = response.body()?.authorImageId
                     imageId?.let { id ->
                         CoroutineScope(Dispatchers.Main).launch {
                             val image = imageService.getImageById(id)
@@ -169,7 +221,7 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
 
     private fun setPublicationLike(){
         val dto = DtoInputPubLike(
-            idPublication = idPublication,
+            publicationId = idPublication,
             isLiked = !liked
         )
         val pubLikeCall = publicationRepository.setPublicationLike(dto)
@@ -182,19 +234,54 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
                     }else{
                         likeCount-=1
                     }
-                    if(liked) {
-                        binding.imFragmentPublicationInformationLike.setImageDrawable(
-                            AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_24))
-                        binding.tvFragmentPublicationInformationLike.text = "Liked ( ${likeCount} )"
-                    }else if(likeCount > 1) {
-                        binding.imFragmentPublicationInformationLike.setImageDrawable(
-                            AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
-                        binding.tvFragmentPublicationInformationLike.text = "Likes ( ${likeCount} )"
-                    }else {
-                        binding.imFragmentPublicationInformationLike.setImageDrawable(
-                            AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
-                        binding.tvFragmentPublicationInformationLike.text = "Like ( ${likeCount} )"
+                    if (isFromConnected){
+                        if(liked) {
+                            binding.imFragmentPublicationInformationRemoveLike.setImageDrawable(
+                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_24))
+                            binding.tvFragmentPublicationInformationRemoveLike.text = "Liked ( ${likeCount} )"
+                        }else if(likeCount > 1) {
+                            binding.imFragmentPublicationInformationRemoveLike.setImageDrawable(
+                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                            binding.tvFragmentPublicationInformationRemoveLike.text = "Likes ( ${likeCount} )"
+                        }else {
+                            binding.imFragmentPublicationInformationRemoveLike.setImageDrawable(
+                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                            binding.tvFragmentPublicationInformationRemoveLike.text = "Like ( ${likeCount} )"
+                        }
+                    }else{
+                        if(liked) {
+                            binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_24))
+                            binding.tvFragmentPublicationInformationLike.text = "Liked ( ${likeCount} )"
+                        }else if(likeCount > 1) {
+                            binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                            binding.tvFragmentPublicationInformationLike.text = "Likes ( ${likeCount} )"
+                        }else {
+                            binding.imFragmentPublicationInformationLike.setImageDrawable(
+                                AppCompatResources.getDrawable(requireContext(), R.drawable.baseline_star_border_purple500_24))
+                            binding.tvFragmentPublicationInformationLike.text = "Like ( ${likeCount} )"
+                        }
                     }
+                } else {
+                    val message = "echec : ${response.message()}"
+                    Log.d("Echec", message)
+                }
+            }
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                val message = "Echec DB: ${t.message}"
+                Log.e("EchecDb", message, t)
+            }
+        })
+    }
+
+    private fun deletePublication(){
+        val addCommentCall =  publicationRepository.deletePublication(idPublication)
+        addCommentCall.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    (requireActivity() as MainActivity).onRefreshUserProfile()
+                    (requireActivity() as MainActivity).closePublicationInformation()
                 } else {
                     val message = "echec : ${response.message()}"
                     Log.d("Echec", message)
@@ -209,8 +296,8 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
 
     private fun addPublicationComment(comment: String){
         val dto = DtoOutputPubComment(
-            idPublication = idPublication,
-            content = comment
+            publicationId = idPublication,
+            commentContent = comment
         )
         val addCommentCall = publicationRepository.setPublicationComment(dto)
         addCommentCall.enqueue(object : Callback<Void> {
@@ -235,7 +322,7 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
         })
     }
 
-    private fun removePublicationComment(){
+    fun removePublicationComment(){
         commentCount-=1
         if(commentCount > 1){
             binding.tvFragmentPublicationInformationComment.text = "Comments ( ${commentCount} )"
@@ -274,9 +361,6 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
                 "PublicationInformationCommentManagerFragment"
             )
             .commit()
-        if(delete){
-            removePublicationComment()
-        }
     }
 
     companion object {

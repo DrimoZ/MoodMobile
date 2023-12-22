@@ -6,13 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-
-import com.groupe5.moodmobile.placeholder.PlaceholderContent.PlaceholderItem
 import com.groupe5.moodmobile.databinding.FragmentPublicationInformationCommentItemBinding
-import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubComment
-import com.groupe5.moodmobile.fragments.UserProfile.UserFriends.ProfileFriendsRecyclerViewAdapter
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.services.ImageService
 import com.groupe5.moodmobile.services.UserService
@@ -59,7 +54,7 @@ class PublicationInformationCommentRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         CoroutineScope(Dispatchers.Main).launch {
-            val image = imageService.getImageById(item.idAuthorImage)
+            val image = imageService.getImageById(item.authorImageId)
             if (image.startsWith("@drawable/")) {
                 val resourceId = context.resources.getIdentifier(
                     image.substringAfterLast('/'),
@@ -71,13 +66,13 @@ class PublicationInformationCommentRecyclerViewAdapter(
                 Picasso.with(holder.userImage.context).load(image).into(holder.userImage)
             }
 
-            if(item.idAuthor == userService.getUserId()){
+            if(item.authorId == userService.getUserId()){
                 holder.btnDeleteComment.visibility = View.VISIBLE
                 holder.btnDeleteComment.isEnabled = true
             }
         }
-        holder.username.text = item.nameAuthor
-        holder.userComment.text = item.content
+        holder.username.text = item.authorName
+        holder.userComment.text = item.commentContent
 
         holder.btnDeleteComment.setOnClickListener{
             deleteClickListener?.onDeleteClick(item)

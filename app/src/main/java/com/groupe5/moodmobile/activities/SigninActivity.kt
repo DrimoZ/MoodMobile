@@ -5,22 +5,21 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.groupe5.moodmobile.databinding.ActivitySigninBinding
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserSignin
 import com.groupe5.moodmobile.repositories.IAuthenticationRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
-
 class SigninActivity : AppCompatActivity() {
-    lateinit var binding: ActivitySigninBinding
-    lateinit var jwtToken: String
+    private lateinit var binding: ActivitySigninBinding
+    private lateinit var jwtToken: String
     private lateinit var authenticationRepository: IAuthenticationRepository
-    lateinit var prefs: SharedPreferences
+    private lateinit var prefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,61 +31,58 @@ class SigninActivity : AppCompatActivity() {
         authenticationRepository = RetrofitFactory.create(jwtToken, IAuthenticationRepository::class.java)
 
         binding.btnSignInSignIn.setOnClickListener {
-            val login = binding.etSigninLogin.text.toString()
-            val password = binding.etSigninPassword.text.toString()
-            val stayLoggedIn = true
-            submitForm(login, password, stayLoggedIn)
+            submitForm(
+                binding.etSigninLogin.text.toString(),
+                binding.etSigninPassword.text.toString(),
+                true
+            )
         }
 
         binding.tvSigninLink.setOnClickListener {
-            val intent = Intent(this, SignupActivity::class.java)
-            startActivity(intent)
-            finish()
+            navigateToSignupActivity()
         }
     }
 
     private fun submitForm(login: String, password: String, stayLoggedIn: Boolean) {
-        val dto = DtoOutputUserSignin(login, password, stayLoggedIn)
-        val call = authenticationRepository.signInUser(dto)
-
-        call.enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) {
-                    //Get the token from the cookie
-                    val cookieHeader: String? = response.headers().get("Set-Cookie")
-                    if (cookieHeader != null) {
-                        val token = extractTokenFromCookie(cookieHeader)
-                        Log.d("cookieToken", token)
-                        updateTokenInPreferences(token)
+        lifecycleScope.launch {
+            try {
+                authenticationRepository.signInUser(DtoOutputUserSignin(login, password, stayLoggedIn)).let { response ->
+                    if (response.isSuccessful) {
+                        response.headers().get("Set-Cookie")?.let { cookieHeader ->
+                            extractTokenFromCookie(cookieHeader)?.let { token ->
+                                updateTokenInPreferences(token)
+                            }
+                        }
+                        navigateToMainActivity()
+                    } else {
+                        Toast.makeText(this@SigninActivity, "Username or Password incorrect", Toast.LENGTH_SHORT).show()
+                        binding.etSigninLogin.text.clear()
+                        binding.etSigninPassword.text.clear()
+                        Log.d("EchecAuth", "Echec Auth!: ${response.message()}")
                     }
-
-                    startActivity(Intent(this@SigninActivity, MainActivity::class.java))
-                } else {
-                    val message = "Echec Auth!: ${response.message()}"
-                    Log.d("EchecAuth", message)
                 }
+            } catch (e: Exception) {
+                Log.e("EchecDb", "Echec DB: ${e.message}", e)
             }
-
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                val message = "Echec DB: ${t.message}"
-                Log.e("EchecDb", message, t)
-            }
-
-        })
-    }
-    private fun extractTokenFromCookie(cookieHeader: String): String {
-        val pattern = Pattern.compile("MoodSession=([^;]+)")
-        val matcher = pattern.matcher(cookieHeader)
-        return if (matcher.find()) {
-            matcher.group(1)
-        } else {
-            ""
         }
     }
+
+    private fun extractTokenFromCookie(cookieHeader: String): String? =
+        Pattern.compile("MoodSession=([^;]+)").matcher(cookieHeader).takeIf { it.find() }?.group(1)
+
     private fun updateTokenInPreferences(newToken: String) {
-        val prefs = getSharedPreferences("mood", MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.putString("jwtToken", newToken)
-        editor.apply()
+        getSharedPreferences("mood", MODE_PRIVATE).edit().apply {
+            putString("jwtToken", newToken)
+            apply()
+        }
+    }
+
+    private fun navigateToSignupActivity() {
+        startActivity(Intent(this@SigninActivity, SignupActivity::class.java))
+        finish()
+    }
+
+    private fun navigateToMainActivity() {
+        startActivity(Intent(this@SigninActivity, MainActivity::class.java))
     }
 }

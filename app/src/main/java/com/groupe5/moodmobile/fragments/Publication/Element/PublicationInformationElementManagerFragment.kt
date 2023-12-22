@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.groupe5.moodmobile.R
 import android.content.Context
-import com.groupe5.moodmobile.databinding.FragmentPublicationInformationContentManagerBinding
+import com.groupe5.moodmobile.databinding.FragmentPublicationInformationElementManagerBinding
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationInformation
 
 class PublicationInformationElementManagerFragment(dto: DtoInputPublicationInformation) : Fragment() {
-    lateinit var binding: FragmentPublicationInformationContentManagerBinding
+    lateinit var binding: FragmentPublicationInformationElementManagerBinding
     val dto = dto
 
     companion object {
@@ -24,7 +24,7 @@ class PublicationInformationElementManagerFragment(dto: DtoInputPublicationInfor
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentPublicationInformationContentManagerBinding.inflate(layoutInflater, container, false)
+        binding = FragmentPublicationInformationElementManagerBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -35,11 +35,11 @@ class PublicationInformationElementManagerFragment(dto: DtoInputPublicationInfor
 
         viewModel = PublicationInformationElementManagerViewModel(token)
 
-        val publicationInformationContentFragment = childFragmentManager
+        val publicationInformationElementFragment = childFragmentManager
             .findFragmentById(R.id.fcb_publicationInformationElement_list) as PublicationInformationElementFragment
 
         viewModel.mutableElementLiveData.observe(viewLifecycleOwner) {
-            publicationInformationContentFragment.initUIWithContents(it)
+            publicationInformationElementFragment.initUIWithElements(it)
         }
         viewModel.startGetAllElement(dto)
     }

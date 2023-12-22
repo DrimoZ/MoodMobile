@@ -4,15 +4,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.groupe5.moodmobile.R
-import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubComment
-import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubElement
-import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationInformation
-import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
-import com.groupe5.moodmobile.fragments.Publication.PublicationInformationFragment
 import com.groupe5.moodmobile.repositories.IPublicationRepository
-import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -51,7 +44,7 @@ class PublicationInformationCommentManagerViewModel(private val jwtToken: String
     }
 
     fun deleteFriend(dto: DtoInputPubComment) {
-        val id = dto.id
+        val id = dto.commentId
         viewModelScope.launch {
             val deleteCall = publicationRepository.deletePublicationComment(id)
             deleteCall.enqueue(object : Callback<Void> {

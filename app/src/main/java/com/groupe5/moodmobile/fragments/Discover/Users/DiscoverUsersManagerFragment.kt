@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.groupe5.moodmobile.R
 import android.content.Context
+import androidx.lifecycle.lifecycleScope
 import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.databinding.FragmentDiscoverUsersManagerBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
+import kotlinx.coroutines.launch
 
 class DiscoverUsersManagerFragment : Fragment() {
     lateinit var binding: FragmentDiscoverUsersManagerBinding
@@ -49,10 +51,10 @@ class DiscoverUsersManagerFragment : Fragment() {
         viewModel.mutableUserLiveData.observe(viewLifecycleOwner) {
             discoverUsersFragment.initUIWithUsers(it)
         }
-//        viewModel.mutableUserAddData.observe(viewLifecycleOwner) {
-//            discoverUsersFragment.addUIToUsers(it)
-//        }
-        viewModel.startGetAllUsers()
+        lifecycleScope.launch {
+            viewModel.startGetAllUsers()
+        }
+
 
         viewModel.mutableUserRefreshData.observe(viewLifecycleOwner){
             discoverUsersFragment.deleteOrAcceptUserUI()
@@ -73,7 +75,9 @@ class DiscoverUsersManagerFragment : Fragment() {
 
         binding.btnDiscoverUsersManagerLoadMoreUsers.setOnClickListener {
             viewModel.showCount += 10
-            viewModel.startGetAllUsers()
+            lifecycleScope.launch {
+                viewModel.startGetAllUsers()
+            }
         }
 
         discoverUsersFragment.discoverUsersRecyclerViewAdapter.setOnDeleteClickListener(object :

@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import com.groupe5.moodmobile.R
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.classes.SharedViewModel
 import com.groupe5.moodmobile.databinding.FragmentProfileFriendManagerBinding
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.fragments.UserProfile.ProfileFragment
+import kotlinx.coroutines.launch
 
 class ProfileFriendManagerFragment : Fragment() {
     lateinit var binding: FragmentProfileFriendManagerBinding
@@ -92,7 +94,9 @@ class ProfileFriendManagerFragment : Fragment() {
             profileFriendsFragment.initUIWithFriends(it)
         }
 
-        viewModel.startGetAllFriends(if (friendId.isNullOrEmpty()) null else friendId)
+        lifecycleScope.launch {
+            viewModel.startGetAllFriends(if (friendId.isNullOrEmpty()) null else friendId)
+        }
 
         profileFriendsFragment.profileFriendRecyclerViewAdapter.setOnDeleteClickListener(object :
             ProfileFriendsRecyclerViewAdapter.OnDeleteClickListener {

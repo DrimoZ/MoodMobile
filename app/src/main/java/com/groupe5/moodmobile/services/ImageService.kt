@@ -31,7 +31,7 @@ class ImageService(private val context: Context, private val imageRepository: II
             callImage.enqueue(object : Callback<DtoInputImage> {
                 override fun onResponse(call: Call<DtoInputImage>, response: Response<DtoInputImage>) {
                     if (response.isSuccessful) {
-                        val imageData = response.body()?.data ?: ""
+                        val imageData = response.body()?.imageData ?: ""
                         if (imageData.isNotEmpty()) {
                             val image = imageToURL(imageData)
                             println("image recue : " + image)

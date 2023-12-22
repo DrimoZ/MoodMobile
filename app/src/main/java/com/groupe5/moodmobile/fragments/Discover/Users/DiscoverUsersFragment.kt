@@ -34,6 +34,7 @@ class DiscoverUsersFragment : Fragment() {
     }
 
     fun initUIWithUsers(users: List<DtoInputFriend>?) {
+        userUI.clear()
         users?.forEach(userUI::add)
         discoverUsersRecyclerViewAdapter.notifyDataSetChanged()
     }

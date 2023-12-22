@@ -25,6 +25,10 @@ class SideMenuFragment : Fragment() {
             (requireActivity() as MainActivity).goToParameters()
         }
 
+        binding.btnFragmentSideMenuNotifications.setOnClickListener {
+            (requireActivity() as MainActivity).goToNotifications()
+        }
+
         binding.btnFragmentSideMenuSignOut.setOnClickListener {
             (requireActivity() as MainActivity).signOut()
         }

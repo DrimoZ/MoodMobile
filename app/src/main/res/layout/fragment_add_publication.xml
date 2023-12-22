@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout4"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#010928"
+    tools:context=".fragments.AddPublication.AddPublicationFragment">
+
+    <TextView
+        android:id="@+id/tv_fragmentAddPublication_pageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Create a new Publication"
+        android:textColor="@color/gold"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_fragmentAddPublication_imagePreviewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Images Preview"
+        android:textColor="@color/gold"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_fragmentAddPublication_pageTitle" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_fragmentAddPublication_imagePreview"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="70dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_fragmentAddPublication_imagePreviewTitle" />
+
+    <Button
+        android:id="@+id/btn_fragmentAddPublication_selectImages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@android:color/transparent"
+        android:text="Select Images"
+        android:textColor="@color/gold"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fcv_fragmentAddPublication_imagePreview"
+        app:strokeColor="@color/gold"
+        app:strokeWidth="1dp" />
+
+    <TextView
+        android:id="@+id/tv_fragmentAddPublication_maximum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Maximum 4 images per post allowed"
+        android:textColor="@color/gold"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fcv_fragmentAddPublication_imagePreview"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tv_fragmentAddPublication_nbImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="0/4"
+        android:textColor="@color/gold"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fcv_fragmentAddPublication_imagePreview" />
+
+    <TextView
+        android:id="@+id/tv_fragmentAddPublication_descriptionTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textColor="@color/gold"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_fragmentAddPublication_nbImage" />
+
+    <EditText
+        android:id="@+id/et_fragmentAddPublication_descriptionText"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        android:ems="10"
+        android:layout_gravity="center_horizontal"
+        android:inputType="textMultiLine"
+        android:textColor="@color/gold"
+        android:textColorHint="#7EDEB992"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_fragmentAddPublication_descriptionTitle" />
+
+    <Button
+        android:id="@+id/btn_fragmentAddPublication_createPublication"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@android:color/transparent"
+        android:text="Create"
+        android:textColor="@color/gold"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_fragmentAddPublication_descriptionText"
+        app:strokeColor="@color/gold"
+        app:strokeWidth="1dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

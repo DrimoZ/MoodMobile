@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 
 import com.groupe5.moodmobile.databinding.FragmentDiscoverPublicationsItemBinding
@@ -50,10 +51,13 @@ class DiscoverPublicationsRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         if (item.elements.isNotEmpty()) {
+            if(item.elements.size > 1){
+                holder.moreContent.visibility = View.VISIBLE
+            }
             val element = item.elements[0]
 
             CoroutineScope(Dispatchers.Main).launch {
-                val image = imageService.getImageById(element.idImage)
+                val image = imageService.getImageById(element.imageId)
                 if (image.startsWith("@drawable/")) {
                     val resourceId = context.resources.getIdentifier(
                         image.substringAfterLast('/'),
@@ -75,12 +79,12 @@ class DiscoverPublicationsRecyclerViewAdapter(
         }
 
         holder.image.setOnClickListener {
-            openClickListener?.onOpenClick(item.id)
+            openClickListener?.onOpenClick(item.publicationId)
         }
 
-        /*holder.moreContent.setOnClickListener {
-            openClickListener?.onOpenClick(item.id)
-        }*/
+        holder.moreContent.setOnClickListener {
+            openClickListener?.onOpenClick(item.publicationId)
+        }
     }
 
     override fun getItemCount(): Int = values.size
@@ -88,6 +92,7 @@ class DiscoverPublicationsRecyclerViewAdapter(
     inner class ViewHolder(binding: FragmentDiscoverPublicationsItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val image = binding.imDiscoverPublicationItemContent
+        val moreContent = binding.imDiscoverPublicationItemMoreContent
     }
 
 }

@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-
-import com.groupe5.moodmobile.databinding.PublicationInformationContentItemBinding
+import com.groupe5.moodmobile.databinding.PublicationInformationElementItemBinding
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPubElement
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.services.ImageService
@@ -31,7 +31,7 @@ class PublicationInformationElementRecyclerViewAdapter(
         imageRepository = RetrofitFactory.create(jwtToken, IImageRepository::class.java)
         imageService = ImageService(context, imageRepository)
         return ViewHolder(
-            PublicationInformationContentItemBinding.inflate(
+            PublicationInformationElementItemBinding.inflate(
                 LayoutInflater.from(
                     parent.context
                 ), parent, false
@@ -42,8 +42,11 @@ class PublicationInformationElementRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
+        if(values.size > 1){
+            holder.moreContent.visibility = View.VISIBLE
+        }
         CoroutineScope(Dispatchers.Main).launch {
-            val image = imageService.getImageById(item.idImage)
+            val image = imageService.getImageById(item.imageId)
             if (image.startsWith("@drawable/")) {
                 val resourceId = context.resources.getIdentifier(
                     image.substringAfterLast('/'),
@@ -59,9 +62,10 @@ class PublicationInformationElementRecyclerViewAdapter(
 
     override fun getItemCount(): Int = values.size
 
-    inner class ViewHolder(binding: PublicationInformationContentItemBinding) :
+    inner class ViewHolder(binding: PublicationInformationElementItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val element = binding.imPublicationInformationElementElement
+        val moreContent = binding.imPublicationInformationElementMoreContent
     }
 
 }

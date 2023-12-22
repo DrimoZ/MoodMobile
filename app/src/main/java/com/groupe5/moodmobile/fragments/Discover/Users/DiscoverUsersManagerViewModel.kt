@@ -1,16 +1,17 @@
 package com.groupe5.moodmobile.fragments.Discover.Users
 
+import IUserRepository
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.repositories.IFriendRepository
-import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
 
 class DiscoverUsersManagerViewModel(private val jwtToken: String, private val searchValue: String) : ViewModel() {
@@ -22,47 +23,24 @@ class DiscoverUsersManagerViewModel(private val jwtToken: String, private val se
     var showCount = 10
     private var searchBarValue = searchValue
 
-    fun startGetAllUsers() {
+    suspend fun startGetAllUsers() {
         try {
-            val usersCall = userRepository.getDiscoverUsers(showCount, searchBarValue)
-            usersCall.enqueue(object : Callback<List<DtoInputFriend>> {
-                override fun onResponse(call: Call<List<DtoInputFriend>>, response: Response<List<DtoInputFriend>>) {
-                    if (response.isSuccessful) {
-                        val num = response.body()?.size
-                        if (num != null) {
-                            if(num == showCount){
-                                mutableCount.postValue(num)
-                                val startIndex = if (num != null && num >= 10) {
-                                    (showCount - 10) % num
-                                } else {
-                                    0
-                                }
-                                val slicedUsers = response.body()?.slice(startIndex until startIndex + 10)
-                                mutableUserLiveData.postValue(slicedUsers)
-                            }else{
-                                mutableCount.postValue(-1)
-                                val startIndex = 0
-                                val slicedUsers = response.body()?.slice(startIndex until startIndex + num)
-                                mutableUserLiveData.postValue(slicedUsers)
-                            }
-                        }
-
-                    } else {
-                        handleApiError(response)
-                    }
+            val response = userRepository.getDiscoverUsers(showCount, searchBarValue)
+                val num = response.size
+                if (num != null) {
+                    mutableCount.postValue(num)
+                    val slicedUsers = response.slice(0 until num)
+                    mutableUserLiveData.postValue(null)
+                    mutableUserLiveData.postValue(slicedUsers)
                 }
-
-                override fun onFailure(call: Call<List<DtoInputFriend>>, t: Throwable) {
-                    handleNetworkError(t)
-                }
-            })
         } catch (e: Exception) {
             handleException(e)
         }
     }
 
+
     fun deleteFriend(friend: DtoInputFriend) {
-        val friendId = friend.id
+        val friendId = friend.userId
         Log.d("friendid",friendId)
         viewModelScope.launch {
             val deleteCall = friendRepository.deleteFriend(friendId)
@@ -88,34 +66,32 @@ class DiscoverUsersManagerViewModel(private val jwtToken: String, private val se
     }
 
     fun addFriend(friend: DtoInputFriend) {
-        val friendId = friend.id
-        Log.d("friendid",friendId)
-        viewModelScope.launch {
-            val addCall = friendRepository.createFriendRequest(friendId)
-            addCall.enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        Log.d("FriendRequestSent", "Friend request sent successfully")
-                        mutableUserRefreshData.postValue(null)
-                    } else if (response.code() == 404) {
-                        Log.d("FriendRequestNotSent", "Friend not found")
-                    }else {
-                        handleApiError(response)
-                        val message = "erreur : ${response.message()}"
-                        Log.d("responseNotSucc",message)
-                    }
+        val friendId = friend.userId
+        Log.d("friendid", friendId)
+        val addCall = friendRepository.createFriendRequest(friendId)
+        addCall.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    friendRepository.createFriendRequest(friendId)
+                    Log.d("FriendRequestSent", "Friend request sent successfully")
+                    mutableUserRefreshData.postValue(null)
+                } else if (response.code() == 404) {
+                    Log.d("FriendRequestNotSent", "Friend not found")
+                }else {
+                    handleApiError(response)
+                    val message = "erreur : ${response.message()}"
+                    Log.d("responseNotSucc",message)
                 }
-
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    handleNetworkError(t)
-                    Log.d("Failure","Failure")
-                }
-            })
-        }
+            }
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                handleNetworkError(t)
+                Log.d("Failure","Failure")
+            }
+        })
     }
 
     fun cancelFriendRequest(friend: DtoInputFriend) {
-        val friendId = friend.id
+        val friendId = friend.userId
         Log.d("friendid",friendId)
         viewModelScope.launch {
             val cancelCall = friendRepository.rejectFriendRequest(friendId)
@@ -142,7 +118,7 @@ class DiscoverUsersManagerViewModel(private val jwtToken: String, private val se
     }
 
     fun acceptFriendRequest(friend: DtoInputFriend) {
-        val friendId = friend.id
+        val friendId = friend.userId
         Log.d("friendid",friendId)
         viewModelScope.launch {
             val acceptCall = friendRepository.acceptFriendRequest(friendId)
@@ -169,7 +145,7 @@ class DiscoverUsersManagerViewModel(private val jwtToken: String, private val se
     }
 
     fun rejectFriendRequest(friend: DtoInputFriend) {
-        val friendId = friend.id
+        val friendId = friend.userId
         Log.d("friendid",friendId)
         viewModelScope.launch {
             val rejectCall = friendRepository.rejectFriendRequest(friendId)

@@ -1,5 +1,6 @@
 package com.groupe5.moodmobile.fragments.UserProfile
 
+import IUserRepository
 import android.app.Activity
 import android.content.Context
 import android.net.Uri
@@ -13,17 +14,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.classes.SharedViewModel
 import com.groupe5.moodmobile.databinding.FragmentProfileBinding
-import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
-import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
 import com.groupe5.moodmobile.fragments.UserProfile.UserFriends.ProfileFriendManagerFragment
 import com.groupe5.moodmobile.fragments.UserProfile.UserPublications.ProfilePublicationManagerFragment
 import com.groupe5.moodmobile.repositories.IImageRepository
-import com.groupe5.moodmobile.repositories.IUserRepository
 import com.groupe5.moodmobile.services.ImageService
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import com.squareup.picasso.Picasso
@@ -91,10 +90,14 @@ class ProfileFragment : Fragment() {
 
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         sharedViewModel.friendData.observe(viewLifecycleOwner, Observer { userProfile ->
-            startUserData()
+            lifecycleScope.launch {
+                startUserData()
+            }
         })
 
-        startUserData()
+        lifecycleScope.launch {
+            startUserData()
+        }
 
         binding.btnFragmentProfilePublications.setOnClickListener {
             replaceFragment(ProfilePublicationManagerFragment.newInstance(""))
@@ -123,68 +126,46 @@ class ProfileFragment : Fragment() {
         transaction.commit()
     }
 
-    private fun startUserData(){
-        val prefs = requireActivity().getSharedPreferences("mood", Context.MODE_PRIVATE)
-        val jwtToken = prefs.getString("jwtToken", "") ?: ""
-        userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
-        imageRepository = RetrofitFactory.create(jwtToken, IImageRepository::class.java)
-        imageService = ImageService(requireContext(), imageRepository)
+    private suspend fun startUserData() {
+        try {
+            val prefs = requireActivity().getSharedPreferences("mood", Context.MODE_PRIVATE)
+            val jwtToken = prefs.getString("jwtToken", "") ?: ""
+            userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
+            imageRepository = RetrofitFactory.create(jwtToken, IImageRepository::class.java)
+            imageService = ImageService(requireContext(), imageRepository)
 
-        // Call the API to get the user's ID and role
-        val call1 = userRepository.getUserIdAndRole()
-        call1.enqueue(object : Callback<DtoInputUserIdAndRole> {
-            override fun onResponse(call: Call<DtoInputUserIdAndRole>, response: Response<DtoInputUserIdAndRole>) {
-                if (response.isSuccessful) {
-                    val userId = response.body()?.userId
-                    userId?.let {
-                        val call2 = userRepository.getUserProfile(it)
-                        call2.enqueue(object : Callback<DtoInputUserProfile> {
-                            override fun onResponse(call: Call<DtoInputUserProfile>, response: Response<DtoInputUserProfile>) {
-                                if (response.isSuccessful) {
-                                    val userProfile = response.body()
-                                    val imageId = response.body()?.idImage
-                                    imageId?.let { id ->
-                                        CoroutineScope(Dispatchers.Main).launch {
-                                            val image = imageService.getImageById(id)
-                                            if (image.startsWith("@drawable/")) {
-                                                val resourceId = resources.getIdentifier(
-                                                    image.substringAfterLast('/'),
-                                                    "drawable",
-                                                    "com.groupe5.moodmobile"
-                                                )
-                                                Picasso.with(binding.ivFragmentProfileUserImage.context).load(resourceId).into(binding.ivFragmentProfileUserImage)
-                                            } else {
-                                                Picasso.with(binding.ivFragmentProfileUserImage.context).load(image).into(binding.ivFragmentProfileUserImage)
-                                            }
-                                        }
-                                    }
-                                    // Update TextViews with profile data
-                                    binding.tvFragmentProfileUserUsername.text = userProfile?.name
-                                    binding.tvFragmentProfileUserNbPublications.text = "Publications: ${userProfile?.publicationCount}"
-                                    binding.tvFragmentProfileUserNbFriends.text = "Friends: ${userProfile?.friendCount}"
-                                    binding.tvFragmentProfileUserDescription.text = userProfile?.description
-                                }
-                            }
+            val userIdAndRole = userRepository.getUserIdAndRole()
 
-                            override fun onFailure(call: Call<DtoInputUserProfile>, t: Throwable) {
-                                val message = "Echec DB: ${t.message}"
-                                Log.e("EchecDb", message, t)
-                            }
-                        })
+            userIdAndRole.userId?.let { userId ->
+                val userProfile = userRepository.getUserProfile(userId)
+
+                val imageId = userProfile.imageId
+                imageId?.let { id ->
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val image = imageService.getImageById(id)
+                        if (image.startsWith("@drawable/")) {
+                            val resourceId = resources.getIdentifier(
+                                image.substringAfterLast('/'),
+                                "drawable",
+                                "com.groupe5.moodmobile"
+                            )
+                            Picasso.with(binding.ivFragmentProfileUserImage.context).load(resourceId).into(binding.ivFragmentProfileUserImage)
+                        } else {
+                            Picasso.with(binding.ivFragmentProfileUserImage.context).load(image).into(binding.ivFragmentProfileUserImage)
+                        }
                     }
-                } else {
-                    val message = "echec : ${response.message()}"
-                    Log.d("Echec", message)
                 }
+                binding.tvFragmentProfileUserUsername.text = userProfile.userName
+                binding.tvFragmentProfileUserNbPublications.text = "Publications: ${userProfile.publicationCount}"
+                binding.tvFragmentProfileUserNbFriends.text = "Friends: ${userProfile.friendCount}"
+                binding.tvFragmentProfileUserDescription.text = userProfile.accountDescription
             }
-
-            override fun onFailure(call: Call<DtoInputUserIdAndRole>, t: Throwable) {
-                val message = "Echec DB: ${t.message}"
-                Log.e("EchecDb", message, t)
-            }
-        })
-
+        } catch (e: Exception) {
+            val message = "Echec: ${e.message}"
+            Log.e("Echec", message, e)
+        }
     }
+
 
     companion object {
         @JvmStatic

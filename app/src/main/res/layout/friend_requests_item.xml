@@ -1,0 +1,78 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_friendRequest_visibility"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@drawable/border_shape">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_friendRequest_userImage"
+        android:layout_width="70dp"
+        android:layout_height="80dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/back" />
+
+    <LinearLayout
+        android:id="@+id/layoutText"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_toRightOf="@id/iv_friendRequest_userImage"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_friendRequest_userUsername"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Username"
+            android:textColor="@color/gold"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_friendRequest_acceptFriend"
+        android:layout_width="55dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="-72dp"
+        android:layout_marginLeft="150dp"
+        android:backgroundTint="#00FFFFFF"
+        android:layout_below="@id/layoutText"
+        android:layout_alignLeft="@id/layoutText"
+        android:text="v"
+        android:textColor="@color/green"
+        android:textColorHighlight="@color/green"
+        app:strokeColor="@color/green"
+        app:strokeWidth="1dp"/>
+
+    <Button
+        android:id="@+id/btn_friendRequest_rejectFriend"
+        android:layout_width="55dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="-72dp"
+        android:layout_marginLeft="210dp"
+        android:layout_below="@id/layoutText"
+        android:layout_alignLeft="@id/layoutText"
+        android:backgroundTint="#00FFFFFF"
+        android:text="x"
+        android:textColor="@color/red"
+        android:textColorHighlight="@color/red"
+        app:strokeColor="@color/red"
+        app:strokeWidth="1dp"/>
+
+    <TextView
+        android:id="@+id/tv_friendRequest_response"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layoutText"
+        android:layout_alignLeft="@id/layoutText"
+        android:layout_marginLeft="170dp"
+        android:layout_marginTop="-65dp"
+        android:text="Test"
+        android:textColor="#888C653A"
+        android:textSize="20sp" />
+
+</RelativeLayout>
+
+
