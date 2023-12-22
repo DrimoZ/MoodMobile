@@ -28,21 +28,10 @@ class DiscoverUsersManagerViewModel(private val jwtToken: String, private val se
             val response = userRepository.getDiscoverUsers(showCount, searchBarValue)
                 val num = response.size
                 if (num != null) {
-                    if (num == showCount) {
-                        mutableCount.postValue(num)
-                        val startIndex = if (num >= 10) {
-                            (showCount - 10) % num
-                        } else {
-                            0
-                        }
-                        val slicedUsers = response.slice(startIndex until startIndex + 10)
-                        mutableUserLiveData.postValue(slicedUsers)
-                    } else {
-                        mutableCount.postValue(-1)
-                        val startIndex = 0
-                        val slicedUsers = response.slice(startIndex until startIndex + num)
-                        mutableUserLiveData.postValue(slicedUsers)
-                    }
+                    mutableCount.postValue(num)
+                    val slicedUsers = response.slice(0 until num)
+                    mutableUserLiveData.postValue(null)
+                    mutableUserLiveData.postValue(slicedUsers)
                 }
         } catch (e: Exception) {
             handleException(e)

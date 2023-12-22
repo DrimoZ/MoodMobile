@@ -1,4 +1,5 @@
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
+import com.groupe5.moodmobile.dtos.Friend.DtoInputFriendRequest
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriendsResponse
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublication
 import com.groupe5.moodmobile.dtos.Publication.Input.DtoInputPublicationsResponse
@@ -43,6 +44,8 @@ interface IUserRepository {
     ): List<DtoInputFriend>
     @GET("/api/v1/user/privacy")
     suspend fun getUserPrivacy(): DtoInputUserPrivacy
+    @GET("/api/v1/user/notifications")
+    suspend fun getUserNotifications(): List<DtoInputFriendRequest>
 
 
 

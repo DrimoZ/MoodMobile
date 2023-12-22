@@ -38,15 +38,15 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
     suspend fun getUserFriends(userId: String) {
         try {
         val response = userRepository.getUserFriends(userId)
-            if (response != null) {
-                if (response.isFriendPublic) {
-                    val friends = response.friends
-                    Log.d("Friends", friends.toString())
-                    mutableFriendLiveData.postValue(friends)
-                } else {
-                    isFriendListPublicLiveData.postValue(false)
-                }
+        if (response != null) {
+            if (response.isFriendPublic) {
+                val friends = response.friends
+                Log.d("Friends", friends.toString())
+                mutableFriendLiveData.postValue(friends)
+            } else {
+                isFriendListPublicLiveData.postValue(false)
             }
+        }
         } catch (t: Throwable) {
             handleNetworkError(t)
         }

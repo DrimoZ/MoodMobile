@@ -51,9 +51,6 @@ class DiscoverUsersManagerFragment : Fragment() {
         viewModel.mutableUserLiveData.observe(viewLifecycleOwner) {
             discoverUsersFragment.initUIWithUsers(it)
         }
-//        viewModel.mutableUserAddData.observe(viewLifecycleOwner) {
-//            discoverUsersFragment.addUIToUsers(it)
-//        }
         lifecycleScope.launch {
             viewModel.startGetAllUsers()
         }

@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="120dp"
-        android:layout_height="80dp"
+        android:layout_height="120dp"
         android:background="@drawable/border_shape2"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,13 +35,30 @@
             android:background="#deb992" />
 
         <TextView
+            android:id="@+id/btn_fragmentSideMenu_Notifications"
+            android:layout_width="120dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="2dp"
+            android:text="Notifications"
+            android:textColor="@color/gold"
+            android:textSize="20sp" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="#deb992" />
+
+        <TextView
             android:id="@+id/btn_fragmentSideMenu_SignOut"
             android:layout_width="100dp"
             android:layout_height="25dp"
             android:layout_marginStart="20dp"
             android:text="Sign Out"
             android:textColor="@color/gold"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

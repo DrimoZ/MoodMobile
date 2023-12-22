@@ -10,6 +10,8 @@ import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
 import com.groupe5.moodmobile.fragments.Discover.DiscoverFragment
 import com.groupe5.moodmobile.fragments.AddPublication.AddPublicationFragment
 import com.groupe5.moodmobile.fragments.More.DeleteAccountFragment
+import com.groupe5.moodmobile.fragments.More.Notifications.FriendRequestsFragment
+import com.groupe5.moodmobile.fragments.More.Notifications.FriendRequestsManagerFragment
 import com.groupe5.moodmobile.fragments.More.ParametersFragment
 import com.groupe5.moodmobile.fragments.NewsFeed.NewsFeedPublicationManagerFragment
 import com.groupe5.moodmobile.fragments.Publication.PublicationInformationFragment
@@ -79,19 +81,19 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
 
     fun toggleParametersFragmentVisibility() {
         if (isParameters) {
-            hideParametersFragment()
+            hideSideBarFragment()
         } else {
-            showParametersFragment()
+            showSideBarFragment()
         }
     }
 
-    private fun showParametersFragment() {
+    private fun showSideBarFragment() {
         binding.fragmentContainerViewMainActivityParameters.visibility = View.VISIBLE
         binding.fragmentContainerViewMainActivityParameters.isEnabled = true
         isParameters = true
     }
 
-    private fun hideParametersFragment() {
+    private fun hideSideBarFragment() {
         binding.fragmentContainerViewMainActivityParameters.visibility = View.INVISIBLE
         binding.fragmentContainerViewMainActivityParameters.isEnabled = false
         isParameters = false
@@ -120,8 +122,13 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
     }
 
     fun goToParameters() {
-        hideParametersFragment()
+        hideSideBarFragment()
         replaceFragment(ParametersFragment.newInstance())
+    }
+
+    fun goToNotifications() {
+        hideSideBarFragment()
+        replaceFragment(FriendRequestsManagerFragment.newInstance())
     }
 
     fun signOut() {
