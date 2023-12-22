@@ -54,7 +54,7 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
 
 
     fun deleteFriend(friend: DtoInputFriend) {
-        val friendId = friend.id
+        val friendId = friend.userId
         Log.d("friendid",friendId)
         viewModelScope.launch {
             val deleteCall = friendRepository.deleteFriend(friendId)
@@ -80,7 +80,7 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
     }
 
     fun addFriend(friend: DtoInputFriend) {
-        val friendId = friend.id
+        val friendId = friend.userId
         Log.d("friendid",friendId)
         viewModelScope.launch {
             val addCall = friendRepository.createFriendRequest(friendId)
@@ -107,7 +107,7 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
     }
 
     fun cancelFriendRequest(friend: DtoInputFriend) {
-        val friendId = friend.id
+        val friendId = friend.userId
         Log.d("friendid",friendId)
         viewModelScope.launch {
             val cancelCall = friendRepository.rejectFriendRequest(friendId)
@@ -134,7 +134,7 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
     }
 
     fun acceptFriendRequest(friend: DtoInputFriend) {
-        val friendId = friend.id
+        val friendId = friend.userId
         Log.d("friendid",friendId)
         viewModelScope.launch {
             val acceptCall = friendRepository.acceptFriendRequest(friendId)
@@ -161,7 +161,7 @@ class ProfileFriendManagerViewModel(private val jwtToken: String) : ViewModel() 
     }
 
     fun rejectFriendRequest(friend: DtoInputFriend) {
-        val friendId = friend.id
+        val friendId = friend.userId
         Log.d("friendid",friendId)
         viewModelScope.launch {
             val rejectCall = friendRepository.rejectFriendRequest(friendId)

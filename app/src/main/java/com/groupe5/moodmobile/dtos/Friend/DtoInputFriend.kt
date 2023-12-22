@@ -1,8 +1,8 @@
 package com.groupe5.moodmobile.dtos.Friend
 
 data class DtoInputFriend(val commonFriendCount: Int,
-                          val id: String,
-                          val idImage: Int,
+                          val userId: String,
+                          val imageId: Int,
                           var isFriendWithConnected: Int,
-                          val login: String,
-                          val name: String)
+                          val userLogin: String,
+                          val userName: String)

@@ -45,10 +45,10 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
             .replace(R.id.fragmentContainerView_mainActivity, NewsFeedPublicationManagerFragment.newInstance(), "NewsFeedPublicationManagerFragment")
             .commit()
     }
-    fun toggleDeleteAccountFragment(show : Boolean) {
+    fun toggleDeleteAccountFragment(userId: String, show : Boolean) {
         if(show){
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView_mainActivity, DeleteAccountFragment.newInstance(), "DeleteAccountFragment")
+                .replace(R.id.fragmentContainerView_mainActivity, DeleteAccountFragment.newInstance(userId), "DeleteAccountFragment")
                 .commit()
         }else{
             supportFragmentManager.beginTransaction()
@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity(), ProfileFriendsRecyclerViewAdapter.OnFr
         userService = UserService(this)
         CoroutineScope(Dispatchers.Main).launch {
             val userId = userService.getUserId()
-            if (friend.id == userId) {
+            if (friend.userId == userId) {
                 replaceFragment(ProfileFragment.newInstance())
             } else {
                 replaceFragment(OtherUserProfileFragment.newInstance(friend))

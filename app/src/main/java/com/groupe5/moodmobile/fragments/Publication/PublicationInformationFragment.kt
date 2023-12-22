@@ -139,14 +139,14 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
                 if (response.isSuccessful) {
                     val userProfile = response.body()
                     userProfile?.let { up ->
-                        userId = userProfile.idAuthor
+                        userId = userProfile.authorId
                         liked = userProfile.hasConnectedLiked
                         likeCount = userProfile.likeCount
                         commentCount = userProfile.commentCount
                         isFromConnected = userProfile.isFromConnected
                         startElements(userProfile)
-                        binding.tvFragmentPublicationInformationUserUsername.text = up.nameAuthor
-                        binding.tvFragmentPublicationInformationContent.text = up.content
+                        binding.tvFragmentPublicationInformationUserUsername.text = up.authorName
+                        binding.tvFragmentPublicationInformationContent.text = up.publicationContent
 
                         if(up.isFromConnected){
                             binding.llFragmentPublicationInformationNotRemove.visibility = View.GONE
@@ -190,7 +190,7 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
                             }
                         }
                     }
-                    val imageId = response.body()?.idAuthorImage
+                    val imageId = response.body()?.authorImageId
                     imageId?.let { id ->
                         CoroutineScope(Dispatchers.Main).launch {
                             val image = imageService.getImageById(id)
@@ -221,7 +221,7 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
 
     private fun setPublicationLike(){
         val dto = DtoInputPubLike(
-            idPublication = idPublication,
+            publicationId = idPublication,
             isLiked = !liked
         )
         val pubLikeCall = publicationRepository.setPublicationLike(dto)
@@ -296,8 +296,8 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
 
     private fun addPublicationComment(comment: String){
         val dto = DtoOutputPubComment(
-            idPublication = idPublication,
-            content = comment
+            publicationId = idPublication,
+            commentContent = comment
         )
         val addCommentCall = publicationRepository.setPublicationComment(dto)
         addCommentCall.enqueue(object : Callback<Void> {

@@ -51,7 +51,7 @@ class DiscoverUsersManagerViewModel(private val jwtToken: String, private val se
 
 
     fun deleteFriend(friend: DtoInputFriend) {
-        val friendId = friend.id
+        val friendId = friend.userId
         Log.d("friendid",friendId)
         viewModelScope.launch {
             val deleteCall = friendRepository.deleteFriend(friendId)
@@ -77,30 +77,32 @@ class DiscoverUsersManagerViewModel(private val jwtToken: String, private val se
     }
 
     fun addFriend(friend: DtoInputFriend) {
-        val friendId = friend.id
+        val friendId = friend.userId
         Log.d("friendid", friendId)
-
-        viewModelScope.launch {
-            try {
-                friendRepository.createFriendRequest(friendId)
-                Log.d("FriendRequestSent", "Friend request sent successfully")
-                mutableUserRefreshData.postValue(null)
-            } catch (e: HttpException) {
-                if (e.code() == 404) {
+        val addCall = friendRepository.createFriendRequest(friendId)
+        addCall.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    friendRepository.createFriendRequest(friendId)
+                    Log.d("FriendRequestSent", "Friend request sent successfully")
+                    mutableUserRefreshData.postValue(null)
+                } else if (response.code() == 404) {
                     Log.d("FriendRequestNotSent", "Friend not found")
-                } else {
-                    val message = "erreur : ${e.message()}"
-                    Log.d("responseNotSucc", message)
+                }else {
+                    handleApiError(response)
+                    val message = "erreur : ${response.message()}"
+                    Log.d("responseNotSucc",message)
                 }
-            } catch (t: Throwable) {
-                handleNetworkError(t)
-                Log.d("Failure", "Failure")
             }
-        }
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                handleNetworkError(t)
+                Log.d("Failure","Failure")
+            }
+        })
     }
 
     fun cancelFriendRequest(friend: DtoInputFriend) {
-        val friendId = friend.id
+        val friendId = friend.userId
         Log.d("friendid",friendId)
         viewModelScope.launch {
             val cancelCall = friendRepository.rejectFriendRequest(friendId)
@@ -127,7 +129,7 @@ class DiscoverUsersManagerViewModel(private val jwtToken: String, private val se
     }
 
     fun acceptFriendRequest(friend: DtoInputFriend) {
-        val friendId = friend.id
+        val friendId = friend.userId
         Log.d("friendid",friendId)
         viewModelScope.launch {
             val acceptCall = friendRepository.acceptFriendRequest(friendId)
@@ -154,7 +156,7 @@ class DiscoverUsersManagerViewModel(private val jwtToken: String, private val se
     }
 
     fun rejectFriendRequest(friend: DtoInputFriend) {
-        val friendId = friend.id
+        val friendId = friend.userId
         Log.d("friendid",friendId)
         viewModelScope.launch {
             val rejectCall = friendRepository.rejectFriendRequest(friendId)

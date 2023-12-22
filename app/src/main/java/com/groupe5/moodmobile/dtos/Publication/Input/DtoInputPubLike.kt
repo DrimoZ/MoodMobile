@@ -1,3 +1,4 @@
 package com.groupe5.moodmobile.dtos.Publication.Input
 
-data class DtoInputPubLike(val idPublication: Int, val isLiked: Boolean)
+data class DtoInputPubLike(val publicationId: Int,
+                           val isLiked: Boolean)

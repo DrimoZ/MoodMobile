@@ -14,6 +14,8 @@ import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.databinding.FragmentDeleteAccountBinding
 import com.groupe5.moodmobile.databinding.FragmentParametersBinding
+import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputDeleteAccount
+import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserPassword
 import com.groupe5.moodmobile.services.UserService
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import kotlinx.coroutines.launch
@@ -21,9 +23,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DeleteAccountFragment : Fragment() {
+class DeleteAccountFragment() : Fragment() {
     private lateinit var binding: FragmentDeleteAccountBinding
     private lateinit var userRepository: IUserRepository
+    private var userId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,32 +38,46 @@ class DeleteAccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnDeleteAccountDelete.setOnClickListener {
-            lifecycleScope.launch {
-                deleteAccount()
-            }
+            deleteAccount()
         }
         binding.btnDeleteAccountCancel.setOnClickListener {
-            (requireActivity() as MainActivity).toggleDeleteAccountFragment(false)
+            (requireActivity() as MainActivity).toggleDeleteAccountFragment("",false)
         }
 
     }
 
-    private suspend fun deleteAccount() {
+    private fun deleteAccount() {
+        // Use the provided userId and initialize userRepository
         val prefs = requireActivity().getSharedPreferences("mood", Context.MODE_PRIVATE)
         val jwtToken = prefs.getString("jwtToken", "") ?: ""
         userRepository = RetrofitFactory.create(jwtToken, IUserRepository::class.java)
-        try {
-            val response = userRepository.deleteAccount()
-            Toast.makeText(requireContext(), "Failed to delete profile", Toast.LENGTH_SHORT).show()
-            Log.d("UpdateProfile", "Failed to delete profile : ${response}")
-        } catch (e: Exception) {
-            (requireActivity() as MainActivity).signOut()
-            Toast.makeText(requireContext(), "Profile deleted successfully", Toast.LENGTH_SHORT).show()
-        }
+        val dto = DtoOutputDeleteAccount(
+            userId = userId
+        )
+        val updateCall = userRepository.deleteAccount(dto)
+        updateCall.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(requireContext(), "Profile deleted successfully", Toast.LENGTH_SHORT).show()
+                    (requireActivity() as MainActivity).signOut()
+                } else {
+                    Toast.makeText(requireContext(), "Failed to delete profile", Toast.LENGTH_SHORT).show()
+                    Log.d("DeleteAccount", "Failed to delete profile: ${response.message()}")
+                }
+            }
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Toast.makeText(requireContext(), "Failed to delete profile", Toast.LENGTH_SHORT).show()
+                Log.e("DeleteAccount", "Error deleting profile", t)
+            }
+        })
     }
 
     companion object {
         @JvmStatic
-        fun newInstance() = DeleteAccountFragment()
+        fun newInstance(userId: String): DeleteAccountFragment {
+            val fragment = DeleteAccountFragment()
+            fragment.userId = userId
+            return fragment
+        }
     }
 }

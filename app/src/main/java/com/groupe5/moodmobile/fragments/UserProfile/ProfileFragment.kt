@@ -139,7 +139,7 @@ class ProfileFragment : Fragment() {
             userIdAndRole.userId?.let { userId ->
                 val userProfile = userRepository.getUserProfile(userId)
 
-                val imageId = userProfile.idImage
+                val imageId = userProfile.imageId
                 imageId?.let { id ->
                     CoroutineScope(Dispatchers.Main).launch {
                         val image = imageService.getImageById(id)
@@ -155,10 +155,10 @@ class ProfileFragment : Fragment() {
                         }
                     }
                 }
-                binding.tvFragmentProfileUserUsername.text = userProfile.name
+                binding.tvFragmentProfileUserUsername.text = userProfile.userName
                 binding.tvFragmentProfileUserNbPublications.text = "Publications: ${userProfile.publicationCount}"
                 binding.tvFragmentProfileUserNbFriends.text = "Friends: ${userProfile.friendCount}"
-                binding.tvFragmentProfileUserDescription.text = userProfile.description
+                binding.tvFragmentProfileUserDescription.text = userProfile.accountDescription
             }
         } catch (e: Exception) {
             val message = "Echec: ${e.message}"

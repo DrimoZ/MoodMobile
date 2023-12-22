@@ -44,7 +44,7 @@ class PublicationInformationCommentManagerViewModel(private val jwtToken: String
     }
 
     fun deleteFriend(dto: DtoInputPubComment) {
-        val id = dto.id
+        val id = dto.commentId
         viewModelScope.launch {
             val deleteCall = publicationRepository.deletePublicationComment(id)
             deleteCall.enqueue(object : Callback<Void> {

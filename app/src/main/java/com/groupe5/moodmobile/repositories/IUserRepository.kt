@@ -6,6 +6,7 @@ import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserAccount
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserPrivacy
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
+import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputDeleteAccount
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserAccount
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserPassword
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserPrivacy
@@ -52,8 +53,8 @@ interface IUserRepository {
     fun setUserPrivacy(@Body userPrivacy: DtoOutputUserPrivacy): Call<Void>
     @POST("/api/v1/user/userPassword")
     fun setUserPassword(@Body userPassword: DtoOutputUserPassword): Call<Void>
-    @POST("/api/v1/user/delete")
-    suspend fun deleteAccount(): Void?
+    @PATCH("/api/v1/user")
+    fun deleteAccount(@Body dto: DtoOutputDeleteAccount): Call<Void>
     @GET("/api/v1/user")
     fun getUserIdAndRoleService(): Call<DtoInputUserIdAndRole>
     @GET("/api/v1/user/{userId}")

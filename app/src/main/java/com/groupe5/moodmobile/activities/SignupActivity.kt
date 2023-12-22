@@ -52,7 +52,7 @@ class SignupActivity : AppCompatActivity() {
     private fun submitForm(name: String, login: String, mail: String, birthdate: String, password: String, passwordConfirmation: String) {
         lifecycleScope.launch {
             try {
-                authenticationRepository.signUpUser(DtoOutputUserSignup(name, login, mail, birthdate, password)).let { response ->
+                authenticationRepository.signUpUser(DtoOutputUserSignup(name, login, mail, password, birthdate)).let { response ->
                     if (response.isSuccessful) {
                         response.headers().get("Set-Cookie")?.let { cookieHeader ->
                             extractTokenFromCookie(cookieHeader)?.let { token ->

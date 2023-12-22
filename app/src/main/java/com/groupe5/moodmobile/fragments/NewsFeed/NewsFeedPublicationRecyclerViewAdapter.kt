@@ -75,12 +75,12 @@ class NewsFeedPublicationRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         val state = publicationViewStates.getOrPut(position) { PublicationViewState() }
-        state.id = item.id
+        state.id = item.publicationId
         state.liked = item.hasConnectedLiked
         state.likeCount = item.likeCount
         state.commentCount = item.commentCount
         CoroutineScope(Dispatchers.Main).launch {
-            val image = imageService.getImageById(item.idAuthorImage)
+            val image = imageService.getImageById(item.authorImageId)
             if (image.startsWith("@drawable/")) {
                 val resourceId = context.resources.getIdentifier(
                     image.substringAfterLast('/'),
@@ -92,10 +92,10 @@ class NewsFeedPublicationRecyclerViewAdapter(
                 Picasso.with(holder.userImage.context).load(image).into(holder.userImage)
             }
         }
-        holder.username.text = item.nameAuthor
-        holder.content.text = item.content
+        holder.username.text = item.authorName
+        holder.content.text = item.publicationContent
         val currentDateMillis = System.currentTimeMillis()
-        val itemDateMillis = item.date.time
+        val itemDateMillis = item.publicationDate.time
 
         val timeAgo = DateUtils.getRelativeTimeSpanString(
             itemDateMillis,
@@ -170,14 +170,14 @@ class NewsFeedPublicationRecyclerViewAdapter(
         })
         holder.username.setOnClickListener {
             activity.lifecycleScope.launch {
-                activity.onFriendClick(userService.getFriendDto(item.idAuthor))
+                activity.onFriendClick(userService.getFriendDto(item.authorId))
              }
         }
     }
     private fun addPublicationComment(dtoP: DtoInputPublicationInformation, comment: String, state: PublicationViewState, holder: ViewHolder){
         val dto = DtoOutputPubComment(
-            idPublication = state.id,
-            content = comment
+            publicationId = state.id,
+            commentContent = comment
         )
         val addCommentCall = publicationRepository.setPublicationComment(dto)
         addCommentCall.enqueue(object : Callback<Void> {
@@ -212,7 +212,7 @@ class NewsFeedPublicationRecyclerViewAdapter(
     }
 
     private fun startElements(holder: ViewHolder, dto: DtoInputPublicationInformation) {
-        val id = dto.id
+        val id = dto.publicationId
         val uniqueContainerId = View.generateViewId()
         fragmentManager
             .beginTransaction()
@@ -227,13 +227,13 @@ class NewsFeedPublicationRecyclerViewAdapter(
     }
 
     private fun startComments(holder: ViewHolder, dto: DtoInputPublicationInformation) {
-        val id = dto.id
+        val id = dto.publicationId
         val uniqueContainerId = View.generateViewId()
         fragmentManager
             .beginTransaction()
             .add(
                 uniqueContainerId,
-                PublicationInformationCommentManagerFragment.newInstance(dto.id),
+                PublicationInformationCommentManagerFragment.newInstance(dto.publicationId),
                 "PublicationInformationCommentManagerFragment$id"
             )
             .commit()
@@ -242,13 +242,13 @@ class NewsFeedPublicationRecyclerViewAdapter(
     }
 
     private fun restartComments(holder: ViewHolder, dto: DtoInputPublicationInformation) {
-        val id = dto.id
+        val id = dto.publicationId
         val uniqueContainerId = View.generateViewId()
         fragmentManager
             .beginTransaction()
             .replace(
                 uniqueContainerId,
-                PublicationInformationCommentManagerFragment.newInstance(dto.id),
+                PublicationInformationCommentManagerFragment.newInstance(dto.publicationId),
                 "PublicationInformationCommentManagerFragment$id"
             )
             .commit()
@@ -258,7 +258,7 @@ class NewsFeedPublicationRecyclerViewAdapter(
 
     private fun setPublicationLike(holder: ViewHolder, dto: DtoInputPublicationInformation, state: PublicationViewState){
         val dtoLike = DtoInputPubLike(
-            idPublication = dto.id,
+            publicationId = dto.publicationId,
             isLiked = !state.liked
         )
         val pubLikeCall = publicationRepository.setPublicationLike(dtoLike)

@@ -1,6 +1,10 @@
 package com.groupe5.moodmobile.dtos.Users.Input
 
-import com.groupe5.moodmobile.dtos.Image.DtoInputImage
-import java.lang.invoke.TypeDescriptor
-
-data class DtoInputUserProfile(val login: String, val name: String, val isFriendWithConnected: Int, val title: String, val description: String, val friendCount: Int, val publicationCount: Int, val idImage: Int)
+data class DtoInputUserProfile(val accountDescription: String,
+                               val friendCount: Int,
+                               val imageId: Int,
+                               val isConnectedUser: Boolean,
+                               val isFriendWithConnected: Int,
+                               val userName: String,
+                               val publicationCount: Int,
+                               val userRole: Int )

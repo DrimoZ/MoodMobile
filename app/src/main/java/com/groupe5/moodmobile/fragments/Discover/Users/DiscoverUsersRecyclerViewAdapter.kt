@@ -91,7 +91,7 @@ class DiscoverUsersRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         CoroutineScope(Dispatchers.Main).launch {
-            val image = imageService.getImageById(item.idImage)
+            val image = imageService.getImageById(item.imageId)
             if (image.startsWith("@drawable/")) {
                 val resourceId = context.resources.getIdentifier(
                     image.substringAfterLast('/'),
@@ -102,7 +102,7 @@ class DiscoverUsersRecyclerViewAdapter(
             } else {
                 Picasso.with(holder.photo.context).load(image).into(holder.photo)
             }
-            if(userService.getUserId() == item.id){
+            if(userService.getUserId() == item.userId){
                 holder.delButton.isEnabled = false
                 holder.delButton.visibility = View.INVISIBLE
                 holder.addButton.isEnabled = false
@@ -122,12 +122,12 @@ class DiscoverUsersRecyclerViewAdapter(
                 holder.rejectButton.isEnabled = true
                 holder.rejectButton.visibility = View.VISIBLE
             }
-            if(item.isFriendWithConnected == -1 && userService.getUserId() != item.id){
+            if(item.isFriendWithConnected == -1 && userService.getUserId() != item.userId){
                 holder.addButton.isEnabled = true
                 holder.addButton.visibility = View.VISIBLE
             }
         }
-        holder.name.text = item.name
+        holder.name.text = item.userName
         if(item.commonFriendCount > 1){
             holder.commonFriend.text = "${item.commonFriendCount} Friends in common"
         }else if(item.commonFriendCount == 1){

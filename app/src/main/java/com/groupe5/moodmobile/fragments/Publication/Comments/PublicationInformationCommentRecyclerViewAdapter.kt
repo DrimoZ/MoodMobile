@@ -54,7 +54,7 @@ class PublicationInformationCommentRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         CoroutineScope(Dispatchers.Main).launch {
-            val image = imageService.getImageById(item.idAuthorImage)
+            val image = imageService.getImageById(item.authorImageId)
             if (image.startsWith("@drawable/")) {
                 val resourceId = context.resources.getIdentifier(
                     image.substringAfterLast('/'),
@@ -66,13 +66,13 @@ class PublicationInformationCommentRecyclerViewAdapter(
                 Picasso.with(holder.userImage.context).load(image).into(holder.userImage)
             }
 
-            if(item.idAuthor == userService.getUserId()){
+            if(item.authorId == userService.getUserId()){
                 holder.btnDeleteComment.visibility = View.VISIBLE
                 holder.btnDeleteComment.isEnabled = true
             }
         }
-        holder.username.text = item.nameAuthor
-        holder.userComment.text = item.content
+        holder.username.text = item.authorName
+        holder.userComment.text = item.commentContent
 
         holder.btnDeleteComment.setOnClickListener{
             deleteClickListener?.onDeleteClick(item)

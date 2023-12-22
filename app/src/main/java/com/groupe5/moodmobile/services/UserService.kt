@@ -5,14 +5,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.groupe5.moodmobile.dtos.Friend.DtoInputFriend
-import com.groupe5.moodmobile.dtos.Friend.DtoInputFriendsResponse
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
 import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserProfile
-import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserPassword
 import com.groupe5.moodmobile.utils.RetrofitFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import retrofit2.Call
 import retrofit2.Callback
@@ -87,11 +82,11 @@ class UserService(private val context: Context) {
                     if (user != null) {
                         val dto = DtoInputFriend(
                             commonFriendCount = 0,
-                            id = friendId,
-                            idImage = user.idImage,
+                            userId = friendId,
+                            imageId = user.imageId,
                             isFriendWithConnected = user.isFriendWithConnected,
-                            login = user.login,
-                            name = user.name
+                            userLogin = "",
+                            userName = user.userName
                         )
                         continuation.resume(dto)
                     } else {

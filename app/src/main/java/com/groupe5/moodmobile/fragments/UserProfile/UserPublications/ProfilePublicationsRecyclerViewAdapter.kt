@@ -57,7 +57,7 @@ class ProfilePublicationsRecyclerViewAdapter(
             val element = item.elements[0]
 
             CoroutineScope(Dispatchers.Main).launch {
-                val image = imageService.getImageById(element.idImage)
+                val image = imageService.getImageById(element.imageId)
                 if (image.startsWith("@drawable/")) {
                     val resourceId = context.resources.getIdentifier(
                         image.substringAfterLast('/'),
@@ -79,11 +79,11 @@ class ProfilePublicationsRecyclerViewAdapter(
         }
 
         holder.content.setOnClickListener {
-            openClickListener?.onOpenClick(item.id)
+            openClickListener?.onOpenClick(item.publicationId)
         }
 
         holder.moreContent.setOnClickListener {
-            openClickListener?.onOpenClick(item.id)
+            openClickListener?.onOpenClick(item.publicationId)
         }
     }
 

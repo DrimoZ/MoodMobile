@@ -46,7 +46,7 @@ class PublicationInformationElementRecyclerViewAdapter(
             holder.moreContent.visibility = View.VISIBLE
         }
         CoroutineScope(Dispatchers.Main).launch {
-            val image = imageService.getImageById(item.idImage)
+            val image = imageService.getImageById(item.imageId)
             if (image.startsWith("@drawable/")) {
                 val resourceId = context.resources.getIdentifier(
                     image.substringAfterLast('/'),

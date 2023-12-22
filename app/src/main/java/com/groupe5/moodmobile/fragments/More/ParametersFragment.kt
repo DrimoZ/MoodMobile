@@ -1,7 +1,6 @@
 package com.groupe5.moodmobile.fragments.More
 
 import IUserRepository
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -11,16 +10,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.databinding.FragmentParametersBinding
-import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserAccount
-import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserIdAndRole
-import com.groupe5.moodmobile.dtos.Users.Input.DtoInputUserPrivacy
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserAccount
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserPassword
 import com.groupe5.moodmobile.dtos.Users.Output.DtoOutputUserPrivacy
-import com.groupe5.moodmobile.fragments.Publication.PublicationInformationFragment
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,7 +30,7 @@ import java.util.Locale
 class ParametersFragment : Fragment() {
     private lateinit var binding: FragmentParametersBinding
     private lateinit var userRepository: IUserRepository
-    private var idUser = "null"
+    private var userId = "null"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,7 +62,7 @@ class ParametersFragment : Fragment() {
             updateUserPrivacy("isFriendPublic", false)
         }
         binding.btnFragmentParametersDeleteAccount.setOnClickListener {
-            (requireActivity() as MainActivity).toggleDeleteAccountFragment(true)
+            (requireActivity() as MainActivity).toggleDeleteAccountFragment(userId, true)
         }
     }
 
@@ -137,12 +131,12 @@ class ParametersFragment : Fragment() {
 
         val birthDate = parseDateString(updatedBirthdate) ?: Date()
         val updatedUserAccount = DtoOutputUserAccount(
-            id = idUser,
-            name = updatedUsername,
-            title = updatedTitle,
-            mail = updatedEmailAddress,
-            birthDate = birthDate,
-            description = updatedDescription
+            userId = userId,
+            userName = updatedUsername,
+            userTitle = updatedTitle,
+            userMail = updatedEmailAddress,
+            accountBirthDate = birthDate,
+            accountDescription = updatedDescription
         )
 
         val updateCall = userRepository.setUserAccount(updatedUserAccount)
@@ -246,9 +240,9 @@ class ParametersFragment : Fragment() {
         try {
             val response = userRepository.getUserIdAndRole()
             if (response != null) {
-                val userId = response.userId
-                userId?.let {
-                    idUser = userId
+                val user = response.userId
+                user?.let {
+                    userId = user
                     getUserAccount()
                     getUserPrivacy()
                 }
@@ -264,17 +258,17 @@ class ParametersFragment : Fragment() {
 
     private suspend fun getUserAccount() {
         try {
-            val response = userRepository.getUserAccount(idUser)
+            val response = userRepository.getUserAccount(userId)
             if (response != null) {
                 val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
                 val outputFormat = SimpleDateFormat("yyyy-MM-dd")
-                val date = inputFormat.parse(response.birthDate.toString())
+                val date = inputFormat.parse(response.accountBirthDate.toString())
                 val birthdate = outputFormat.format(date)
-                binding.etFragmentParametersUsername.setText(response.name)
-                binding.etFragmentParametersEmailAddress.setText(response.mail)
+                binding.etFragmentParametersUsername.setText(response.userName)
+                binding.etFragmentParametersEmailAddress.setText(response.userMail)
                 binding.etFragmentParametersBirthdate.setText(birthdate)
-                binding.etFragmentParametersTitle.setText(response.title)
-                binding.etFragmentParametersDescription.setText(response.description)
+                binding.etFragmentParametersTitle.setText(response.userTitle)
+                binding.etFragmentParametersDescription.setText(response.accountDescription)
             }
         } catch (e: Exception) {
             val message = "Echec DB: ${e.message}"
