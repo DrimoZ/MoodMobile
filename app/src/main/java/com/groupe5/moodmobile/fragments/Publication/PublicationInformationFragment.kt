@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.groupe5.moodmobile.R
 import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.databinding.FragmentPublicationInformationBinding
@@ -19,6 +20,7 @@ import com.groupe5.moodmobile.fragments.Publication.Element.PublicationInformati
 import com.groupe5.moodmobile.repositories.IImageRepository
 import com.groupe5.moodmobile.repositories.IPublicationRepository
 import com.groupe5.moodmobile.services.ImageService
+import com.groupe5.moodmobile.services.UserService
 import com.groupe5.moodmobile.utils.RetrofitFactory
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -30,12 +32,13 @@ import retrofit2.Response
 
 
 class PublicationInformationFragment(idPublication: Int) : Fragment() {
-    private lateinit var commentManagerFragment: PublicationInformationCommentManagerFragment
     private lateinit var binding : FragmentPublicationInformationBinding
     private lateinit var publicationRepository: IPublicationRepository
     private lateinit var imageRepository: IImageRepository
     private lateinit var imageService: ImageService
+    private lateinit var userService: UserService
     var idPublication = idPublication
+    var userId = ""
     var liked = false
     var likeCount = 0
     var commentDisplay = false
@@ -51,6 +54,7 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        userService = UserService(requireContext())
 
         startPublicationInformationData()
         binding.btnFragmentPublicationInformationClose.setOnClickListener {
@@ -96,6 +100,11 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
         binding.tvFragmentPublicationInformationRemove.setOnClickListener {
             deletePublication()
         }
+        binding.tvFragmentPublicationInformationUserUsername.setOnClickListener {
+            lifecycleScope.launch {
+                (requireActivity() as MainActivity).onFriendClick(userService.getFriendDto(userId))
+            }
+        }
     }
 
     private fun setPublicationDisplaysComments() {
@@ -130,6 +139,7 @@ class PublicationInformationFragment(idPublication: Int) : Fragment() {
                 if (response.isSuccessful) {
                     val userProfile = response.body()
                     userProfile?.let { up ->
+                        userId = userProfile.idAuthor
                         liked = userProfile.hasConnectedLiked
                         likeCount = userProfile.likeCount
                         commentCount = userProfile.commentCount

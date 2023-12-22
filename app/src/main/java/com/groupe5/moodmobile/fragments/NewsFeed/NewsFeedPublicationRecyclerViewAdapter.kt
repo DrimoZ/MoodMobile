@@ -13,7 +13,9 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.groupe5.moodmobile.R
+import com.groupe5.moodmobile.activities.MainActivity
 import com.groupe5.moodmobile.classes.SharedViewModel
 
 import com.groupe5.moodmobile.databinding.FragmentNewsFeedPublicationItemBinding
@@ -38,6 +40,7 @@ import retrofit2.Response
 
 class NewsFeedPublicationRecyclerViewAdapter(
     private val context: Context,
+    private val activity: MainActivity,
     private val fragmentManager: FragmentManager,
     private val values: List<DtoInputPublicationInformation>,
     private val sharedViewModel: SharedViewModel,
@@ -165,7 +168,11 @@ class NewsFeedPublicationRecyclerViewAdapter(
                 holder.commentText.text = "$commentText ( ${state.commentCount} )"
             }
         })
-
+        holder.username.setOnClickListener {
+            activity.lifecycleScope.launch {
+                activity.onFriendClick(userService.getFriendDto(item.idAuthor))
+             }
+        }
     }
     private fun addPublicationComment(dtoP: DtoInputPublicationInformation, comment: String, state: PublicationViewState, holder: ViewHolder){
         val dto = DtoOutputPubComment(

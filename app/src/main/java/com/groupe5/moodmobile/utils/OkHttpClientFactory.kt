@@ -5,6 +5,7 @@ import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 
 object OkHttpClientFactory {
     fun create(token: String): OkHttpClient {
@@ -21,6 +22,7 @@ object OkHttpClientFactory {
         }
 
         val okHttpClient = OkHttpClient.Builder()
+            .callTimeout(30, TimeUnit.SECONDS)
             .addInterceptor { chain ->
                 val original = chain.request()
                 val requestBuilder = original.newBuilder()

@@ -52,6 +52,7 @@ class ProfilePublicationsRecyclerViewAdapter(
         if (item.elements.isNotEmpty()) {
             if(item.elements.size > 1){
                 holder.moreContent.visibility = View.VISIBLE
+
             }
             val element = item.elements[0]
 

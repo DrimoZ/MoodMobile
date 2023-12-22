@@ -20,33 +20,26 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface IUserRepository {
-    @GET("/api/v1/user/{userLogin}")
-    suspend fun getUserProfile(@Path("userLogin") userLogin: String): DtoInputUserProfile
-
-    @GET("/api/v1/user/{userLogin}/account")
-    suspend fun getUserAccount(@Path("userLogin") userLogin: String): DtoInputUserAccount
-
+    @GET("/api/v1/user/{userId}")
+    suspend fun getUserProfile(@Path("userId") userId: String): DtoInputUserProfile
+    @GET("/api/v1/user/{userId}/account")
+    suspend fun getUserAccount(@Path("userId") userId: String): DtoInputUserAccount
     @GET("/api/v1/user")
     suspend fun getUserIdAndRole(): DtoInputUserIdAndRole
-
-    @GET("/api/v1/user/{userLogin}/publications")
-    suspend fun getUserPublications(@Path("userLogin") userLogin: String): DtoInputPublicationsResponse
-
+    @GET("/api/v1/user/{userId}/publications")
+    suspend fun getUserPublications(@Path("userId") userId: String): DtoInputPublicationsResponse
     @GET("/api/v1/user/discover/publications")
     suspend fun getDiscoverPublications(
         @Query("publicationCount") count: Int,
         @Query("searchValue") search: String
     ): Response<List<DtoInputPublication>>
-
-    @GET("/api/v1/user/{userLogin}/friends")
-    suspend fun getUserFriends(@Path("userLogin") userLogin: String): DtoInputFriendsResponse
-
+    @GET("/api/v1/user/{userId}/friends")
+    suspend fun getUserFriends(@Path("userId") userId: String): DtoInputFriendsResponse
     @GET("/api/v1/user/discover/users")
     suspend fun getDiscoverUsers(
         @Query("userCount") count: Int,
         @Query("searchValue") search: String
     ): List<DtoInputFriend>
-
     @GET("/api/v1/user/privacy")
     suspend fun getUserPrivacy(): DtoInputUserPrivacy
 
@@ -63,6 +56,6 @@ interface IUserRepository {
     suspend fun deleteAccount(): Void?
     @GET("/api/v1/user")
     fun getUserIdAndRoleService(): Call<DtoInputUserIdAndRole>
-    @GET("/api/v1/user/{userLogin}")
-    fun getUserProfileService(@Path("userLogin") userLogin: String): Call<DtoInputUserProfile>
+    @GET("/api/v1/user/{userId}")
+    fun getUserProfileService(@Path("userId") userId: String): Call<DtoInputUserProfile>
 }
